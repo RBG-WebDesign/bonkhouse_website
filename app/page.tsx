@@ -16,7 +16,7 @@ import { EventCard } from "@/components/event-card";
 import { MailingListForm } from "@/components/mailing-list-form";
 import { buttonVariants } from "@/components/ui/button";
 import { getEvents } from "@/lib/data";
-import { formatEventDate, formatEventTime } from "@/lib/utils";
+import { formatEventDate, formatEventTime, publicAsset } from "@/lib/utils";
 import type { BonkhouseEvent } from "@/types/bonkhouse";
 
 export default async function Home() {
@@ -60,12 +60,24 @@ export default async function Home() {
           </div>
 
           <div className="relative min-h-[24rem] overflow-hidden border-x border-white/15 lg:min-h-[38rem]">
-            <div className="photo-frame photo-warm absolute inset-0" />
+            <div className="photo-frame photo-warm absolute inset-0 opacity-55" />
+            <div className="absolute inset-5 flex items-center justify-center pb-24 sm:inset-8">
+              {nextEvent.posterUrl ? (
+                <div className="relative aspect-[555/740] w-full max-w-[15rem] rotate-[-1.5deg] overflow-hidden border-[7px] border-white/85 bg-black shadow-soft sm:max-w-[18rem] lg:max-w-[19rem]">
+                  <img
+                    alt={`${nextEvent.title} poster`}
+                    className="h-full w-full object-cover"
+                    src={publicAsset(nextEvent.posterUrl)}
+                  />
+                  <span className="tape -top-3 left-10 rotate-6" />
+                </div>
+              ) : null}
+            </div>
             <div className="absolute inset-x-8 bottom-8 z-10 border border-white/25 bg-black/72 p-4 backdrop-blur">
               <p className="eyebrow">Next screening</p>
               <p className="mt-1 font-display text-3xl uppercase leading-none text-white">{nextEvent.title}</p>
               <p className="mt-2 text-sm text-white/70">
-                {formatEventDate(nextEvent.startsAt)} · {formatEventTime(nextEvent.startsAt)}
+                {formatEventDate(nextEvent.startsAt)} | {formatEventTime(nextEvent.startsAt)}
               </p>
             </div>
           </div>

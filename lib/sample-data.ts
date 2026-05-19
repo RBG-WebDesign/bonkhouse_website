@@ -36,12 +36,12 @@ const bayStreet = {
 export const sampleEvents: BonkhouseEvent[] = [
   {
     id: "sample-next-screening",
-    slug: "sunday-double-feature",
-    title: "Sunday Double Feature",
-    kicker: "Trailers, commercials, first feature, intermission, second feature.",
+    slug: "society-videodrome-double-feature",
+    title: "Society / Videodrome Double Feature",
+    kicker: "Bryan Yuzna's Society meets Videodrome for a body-horror Sunday.",
     description:
-      "A neighborhood movie afternoon with a pre-show, two features, and enough lobby chatter to make leaving immediately feel rude.",
-    posterUrl: null,
+      "A neighborhood body-horror movie afternoon with a pre-show, Society, intermission, Videodrome, and enough lobby chatter to make leaving immediately feel rude.",
+    posterUrl: "/posters/society-videodrome-double-feature.svg",
     startsAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 12).toISOString(),
     doorsAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 12 - 1000 * 60 * 45).toISOString(),
     gateClosesAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 12 + 1000 * 60 * 10).toISOString(),
@@ -50,9 +50,9 @@ export const sampleEvents: BonkhouseEvent[] = [
     capacityOverflow: 20,
     status: "published",
     isInviteOnly: false,
-    program: ["Pre-show trailers", "Feature one", "Intermission ads", "Feature two"],
+    program: ["Pre-show trailers", "Society", "Intermission ads", "Videodrome"],
     hostNote:
-      "Bring a friend, bring patience for folding chairs, and arrive before the gate closes.",
+      "Bring a friend, bring patience for folding chairs, and arrive before the gate closes. Your Sundays belong to us.",
     accessibilityNote:
       "The community center has step-free access. Email us if you need a reserved accessible seat.",
     textForEntry: "If the gate is closed, text the host number in your ticket email."
