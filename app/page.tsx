@@ -31,7 +31,7 @@ export default async function Home() {
         <div className="club-container grid min-h-[38rem] gap-8 py-10 lg:grid-cols-[3rem_1.06fr_1fr_0.62fr] lg:py-0">
           <aside className="hidden items-center justify-center border-r border-white/15 lg:flex">
             <div className="vertical-slogan text-[0.65rem] font-black uppercase text-white/48">
-              Good films. Good people. Mildly concerning devotion.
+              Every Sunday. Every Bonk.
             </div>
           </aside>
 
@@ -44,6 +44,9 @@ export default async function Home() {
               Every Sunday afternoon we gather to watch films, talk about them,
               overthink them, misremember them, and pretend that snacks are not
               the main reason we came.
+            </p>
+            <p className="mt-5 text-sm font-black uppercase tracking-[0.14em] text-butter">
+              Every Sunday. Every Bonk.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
               <Link className={buttonVariants({ size: "lg" })} href="/screenings">
