@@ -1,9 +1,9 @@
-import { createClient } from "@/lib/supabase/server";
 import { sampleEvents, sampleMerch, samplePhotos } from "@/lib/sample-data";
 import type { BonkhouseEvent, MerchProduct, Photo } from "@/types/bonkhouse";
 
 export async function getEvents() {
   try {
+    const { createClient } = await import("@/lib/supabase/server");
     const supabase = await createClient();
     const { data, error } = await supabase
       .from("events")
@@ -27,6 +27,7 @@ export async function getEventBySlug(slug: string) {
 
 export async function getPhotos(): Promise<Photo[]> {
   try {
+    const { createClient } = await import("@/lib/supabase/server");
     const supabase = await createClient();
     const { data, error } = await supabase
       .from("photos")
@@ -51,6 +52,7 @@ export async function getPhotos(): Promise<Photo[]> {
 
 export async function getMerch(): Promise<MerchProduct[]> {
   try {
+    const { createClient } = await import("@/lib/supabase/server");
     const supabase = await createClient();
     const { data, error } = await supabase
       .from("merch_products")

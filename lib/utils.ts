@@ -24,3 +24,16 @@ export function formatEventTime(value: string) {
 export function siteUrl() {
   return process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "http://localhost:3000";
 }
+
+export function publicAsset(path: string | null | undefined) {
+  if (!path) {
+    return "";
+  }
+
+  if (/^(https?:)?\/\//.test(path) || path.startsWith("data:")) {
+    return path;
+  }
+
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  return normalizedPath;
+}

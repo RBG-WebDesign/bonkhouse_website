@@ -1,10 +1,14 @@
-import { notFound } from "next/navigation";
 import { CalendarDays, Clock, DoorOpen, MapPin, MessageCircle } from "lucide-react";
 import { PosterCard } from "@/components/poster-card";
 import { RsvpForm } from "@/components/rsvp-form";
 import { Badge } from "@/components/ui/badge";
 import { getEventBySlug } from "@/lib/data";
+import { sampleEvents } from "@/lib/sample-data";
 import { formatEventDate, formatEventTime } from "@/lib/utils";
+
+export function generateStaticParams() {
+  return sampleEvents.map((event) => ({ slug: event.slug }));
+}
 
 export default async function EventDetailPage({
   params
@@ -15,7 +19,14 @@ export default async function EventDetailPage({
   const event = await getEventBySlug(slug);
 
   if (!event) {
-    notFound();
+    return (
+      <div className="club-container py-10">
+        <p className="eyebrow">Screening</p>
+        <h1 className="font-display text-6xl uppercase leading-none tracking-[-0.06em] text-white">
+          Screening not found
+        </h1>
+      </div>
+    );
   }
 
   const archived = event.status === "archived" || new Date(event.startsAt) < new Date();

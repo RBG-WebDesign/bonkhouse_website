@@ -1,4 +1,5 @@
 import type { BonkhouseEvent } from "@/types/bonkhouse";
+import { publicAsset } from "@/lib/utils";
 
 export function PosterCard({ event }: { event: BonkhouseEvent }) {
   if (event.posterUrl) {
@@ -7,7 +8,7 @@ export function PosterCard({ event }: { event: BonkhouseEvent }) {
         <img
           alt={`${event.title} poster`}
           className="absolute inset-0 h-full w-full object-cover"
-          src={event.posterUrl}
+          src={publicAsset(event.posterUrl)}
         />
       </div>
     );

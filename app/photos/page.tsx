@@ -1,6 +1,7 @@
 import { Camera } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { getPhotos } from "@/lib/data";
+import { publicAsset } from "@/lib/utils";
 
 export default async function PhotosPage() {
   const photos = await getPhotos();
@@ -21,7 +22,7 @@ export default async function PhotosPage() {
           <article className="club-card p-4" key={photo.id}>
             <div className="photo-frame grid aspect-[4/3] place-items-center">
               {photo.imageUrl ? (
-                <img alt={photo.caption} className="h-full w-full object-cover" src={photo.imageUrl} />
+                <img alt={photo.caption} className="h-full w-full object-cover" src={publicAsset(photo.imageUrl)} />
               ) : (
                 <Camera className="relative z-10 text-butter" size={46} />
               )}

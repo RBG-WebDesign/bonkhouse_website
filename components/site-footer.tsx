@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CircleEllipsis, MessageCircle, Play, Ticket } from "lucide-react";
+import { publicAsset } from "@/lib/utils";
 
 export function SiteFooter() {
   return (
@@ -9,7 +10,7 @@ export function SiteFooter() {
           <img
             alt="Sunday Afternoon Bonk House"
             className="h-auto w-56"
-            src="/bonkhouse-title.png"
+            src={publicAsset("/bonkhouse-title.png")}
           />
           <p className="mt-4 max-w-xs text-sm leading-6 text-white/62">
             A Culver City excuse to watch movies together, with double features, trailers,

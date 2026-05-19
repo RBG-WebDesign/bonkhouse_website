@@ -1,13 +1,14 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
+import { publicAsset } from "@/lib/utils";
 
 const links = [
   { href: "/screenings", label: "Screenings" },
   { href: "/photos", label: "Journal" },
   { href: "/merch", label: "Membership" },
   { href: "/about", label: "About" },
-  { href: "/admin", label: "Contact" }
+  { href: "/about", label: "Contact" }
 ];
 
 export function SiteHeader() {
@@ -18,7 +19,7 @@ export function SiteHeader() {
           <img
             alt="Sunday Afternoon Bonk House"
             className="h-auto w-44 transition duration-200 group-hover:brightness-125 sm:w-56"
-            src="/bonkhouse-title.png"
+            src={publicAsset("/bonkhouse-title.png")}
           />
         </Link>
         <nav className="hidden items-center gap-8 lg:flex">

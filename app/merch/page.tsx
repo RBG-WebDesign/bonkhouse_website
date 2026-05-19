@@ -1,6 +1,7 @@
 import { ShoppingBag } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { getMerch } from "@/lib/data";
+import { publicAsset } from "@/lib/utils";
 
 export default async function MerchPage() {
   const products = await getMerch();
@@ -21,7 +22,7 @@ export default async function MerchPage() {
           <article className="club-card p-4" key={product.id}>
             <div className="photo-frame photo-warm grid aspect-square place-items-center">
               {product.imageUrl ? (
-                <img alt={product.name} className="h-full w-full object-cover" src={product.imageUrl} />
+                <img alt={product.name} className="h-full w-full object-cover" src={publicAsset(product.imageUrl)} />
               ) : (
                 <ShoppingBag className="relative z-10 text-butter" size={52} />
               )}

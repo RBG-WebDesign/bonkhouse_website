@@ -31,21 +31,22 @@ export default async function Home() {
         <div className="club-container grid min-h-[38rem] gap-8 py-10 lg:grid-cols-[3rem_1.06fr_1fr_0.62fr] lg:py-0">
           <aside className="hidden items-center justify-center border-r border-white/15 lg:flex">
             <div className="vertical-slogan text-[0.65rem] font-black uppercase text-white/48">
-              Good films. Good people.
+              Good films. Good people. Mildly concerning devotion.
             </div>
           </aside>
 
           <div className="relative z-10 flex flex-col justify-center py-10">
             <p className="eyebrow">Welcome to Bonkhouse</p>
             <h1 className="mt-5 max-w-2xl font-display text-5xl leading-[0.96] tracking-[-0.06em] text-white sm:text-6xl lg:text-7xl">
-              A Film Social Club for Screenings, Conversation, and Good Company.
+              A Film Social Club for People Who Like Movies a Normal Amount
             </h1>
             <p className="mt-6 max-w-lg text-base leading-7 text-white/72">
-              We screen films we love, talk about what moves us, and build a creative
-              community around cinema. Every Sunday. Always open to new faces.
+              Every Sunday afternoon we gather to watch films, talk about them,
+              overthink them, misremember them, and pretend that snacks are not
+              the main reason we came.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
-              <Link className={buttonVariants({ size: "lg" })} href={`/events/${nextEvent.slug}`}>
+              <Link className={buttonVariants({ size: "lg" })} href="/screenings">
                 See upcoming screenings
                 <ArrowRight size={18} />
               </Link>
@@ -69,12 +70,14 @@ export default async function Home() {
           <div className="relative min-h-[30rem] lg:min-h-[38rem]">
             <div className="photo-frame absolute right-2 top-6 h-44 w-56 rotate-3 border-[8px] border-white/85 shadow-soft sm:w-64" />
             <div className="absolute left-3 top-52 z-10 grid h-36 w-36 rotate-[-10deg] place-items-center rounded-full border-4 border-white bg-black text-center">
-              <p className="scribble-logo text-2xl leading-none text-white">
-                Every
-                <br />
-                <span className="text-butter">Sunday</span>
+              <p className="scribble-logo text-xl leading-none text-white">
+                Every Sunday
                 <br />
                 Afternoon
+                <br />
+                <span className="text-butter">Your Sundays</span>
+                <br />
+                Belong to us :)
               </p>
             </div>
             <div className="photo-frame photo-warm absolute bottom-8 right-0 h-40 w-52 rotate-[-2deg] border-[8px] border-white/85 shadow-soft sm:w-60" />

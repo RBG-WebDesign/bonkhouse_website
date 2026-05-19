@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, CalendarDays, MapPin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { formatEventDate, formatEventTime } from "@/lib/utils";
+import { formatEventDate, formatEventTime, publicAsset } from "@/lib/utils";
 import type { BonkhouseEvent } from "@/types/bonkhouse";
 
 export function EventCard({ event }: { event: BonkhouseEvent }) {
@@ -20,7 +20,7 @@ export function EventCard({ event }: { event: BonkhouseEvent }) {
           <img
             alt={`${event.title} poster`}
             className="absolute inset-0 h-full w-full object-cover"
-            src={event.posterUrl}
+            src={publicAsset(event.posterUrl)}
           />
         ) : null}
         <Link
