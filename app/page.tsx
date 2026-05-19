@@ -23,6 +23,7 @@ export default async function Home() {
   const events = await getEvents();
   const upcoming = events.filter((event) => new Date(event.startsAt) >= new Date() && event.status !== "archived");
   const nextEvent = upcoming[0] || events[0];
+  const heroEvent = makeHeroEvent(nextEvent);
   const cards = makeHomeCards(upcoming, nextEvent);
 
   return (
@@ -38,7 +39,7 @@ export default async function Home() {
           <div className="relative z-10 flex flex-col justify-center py-10">
             <p className="eyebrow">Welcome to Bonkhouse</p>
             <h1 className="mt-5 max-w-2xl font-display text-5xl leading-[0.96] tracking-[-0.06em] text-white sm:text-6xl lg:text-7xl">
-              A Film Social Club for People Who Like Movies a Normal Amount
+              Every Sunday. Every Bonk.
             </h1>
             <p className="mt-6 max-w-lg text-base leading-7 text-white/72">
               Every Sunday afternoon we gather to watch films, talk about them,
@@ -62,12 +63,12 @@ export default async function Home() {
           <div className="relative min-h-[24rem] overflow-hidden border-x border-white/15 lg:min-h-[38rem]">
             <div className="photo-frame photo-warm absolute inset-0 opacity-55" />
             <div className="absolute inset-5 flex items-center justify-center pb-24 sm:inset-8">
-              {nextEvent.posterUrl ? (
+              {heroEvent.posterUrl ? (
                 <div className="relative aspect-[555/740] w-full max-w-[15rem] rotate-[-1.5deg] overflow-hidden border-[7px] border-white/85 bg-black shadow-soft sm:max-w-[18rem] lg:max-w-[19rem]">
                   <img
-                    alt={`${nextEvent.title} poster`}
+                    alt={`${heroEvent.title} poster`}
                     className="h-full w-full object-cover"
-                    src={publicAsset(nextEvent.posterUrl)}
+                    src={publicAsset(heroEvent.posterUrl)}
                   />
                   <span className="tape -top-3 left-10 rotate-6" />
                 </div>
@@ -75,9 +76,9 @@ export default async function Home() {
             </div>
             <div className="absolute inset-x-8 bottom-8 z-10 border border-white/25 bg-black/72 p-4 backdrop-blur">
               <p className="eyebrow">Next screening</p>
-              <p className="mt-1 font-display text-3xl uppercase leading-none text-white">{nextEvent.title}</p>
+              <p className="mt-1 font-display text-3xl uppercase leading-none text-white">{heroEvent.title}</p>
               <p className="mt-2 text-sm text-white/70">
-                {formatEventDate(nextEvent.startsAt)} | {formatEventTime(nextEvent.startsAt)}
+                {formatEventDate(heroEvent.startsAt)} | {formatEventTime(heroEvent.startsAt)}
               </p>
             </div>
           </div>
@@ -213,6 +214,20 @@ export default async function Home() {
       </section>
     </div>
   );
+}
+
+function makeHeroEvent(event: BonkhouseEvent): BonkhouseEvent {
+  return {
+    ...event,
+    id: "society-videodrome-double-feature",
+    slug: "society-videodrome-double-feature",
+    title: "Society / Videodrome Double Feature",
+    kicker: "Bryan Yuzna's Society meets Videodrome for a body-horror Sunday.",
+    description:
+      "A neighborhood body-horror movie afternoon with a pre-show, Society, intermission, Videodrome, and enough lobby chatter to make leaving immediately feel rude.",
+    posterUrl: "/posters/society-videodrome-double-feature.svg",
+    program: ["Pre-show trailers", "Society", "Intermission ads", "Videodrome"]
+  };
 }
 
 function makeHomeCards(upcoming: BonkhouseEvent[], nextEvent: BonkhouseEvent) {
