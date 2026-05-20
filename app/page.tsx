@@ -4,7 +4,7 @@ import { HeroShaderBackground } from "@/components/hero-shader-background";
 import { MailingListForm } from "@/components/mailing-list-form";
 import { buttonVariants } from "@/components/ui/button";
 import { getEvents, getPhotos } from "@/lib/data";
-import { formatEventTime, publicAsset } from "@/lib/utils";
+import { formatEventTime, formatEventTimeRange, publicAsset } from "@/lib/utils";
 import type { BonkhouseEvent } from "@/types/bonkhouse";
 
 export default async function Home() {
@@ -131,7 +131,11 @@ export default async function Home() {
           </div>
 
           {/* Double-feature Card Ticket Flyer */}
-          <div className="relative p-6 bg-[#dfdacb] border border-[#c3bba6] shadow-sticker rounded-[3px] text-black overflow-visible flex min-h-[17rem] md:min-h-[20rem] select-none hover:-translate-y-1 transition duration-300">
+          <Link
+            aria-label={`Open ${heroEvent.title}`}
+            className="focus-ring relative p-6 bg-[#dfdacb] border border-[#c3bba6] shadow-sticker rounded-[3px] text-black overflow-visible flex min-h-[17rem] md:min-h-[20rem] select-none hover:-translate-y-1 transition duration-300 cursor-pointer"
+            href={`/events/${heroEvent.slug}`}
+          >
             {/* Ticket Punches */}
             <div className="ticket-punch-left" />
             <div className="ticket-punch-right" />
@@ -209,11 +213,11 @@ export default async function Home() {
 
               {/* Flyer Bottom Bar */}
               <div className="border-t border-[#c5bead] pt-3 flex justify-between items-center text-[0.62rem] font-black uppercase tracking-widest text-black/60 font-sans">
-                <span>DOORS: {formatEventTime(heroEvent.doorsAt)}</span>
+                <span>TIME: {formatEventTimeRange(heroEvent.startsAt, heroEvent.endsAt)}</span>
                 <span>VENUE: {heroEvent.venue.name}</span>
               </div>
             </div>
-          </div>
+          </Link>
         </div>
       </section>
 
@@ -231,9 +235,11 @@ export default async function Home() {
               const eventDay = eventDate.getDate();
 
               return (
-                <div 
+                <Link 
                   key={event.id}
-                  className="relative p-5 bg-[#dfdacb] border border-[#c3bba6] shadow-sticker rounded-[3px] text-black overflow-visible flex flex-col justify-between min-h-[14rem] select-none hover:-translate-y-1 transition duration-300"
+                  aria-label={`Open ${event.title}`}
+                  className="focus-ring relative p-5 bg-[#dfdacb] border border-[#c3bba6] shadow-sticker rounded-[3px] text-black overflow-visible flex flex-col justify-between min-h-[14rem] select-none hover:-translate-y-1 transition duration-300 cursor-pointer"
+                  href={`/events/${event.slug}`}
                   style={{ transform: `rotate(${(index % 2 === 0 ? -1.2 : 0.8) * 0.8}deg)` }}
                 >
                   {/* Ticket Punches */}
@@ -282,7 +288,7 @@ export default async function Home() {
                       {index === 0 ? "DOUBLE FEATURE" : index === 1 ? "DISCUSSION TO FOLLOW" : "PRIVATE SCREENING"}
                     </span>
                   </div>
-                </div>
+                </Link>
               );
             })}
           </div>
@@ -390,7 +396,11 @@ function makeHeroEvent(event: BonkhouseEvent): BonkhouseEvent {
     kicker: "Bryan Yuzna's Society meets Videodrome for a body-horror Sunday.",
     description:
       "A neighborhood body-horror movie afternoon with a pre-show, Society, intermission, Videodrome, and enough lobby chatter to make leaving immediately feel rude.",
-    posterUrl: "/posters/society-videodrome-double-feature.svg",
+    posterUrl: "/posters/long-live-the-new-bonk.png",
+    startsAt: "2026-10-18T13:00:00-07:00",
+    endsAt: "2026-10-18T17:00:00-07:00",
+    doorsAt: "2026-10-18T13:00:00-07:00",
+    gateClosesAt: "2026-10-18T13:10:00-07:00",
     program: ["Pre-show trailers", "Society", "Intermission ads", "Videodrome"]
   };
 }

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, CalendarDays, MapPin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { formatEventDate, formatEventTime, publicAsset } from "@/lib/utils";
+import { formatEventDate, formatEventTime, formatEventTimeRange, publicAsset } from "@/lib/utils";
 import type { BonkhouseEvent } from "@/types/bonkhouse";
 
 export function EventCard({ event }: { event: BonkhouseEvent }) {
@@ -10,7 +10,11 @@ export function EventCard({ event }: { event: BonkhouseEvent }) {
 
   return (
     <article className="club-card group overflow-hidden rounded-lg p-3 transition hover:-translate-y-1">
-      <div className="relative aspect-[555/740] overflow-hidden rounded-md border border-white/20 bg-[#e8e1cf] text-black">
+      <Link
+        aria-label={`Open ${event.title}`}
+        className="focus-ring relative block aspect-[555/740] overflow-hidden rounded-md border border-white/20 bg-[#e8e1cf] text-black transition hover:border-butter"
+        href={`/events/${event.slug}`}
+      >
         {useExistingPoster ? (
           <img
             alt={`${event.title} poster`}
@@ -20,14 +24,10 @@ export function EventCard({ event }: { event: BonkhouseEvent }) {
         ) : (
           <ScreeningPosterTemplate event={event} archived={archived} />
         )}
-        <Link
-          aria-label={`Open ${event.title}`}
-          className="absolute right-3 top-3 z-10 grid h-9 w-9 place-items-center rounded-full border border-white/60 bg-black/70 text-white transition group-hover:border-butter group-hover:text-butter"
-          href={`/events/${event.slug}`}
-        >
+        <span className="absolute right-3 top-3 z-10 grid h-9 w-9 place-items-center rounded-full border border-white/60 bg-black/70 text-white transition group-hover:border-butter group-hover:text-butter">
           <ArrowRight size={17} />
-        </Link>
-      </div>
+        </span>
+      </Link>
       <div className="grid grid-cols-[4.2rem_1fr] gap-4 pt-4">
         <div className="grid h-16 place-items-center rounded-md border border-butter text-center text-butter">
           <div>
@@ -39,7 +39,7 @@ export function EventCard({ event }: { event: BonkhouseEvent }) {
         </div>
         <div>
           <p className="text-[0.68rem] font-black uppercase tracking-[0.08em] text-butter">
-            {formatEventTime(event.startsAt)} | {event.venue.name}
+            {formatEventTimeRange(event.startsAt, event.endsAt)} | {event.venue.name}
           </p>
           <h3 className="mt-2 font-display text-2xl uppercase leading-none text-white">{event.title}</h3>
           <p className="mt-2 line-clamp-2 text-sm leading-5 text-white/66">{event.description}</p>
@@ -99,7 +99,7 @@ function ScreeningPosterTemplate({ event, archived }: { event: BonkhouseEvent; a
       </div>
 
       <div className="absolute inset-x-8 bottom-8 z-10 flex justify-between border-t border-black/15 pt-3 font-special text-[0.58rem] uppercase tracking-[0.16em] text-black/58">
-        <span>{formatEventTime(event.startsAt)}</span>
+        <span>{formatEventTimeRange(event.startsAt, event.endsAt)}</span>
         <span>{event.venue.neighborhood}</span>
       </div>
     </div>

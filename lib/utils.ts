@@ -21,6 +21,14 @@ export function formatEventTime(value: string) {
   }).format(new Date(value));
 }
 
+export function formatEventTimeRange(start: string, end?: string) {
+  if (!end) {
+    return formatEventTime(start);
+  }
+
+  return `${formatEventTime(start)} to ${formatEventTime(end)}`;
+}
+
 export function siteUrl() {
   return process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "http://localhost:3000";
 }

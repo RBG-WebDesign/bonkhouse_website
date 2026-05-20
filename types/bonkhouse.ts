@@ -17,6 +17,7 @@ export type BonkhouseEvent = {
   description: string;
   posterUrl: string | null;
   startsAt: string;
+  endsAt?: string;
   doorsAt: string;
   gateClosesAt: string;
   venue: Venue;

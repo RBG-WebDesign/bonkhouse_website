@@ -4,7 +4,7 @@ import { RsvpForm } from "@/components/rsvp-form";
 import { Badge } from "@/components/ui/badge";
 import { getEventBySlug } from "@/lib/data";
 import { sampleEvents } from "@/lib/sample-data";
-import { formatEventDate, formatEventTime } from "@/lib/utils";
+import { formatEventDate, formatEventTime, formatEventTimeRange } from "@/lib/utils";
 
 export function generateStaticParams() {
   return sampleEvents.map((event) => ({ slug: event.slug }));
@@ -48,7 +48,7 @@ export default async function EventDetailPage({
           {[
             [CalendarDays, "Date", formatEventDate(event.startsAt)],
             [DoorOpen, "Doors", formatEventTime(event.doorsAt)],
-            [Clock, "Screening", formatEventTime(event.startsAt)],
+            [Clock, "Screening", formatEventTimeRange(event.startsAt, event.endsAt)],
             [MapPin, "Venue", `${event.venue.name}, ${event.venue.address}`],
             [MessageCircle, "Late arrival", event.textForEntry]
           ].map(([Icon, label, value]) => {
