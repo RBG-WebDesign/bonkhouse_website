@@ -33,23 +33,33 @@ export default async function Home() {
         
         <div className="club-container relative z-10 grid w-full gap-8 lg:grid-cols-12">
           <div className="relative z-10 flex flex-col justify-center py-10 lg:col-span-8">
-            <span className="mb-1 inline-block self-start rotate-[-1.5deg] font-hand text-[4.25rem] leading-[0.78] tracking-wide text-white sm:text-[5.4rem] md:text-[6.25rem]">
-              Welcome to
+            <span aria-label="Welcome to" className="hero-handwritten-mark mb-1 self-start">
+              {"Welcome to".split("").map((letter, index) => (
+                <span
+                  aria-hidden="true"
+                  className={letter === " " ? "hero-handwritten-space" : undefined}
+                  key={`${letter}-${index}`}
+                >
+                  {letter}
+                </span>
+              ))}
             </span>
             <h1 
-              className="font-bebas text-7xl sm:text-8xl md:text-9xl leading-[0.8] tracking-[0.08em] select-none uppercase font-black bonk-title-3d"
+              className="font-bebas text-7xl sm:text-8xl md:text-9xl leading-[0.8] tracking-[0.1em] select-none uppercase"
+              style={{ WebkitTextStroke: "2px #ffd400", color: "transparent" }}
             >
               BONKHOUSE
             </h1>
             <p className="mt-6 max-w-2xl font-special text-[1.05rem] leading-[1.25] tracking-[0.015em] text-white sm:text-[1.35rem] md:text-[1.55rem]">
-              A place for films, friends, and whatever happens <span className="brush-underline text-butter">after the credits</span>.
+              A Sunday afternoon film thing for friends, freaks, and anyone who loves movies{" "}
+              <span className="brush-underline text-butter">more than life itself</span>.
             </p>
-            <p className="mt-4 max-w-md text-sm text-white/70 leading-relaxed font-sans">
-              We build custom double features from movies, shorts, animations, trailers, commercials, and strange little surprises you will not get at a normal screening.
+            <p className="mt-4 max-w-xl text-sm text-white/70 leading-relaxed font-sans">
+              As the empire falls, we gather before the screen to remember its visions: the films, trailers, and commercials that promised us what could have been.
             </p>
             
             <div className="mt-6 self-start dymo-tape-yellow text-[0.62rem] font-bold uppercase tracking-[0.08em] rotate-[1.5deg] shadow-md">
-              Come watch something with us.
+              Come watch something weird with us.
             </div>
 
             <div className="mt-8 flex flex-wrap gap-4">
@@ -62,24 +72,17 @@ export default async function Home() {
             </div>
           </div>
 
-          {/* Right Column: Floating Yellow Crumpled Circle Badge */}
+          {/* Right Column: Floating Free Screenings Sticker */}
           <div className="relative hidden items-center justify-center lg:col-span-4 lg:flex">
-            <div className="w-56 h-56 yellow-sticker flex flex-col justify-center items-center text-center p-6 rotate-[3deg] animate-float z-20 select-none">
-              <p className="font-sans font-black text-[0.65rem] uppercase tracking-widest text-black/85 leading-tight">
-                EVERY SUNDAY
-              </p>
-              <p className="font-sans font-black text-[0.65rem] uppercase tracking-widest text-black/85 leading-tight">
-                AFTERNOON
-              </p>
-              <p className="font-hand text-[2.2rem] font-black leading-none text-black/90 my-2.5 rotate-[-1.5deg]">
-                Your Sundays
-              </p>
-              <p className="font-hand text-[2.2rem] font-black leading-none text-black/90 rotate-[-1.5deg] -mt-1.5">
-                Belong to us
-              </p>
-              <p className="font-hand text-[2.2rem] font-black text-black/90 mt-1">
-                :)
-              </p>
+            <div
+              aria-label="Dirty old sticker that says Your Sundays are belong to us"
+              className="free-screenings-sticker h-56 w-56 rotate-[3deg] animate-float select-none"
+            >
+              <span className="sticker-grime sticker-grime-one" />
+              <span className="sticker-grime sticker-grime-two" />
+              <span className="sticker-slogan sticker-slogan-top">Your Sundays</span>
+              <span className="sticker-slogan sticker-slogan-mid">are belong</span>
+              <span className="sticker-slogan sticker-slogan-bottom">to us</span>
             </div>
           </div>
         </div>

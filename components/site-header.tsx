@@ -11,12 +11,12 @@ const links = [
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-50 border-b border-white/15 bg-black/90 backdrop-blur-xl">
+    <header className="grindhouse-header sticky top-0 z-50 border-b border-white/15 bg-black/90 backdrop-blur-xl">
       <div className="club-container flex min-h-20 items-center justify-between gap-4">
         <Link className="group block min-w-max" href="/">
           <img
             alt="Sunday Afternoon Bonk House"
-            className="h-auto w-44 transition duration-200 group-hover:brightness-125 sm:w-56"
+            className="grindhouse-logo h-auto w-44 transition duration-200 group-hover:brightness-125 sm:w-56"
             src={publicAsset("/bonkhouse-title.png")}
           />
         </Link>
@@ -32,7 +32,7 @@ export function SiteHeader() {
               </Link>
             ))}
           </nav>
-          <Link className={buttonVariants({ className: "hidden h-11 font-bebas text-lg tracking-wider leading-none sm:inline-flex", variant: "default" })} href="/screenings">
+          <Link className={buttonVariants({ className: "hidden h-12 px-6 font-bebas text-2xl tracking-wider leading-none sm:inline-flex", variant: "default" })} href="/screenings">
             JOIN THE CLUB
             <ArrowRight className="ml-1.5" size={16} />
           </Link>

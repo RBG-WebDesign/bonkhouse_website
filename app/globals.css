@@ -23,9 +23,9 @@ body {
   min-height: 100vh;
   margin: 0;
   background:
-    radial-gradient(circle at 65% 12%, rgba(255, 212, 0, 0.09), transparent 24rem),
-    radial-gradient(circle at 18% 20%, rgba(255, 255, 255, 0.06), transparent 18rem),
-    linear-gradient(180deg, #030303 0%, #080808 48%, #000 100%);
+    radial-gradient(circle at 65% 12%, rgba(255, 212, 0, 0.075), transparent 24rem),
+    radial-gradient(circle at 18% 20%, rgba(129, 39, 24, 0.11), transparent 18rem),
+    linear-gradient(180deg, #050403 0%, #090705 48%, #000 100%);
   color: var(--ink);
   font-family: "Trebuchet MS", Verdana, sans-serif;
 }
@@ -33,25 +33,32 @@ body {
 body::before {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: 70;
   pointer-events: none;
   content: "";
-  opacity: 0.17;
+  opacity: 0.13;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-  background-size: 42px 42px;
+    radial-gradient(circle at 14% 21%, rgba(255, 216, 120, 0.32), transparent 0.08rem),
+    radial-gradient(circle at 72% 18%, rgba(255, 216, 120, 0.2), transparent 0.06rem),
+    radial-gradient(circle at 86% 72%, rgba(0, 0, 0, 0.7), transparent 0.1rem),
+    radial-gradient(circle at 31% 84%, rgba(255, 255, 255, 0.24), transparent 0.07rem),
+    linear-gradient(90deg, transparent 0 3%, rgba(255, 218, 120, 0.2) 3.1%, transparent 3.3% 96.4%, rgba(255, 218, 120, 0.14) 96.6%, transparent 97%),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.06) 0 1px, transparent 1px 9px);
+  background-size: 240px 240px, 180px 180px, 220px 220px, 150px 150px, 100% 100%, 100% 100%;
+  mix-blend-mode: screen;
 }
 
 body::after {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: 71;
   pointer-events: none;
   content: "";
-  opacity: 0.2;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E");
-  mix-blend-mode: screen;
+  opacity: 0.26;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.92' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.42'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse at center, transparent 48%, rgba(0, 0, 0, 0.45) 100%);
+  mix-blend-mode: overlay;
 }
 
 a {
@@ -100,6 +107,197 @@ textarea {
   @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
 }
 
+.grindhouse-header {
+  overflow: hidden;
+  box-shadow:
+    inset 0 -1px 0 rgba(155, 38, 21, 0.45),
+    0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.grindhouse-header::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, transparent, rgba(255, 212, 0, 0.06), transparent),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.07) 0 1px, transparent 1px 9px);
+  mix-blend-mode: overlay;
+  opacity: 0.48;
+}
+
+.grindhouse-header::after {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  content: "";
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(177, 38, 21, 0.8) 12%, rgba(255, 212, 0, 0.35) 50%, rgba(177, 38, 21, 0.8) 88%, transparent);
+  opacity: 0.65;
+}
+
+.grindhouse-logo {
+  filter: sepia(0.16) contrast(1.1) drop-shadow(1px 1px 0 rgba(132, 22, 13, 0.5));
+}
+
+main > div > section {
+  isolation: isolate;
+}
+
+main > div > section::before {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  content: "";
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 8% 12%, rgba(255, 223, 138, 0.1), transparent 11rem),
+    radial-gradient(circle at 94% 24%, rgba(169, 38, 20, 0.08), transparent 13rem),
+    repeating-linear-gradient(92deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 18px);
+  mix-blend-mode: screen;
+  opacity: 0.7;
+}
+
+main > div > section > .club-container {
+  position: relative;
+  z-index: 1;
+}
+
+.grindhouse-button {
+  position: relative;
+  overflow: hidden;
+  border-radius: 3px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -8px 18px rgba(83, 51, 0, 0.14),
+    0 8px 22px rgba(0, 0, 0, 0.32);
+}
+
+.grindhouse-button::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 14% 26%, rgba(35, 24, 0, 0.22), transparent 0.13rem),
+    radial-gradient(circle at 76% 66%, rgba(35, 24, 0, 0.18), transparent 0.12rem),
+    repeating-linear-gradient(106deg, rgba(255, 255, 255, 0.12) 0 1px, transparent 1px 8px);
+  mix-blend-mode: multiply;
+  opacity: 0.42;
+}
+
+.grindhouse-button::after {
+  position: absolute;
+  inset: 2px;
+  content: "";
+  pointer-events: none;
+  border: 1px solid rgba(0, 0, 0, 0.22);
+  border-radius: 2px;
+  opacity: 0.35;
+}
+
+.hero-handwritten-mark {
+  position: relative;
+  display: inline-flex;
+  align-items: baseline;
+  color: #fff8e4;
+  font-family: var(--font-hand), "Segoe Print", "Bradley Hand ITC", cursive;
+  font-size: 4.25rem;
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  line-height: 0.78;
+  text-shadow:
+    1px 1px 0 rgba(0, 0, 0, 0.36),
+    1px 2px 0 rgba(143, 28, 16, 0.18);
+  transform: rotate(-2.4deg) skewX(-3deg);
+}
+
+.hero-handwritten-mark::before,
+.hero-handwritten-mark::after {
+  position: absolute;
+  left: 4%;
+  right: 2%;
+  bottom: -0.18rem;
+  height: 0.11rem;
+  content: "";
+  pointer-events: none;
+  border-radius: 9999px;
+  background: rgba(255, 248, 228, 0.92);
+  transform: rotate(0.8deg);
+  filter: drop-shadow(1px 1px 0 rgba(128, 25, 15, 0.22));
+}
+
+.hero-handwritten-mark::after {
+  left: 15%;
+  right: 11%;
+  bottom: -0.34rem;
+  height: 0.07rem;
+  opacity: 0.38;
+  transform: rotate(-1.6deg);
+}
+
+.hero-handwritten-mark span {
+  display: inline-block;
+}
+
+.hero-handwritten-mark span:nth-child(1) {
+  transform: translateY(0.03em) rotate(-5deg);
+}
+
+.hero-handwritten-mark span:nth-child(2) {
+  transform: translateY(-0.05em) rotate(2deg);
+}
+
+.hero-handwritten-mark span:nth-child(3) {
+  transform: translateY(0.02em) rotate(-2deg) scaleX(0.96);
+}
+
+.hero-handwritten-mark span:nth-child(4) {
+  transform: translateY(-0.04em) rotate(3deg);
+}
+
+.hero-handwritten-mark span:nth-child(5) {
+  transform: translateY(0.04em) rotate(-3deg);
+}
+
+.hero-handwritten-mark span:nth-child(6) {
+  transform: translateY(-0.03em) rotate(2deg) scaleX(1.08);
+}
+
+.hero-handwritten-mark span:nth-child(7) {
+  transform: translateY(0.02em) rotate(-4deg);
+}
+
+.hero-handwritten-mark span:nth-child(8) {
+  transform: translateY(-0.02em) rotate(1deg);
+}
+
+.hero-handwritten-mark span:nth-child(9) {
+  transform: translateY(0.03em) rotate(4deg);
+}
+
+.hero-handwritten-mark span:nth-child(10) {
+  transform: translateY(-0.03em) rotate(-2deg);
+}
+
+.hero-handwritten-space {
+  width: 0.28em;
+}
+
+@media (min-width: 640px) {
+  .hero-handwritten-mark {
+    font-size: 5.4rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .hero-handwritten-mark {
+    font-size: 6.25rem;
+  }
+}
+
 .hero-shader-background {
   position: absolute;
   inset: 0;
@@ -115,8 +313,9 @@ textarea {
   pointer-events: none;
   content: "";
   background:
-    linear-gradient(90deg, rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0.24) 48%, rgba(0, 0, 0, 0.54)),
-    linear-gradient(180deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.56));
+    radial-gradient(circle at 62% 50%, rgba(255, 188, 0, 0.08), transparent 15rem),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.34) 48%, rgba(0, 0, 0, 0.6)),
+    linear-gradient(180deg, rgba(61, 22, 10, 0.16), rgba(0, 0, 0, 0.62));
 }
 
 .hero-shader-background::after {
@@ -125,9 +324,12 @@ textarea {
   z-index: 2;
   pointer-events: none;
   content: "";
-  opacity: 0.28;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.92' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='96' height='96' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
-  mix-blend-mode: screen;
+  opacity: 0.34;
+  background-image:
+    radial-gradient(circle, rgba(255, 232, 164, 0.28) 0 1px, transparent 1.2px),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.92' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='96' height='96' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+  background-size: 5px 5px, 96px 96px;
+  mix-blend-mode: overlay;
 }
 
 .hero-shader-background__canvas {
@@ -152,10 +354,39 @@ textarea {
   @apply text-xs font-black uppercase tracking-[0.08em] text-butter;
 }
 
+.font-bebas.text-butter {
+  text-shadow:
+    1px 1px 0 rgba(135, 25, 12, 0.7),
+    0 0 18px rgba(255, 212, 0, 0.12);
+}
+
 .club-card {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.035));
   border: 1px solid var(--line);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 18px 48px rgba(0, 0, 0, 0.38);
+}
+
+.shadow-sticker {
+  isolation: isolate;
+  box-shadow:
+    0 0 0 1px rgba(70, 49, 11, 0.35),
+    0 18px 48px rgba(0, 0, 0, 0.5),
+    inset 0 0 28px rgba(95, 68, 26, 0.13);
+}
+
+.shadow-sticker::before {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  content: "";
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(64, 42, 10, 0.16), transparent 0.18rem),
+    radial-gradient(circle at 76% 23%, rgba(64, 42, 10, 0.12), transparent 0.16rem),
+    radial-gradient(circle at 64% 83%, rgba(64, 42, 10, 0.15), transparent 0.2rem),
+    repeating-linear-gradient(86deg, rgba(71, 49, 16, 0.07) 0 1px, transparent 1px 11px);
+  mix-blend-mode: multiply;
+  opacity: 0.9;
 }
 
 .photo-frame {
@@ -235,7 +466,6 @@ textarea {
   z-index: 20;
 }
 
-/* Yellow sticker badge (using our crumpled texture PNG) */
 .yellow-sticker {
   position: relative;
   background-image: url("/yellow-sticker.png");
@@ -256,6 +486,166 @@ textarea {
 .yellow-sticker > * {
   position: relative;
   z-index: 1;
+}
+
+.free-screenings-sticker {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border: 3px solid rgba(30, 20, 0, 0.52);
+  border-radius: 48% 52% 50% 47% / 49% 46% 54% 51%;
+  background:
+    radial-gradient(circle at 30% 21%, rgba(255, 255, 255, 0.18), transparent 1.5rem),
+    radial-gradient(circle at 68% 70%, rgba(75, 47, 0, 0.34), transparent 3.2rem),
+    radial-gradient(circle at 20% 78%, rgba(0, 0, 0, 0.2), transparent 2.5rem),
+    conic-gradient(from 18deg, #e5b300, #c88c00, #ffd732, #ad7800, #edbf00, #bd8400, #e5b300);
+  box-shadow:
+    inset 0 0 0 6px rgba(255, 218, 50, 0.24),
+    inset 0 0 0 12px rgba(32, 24, 2, 0.08),
+    inset 0 -26px 38px rgba(58, 35, 0, 0.32),
+    0 18px 44px rgba(0, 0, 0, 0.46);
+  color: #130f05;
+  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.38));
+  text-align: center;
+}
+
+.free-screenings-sticker::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background:
+    radial-gradient(circle at 21% 19%, rgba(39, 30, 2, 0.48), transparent 0.17rem),
+    radial-gradient(circle at 41% 13%, rgba(39, 30, 2, 0.22), transparent 0.12rem),
+    radial-gradient(circle at 73% 24%, rgba(39, 30, 2, 0.38), transparent 0.15rem),
+    radial-gradient(circle at 86% 55%, rgba(39, 30, 2, 0.28), transparent 0.2rem),
+    radial-gradient(circle at 30% 83%, rgba(39, 30, 2, 0.42), transparent 0.22rem),
+    radial-gradient(circle at 62% 88%, rgba(255, 255, 255, 0.22), transparent 0.18rem),
+    repeating-linear-gradient(96deg, rgba(42, 29, 0, 0.11) 0 1px, transparent 1px 7px),
+    repeating-linear-gradient(177deg, rgba(255, 255, 255, 0.07) 0 1px, transparent 1px 13px);
+  mix-blend-mode: multiply;
+  opacity: 0.82;
+  pointer-events: none;
+}
+
+.free-screenings-sticker::after {
+  position: absolute;
+  inset: 0.72rem;
+  content: "";
+  border: 2px dashed rgba(20, 15, 3, 0.48);
+  border-radius: inherit;
+  box-shadow:
+    inset 0 0 19px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.11);
+  pointer-events: none;
+}
+
+.sticker-slogan {
+  position: absolute;
+  left: 50%;
+  z-index: 2;
+  color: #0c0802;
+  font-family: var(--font-hand), "Segoe Print", cursive;
+  font-weight: 900;
+  line-height: 0.82;
+  text-align: center;
+  text-shadow:
+    2px 2px 0 rgba(172, 29, 18, 0.66),
+    -1px -1px 0 rgba(255, 229, 90, 0.3);
+  white-space: nowrap;
+}
+
+.sticker-slogan-top {
+  top: 30%;
+  font-size: 2.5rem;
+  transform: translateX(-50%) rotate(-5deg);
+}
+
+.sticker-slogan-mid {
+  top: 46%;
+  font-size: 2.25rem;
+  transform: translateX(-50%) rotate(2deg);
+}
+
+.sticker-slogan-bottom {
+  top: 61%;
+  font-size: 2.95rem;
+  transform: translateX(-50%) rotate(-3deg);
+}
+
+.grindhouse-sticker-type {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 2;
+  width: 86%;
+  height: 72%;
+  overflow: visible;
+  transform: translate(-50%, -47%) rotate(-2deg) skewX(-5deg);
+}
+
+.grindhouse-sticker-type text {
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", "Arial Black", sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.grindhouse-sticker-type text:nth-child(1) {
+  font-size: 29px;
+  letter-spacing: 0.02em;
+}
+
+.grindhouse-sticker-type text:nth-child(2) {
+  font-size: 70px;
+}
+
+.grindhouse-sticker-type text:nth-child(3) {
+  font-size: 33px;
+  letter-spacing: -0.04em;
+}
+
+.grindhouse-red-layer {
+  fill: #a51b11;
+  opacity: 0.92;
+  transform: translate(5px, 4px);
+}
+
+.grindhouse-black-layer {
+  fill: #0c0802;
+  stroke: rgba(0, 0, 0, 0.5);
+  stroke-width: 0.7px;
+}
+
+.grindhouse-rule {
+  fill: none;
+  stroke: #0c0802;
+  stroke-linecap: square;
+  stroke-width: 7;
+  transform: rotate(-2deg);
+}
+
+.sticker-grime {
+  position: absolute;
+  z-index: 3;
+  border-radius: 9999px;
+  background: rgba(46, 31, 0, 0.24);
+  filter: blur(0.5px);
+  mix-blend-mode: multiply;
+}
+
+.sticker-grime-one {
+  left: 1.7rem;
+  top: 3.2rem;
+  width: 2.7rem;
+  height: 0.52rem;
+  transform: rotate(-19deg);
+}
+
+.sticker-grime-two {
+  right: 2rem;
+  bottom: 3rem;
+  width: 3.2rem;
+  height: 0.62rem;
+  transform: rotate(13deg);
 }
 
 /* Red pop-out 3D poster heading style */
@@ -368,10 +758,26 @@ textarea {
 .polaroid-frame {
   background: #f7f4ea;
   padding: 10px 10px 28px 10px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.5),
+    inset 0 0 22px rgba(88, 64, 24, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.05);
   transition: all 0.3s ease;
   color: #1a1a1a;
+  position: relative;
+  overflow: hidden;
+}
+.polaroid-frame::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 18% 22%, rgba(52, 33, 0, 0.15), transparent 0.12rem),
+    radial-gradient(circle at 79% 73%, rgba(52, 33, 0, 0.12), transparent 0.14rem),
+    repeating-linear-gradient(103deg, rgba(0, 0, 0, 0.035) 0 1px, transparent 1px 8px);
+  mix-blend-mode: multiply;
+  z-index: 3;
 }
 .polaroid-frame:hover {
   transform: scale(1.05) rotate(0deg) !important;

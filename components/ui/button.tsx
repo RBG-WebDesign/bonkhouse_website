@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "focus-ring inline-flex min-h-11 items-center justify-center gap-2 rounded-md border px-5 py-2.5 text-xs font-black uppercase tracking-[0.02em] transition hover:-translate-y-0.5 active:translate-y-0 disabled:pointer-events-none disabled:opacity-50",
+  "grindhouse-button focus-ring inline-flex min-h-11 items-center justify-center gap-2 rounded-md border px-5 py-2.5 text-xs font-black uppercase tracking-[0.02em] transition hover:-translate-y-0.5 active:translate-y-0 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
