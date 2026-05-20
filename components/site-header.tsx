@@ -24,7 +24,7 @@ export function SiteHeader() {
           <nav className="hidden items-center gap-8 lg:flex">
             {links.map((link) => (
               <Link
-                className="inline-flex h-11 items-center text-xs font-black uppercase leading-none tracking-[0.05em] text-white transition hover:text-butter"
+                className="inline-flex h-11 items-center font-bebas text-2xl uppercase tracking-wider text-white transition duration-200 hover:text-butter hover:scale-105"
                 href={link.href}
                 key={link.href}
               >
@@ -32,9 +32,9 @@ export function SiteHeader() {
               </Link>
             ))}
           </nav>
-          <Link className={buttonVariants({ className: "hidden h-11 leading-none sm:inline-flex", variant: "default" })} href="/screenings">
+          <Link className={buttonVariants({ className: "hidden h-11 font-bebas text-lg tracking-wider leading-none sm:inline-flex", variant: "default" })} href="/screenings">
             JOIN THE CLUB
-            <ArrowRight size={16} />
+            <ArrowRight className="ml-1.5" size={16} />
           </Link>
         </div>
       </div>

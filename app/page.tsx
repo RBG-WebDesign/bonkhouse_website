@@ -37,8 +37,7 @@ export default async function Home() {
               Welcome to
             </span>
             <h1 
-              className="font-bebas text-7xl sm:text-8xl md:text-9xl leading-[0.8] tracking-[0.1em] select-none uppercase"
-              style={{ WebkitTextStroke: "2px #ffd400", color: "transparent" }}
+              className="font-bebas text-7xl sm:text-8xl md:text-9xl leading-[0.8] tracking-[0.08em] select-none uppercase font-black bonk-title-3d"
             >
               BONKHOUSE
             </h1>
@@ -49,7 +48,7 @@ export default async function Home() {
               We build custom double features from movies, shorts, animations, trailers, commercials, and strange little surprises you will not get at a normal screening.
             </p>
             
-            <div className="mt-6 self-start border border-butter/30 px-3 py-1 text-[0.7rem] font-black uppercase tracking-[0.12em] text-butter bg-butter/5 rounded-[3px]">
+            <div className="mt-6 self-start dymo-tape-yellow text-[0.62rem] font-bold uppercase tracking-[0.08em] rotate-[1.5deg] shadow-md">
               Come watch something with us.
             </div>
 
@@ -88,14 +87,25 @@ export default async function Home() {
         {/* Torn paper divider */}
         <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none">
           <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-b from-transparent via-black/32 to-black" />
+          {/* Layer 1: White paper backing shadow */}
           <svg
             aria-hidden="true"
-            className="relative block h-10 w-full fill-black drop-shadow-[0_-8px_14px_rgba(0,0,0,0.32)]"
+            className="relative block h-14 w-full fill-white/10 translate-y-[2px]"
             preserveAspectRatio="none"
             viewBox="0 0 1440 48"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <path d="M0 20C40 25 68 15 108 21C145 27 175 14 211 21C248 29 280 13 318 22C353 30 386 14 424 21C462 28 494 14 532 22C572 31 606 12 647 21C686 30 724 15 762 22C801 29 836 13 876 21C914 29 948 16 987 22C1027 29 1062 12 1104 22C1143 31 1178 15 1219 22C1257 28 1293 13 1332 20C1370 27 1400 18 1440 23V48H0V20Z" />
+            <path d="M0 32L24 24L48 35L72 20L96 30L120 22L144 38L168 25L192 33L216 19L240 28L264 22L288 35L312 21L336 29L360 23L384 37L408 26L432 32L456 18L480 30L504 22L528 35L552 24L576 31L600 20L624 28L648 22L672 36L696 25L720 33L744 19L768 29L792 21L816 35L840 24L864 30L888 20L912 28L936 23L960 36L984 25L1008 32L1032 19L1056 29L1080 22L1104 35L1128 24L1152 31L1176 20L1200 28L1224 22L1248 36L1272 25L1296 33L1320 19L1344 28L1368 22L1392 35L1416 23L1440 30V48H0Z" />
+          </svg>
+          {/* Layer 2: Main black tear */}
+          <svg
+            aria-hidden="true"
+            className="relative block h-14 w-full fill-black -mt-14 drop-shadow-[0_-8px_14px_rgba(0,0,0,0.45)]"
+            preserveAspectRatio="none"
+            viewBox="0 0 1440 48"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M0 32L24 24L48 35L72 20L96 30L120 22L144 38L168 25L192 33L216 19L240 28L264 22L288 35L312 21L336 29L360 23L384 37L408 26L432 32L456 18L480 30L504 22L528 35L552 24L576 31L600 20L624 28L648 22L672 36L696 25L720 33L744 19L768 29L792 21L816 35L840 24L864 30L888 20L912 28L936 23L960 36L984 25L1008 32L1032 19L1056 29L1080 22L1104 35L1128 24L1152 31L1176 20L1200 28L1224 22L1248 36L1272 25L1296 33L1320 19L1344 28L1368 22L1392 35L1416 23L1440 30V48H0Z" />
           </svg>
         </div>
       </section>
@@ -118,15 +128,19 @@ export default async function Home() {
           </div>
 
           {/* Double-feature Card Ticket Flyer */}
-          <div className="relative p-6 bg-[#dfdacb] border border-[#c3bba6] shadow-sticker rounded-[3px] text-black overflow-hidden flex min-h-[17rem] md:min-h-[20rem] select-none hover:-translate-y-1 transition duration-300">
+          <div className="relative p-6 bg-[#dfdacb] border border-[#c3bba6] shadow-sticker rounded-[3px] text-black overflow-visible flex min-h-[17rem] md:min-h-[20rem] select-none hover:-translate-y-1 transition duration-300">
+            {/* Ticket Punches */}
+            <div className="ticket-punch-left" />
+            <div className="ticket-punch-right" />
+
             {/* Translucent Corner Tapes */}
             <div className="ticket-tape -top-2 -left-8 rotate-[-35deg]" />
             <div className="ticket-tape -top-2 -right-8 rotate-[35deg]" />
             <div className="ticket-tape -bottom-2 -left-8 rotate-[35deg]" />
             <div className="ticket-tape -bottom-2 -right-8 rotate-[-35deg]" />
 
-            {/* Subtle paper grid overlay */}
-            <div className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#000_1px,transparent_1px)] bg-[size:14px_14px]" />
+            {/* Subtle paper grid overlay (clipped to rounded corners) */}
+            <div className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#000_1px,transparent_1px)] bg-[size:14px_14px] rounded-[3px] overflow-hidden" />
 
             {/* Date Stamp Column */}
             <div className="flex flex-col justify-center items-center pr-6 border-r border-dashed border-[#c5bead] select-none z-10">
@@ -138,8 +152,8 @@ export default async function Home() {
             <div className="flex-1 pl-6 flex flex-col justify-between relative z-10">
               {heroEvent.slug === "society-videodrome-double-feature" ? (
                 <>
-                  {/* Subtle graphics collage bg */}
-                  <div className="absolute inset-0 flex justify-between items-center opacity-[0.28] pointer-events-none overflow-hidden select-none">
+                  {/* Subtle graphics collage bg (clipped to rounded corners) */}
+                  <div className="absolute inset-0 flex justify-between items-center opacity-[0.28] pointer-events-none rounded-[3px] overflow-hidden select-none">
                     {/* Melting body profile left */}
                     <div className="w-24 h-24 rounded-full bg-[#b22e1e] blur-md translate-x-[-12px] opacity-70" />
                     {/* Retro TV box right */}
@@ -159,12 +173,12 @@ export default async function Home() {
                       SOCIETY + VIDEODROME
                     </h3>
                     <div className="mt-3.5 flex flex-col items-center gap-1.5 w-full">
-                      {/* Yellow Tape Badge */}
-                      <span className="bg-[#ffd400] text-black font-special px-3 py-0.5 text-[0.6rem] font-bold uppercase tracking-wider rotate-[-1deg] shadow-sm select-none">
+                      {/* Yellow Dymo Tape Badge */}
+                      <span className="dymo-tape-yellow text-[0.6rem] font-bold uppercase tracking-wider rotate-[-1deg] shadow-md select-none">
                         BODY HORROR DOUBLE FEATURE
                       </span>
-                      {/* Red Tape Badge */}
-                      <span className="bg-[#b22e1e] text-white font-special px-3 py-0.5 text-[0.6rem] font-bold uppercase tracking-wider rotate-[0.5deg] shadow-sm select-none">
+                      {/* Red Dymo Tape Badge */}
+                      <span className="dymo-tape text-[0.6rem] font-bold uppercase tracking-wider rotate-[0.5deg] shadow-md select-none">
                         DISCUSSION TO FOLLOW, WHETHER YOU WANT IT OR NOT
                       </span>
                     </div>
@@ -183,7 +197,7 @@ export default async function Home() {
                     {heroEvent.description}
                   </p>
                   <div className="mt-4">
-                    <span className="bg-[#ffd400] text-black font-special px-3 py-0.5 text-[0.6rem] font-bold uppercase tracking-wider rotate-[-1deg] shadow-sm">
+                    <span className="dymo-tape-yellow text-[0.6rem] font-bold uppercase tracking-wider rotate-[-1deg] shadow-md">
                       {heroEvent.kicker || "RSVP OPEN"}
                     </span>
                   </div>
@@ -216,8 +230,13 @@ export default async function Home() {
               return (
                 <div 
                   key={event.id}
-                  className="relative p-5 bg-[#dfdacb] border border-[#c3bba6] shadow-sticker rounded-[3px] text-black overflow-hidden flex flex-col justify-between min-h-[14rem] select-none hover:-translate-y-1 transition duration-300"
+                  className="relative p-5 bg-[#dfdacb] border border-[#c3bba6] shadow-sticker rounded-[3px] text-black overflow-visible flex flex-col justify-between min-h-[14rem] select-none hover:-translate-y-1 transition duration-300"
+                  style={{ transform: `rotate(${(index % 2 === 0 ? -1.2 : 0.8) * 0.8}deg)` }}
                 >
+                  {/* Ticket Punches */}
+                  <div className="ticket-punch-left" />
+                  <div className="ticket-punch-right" />
+
                   {/* Paper taped corners */}
                   <div className="ticket-tape -top-2 left-6 rotate-[12deg] w-20 opacity-90" />
                   <div className="ticket-tape -bottom-2 right-8 rotate-[-8deg] w-20 opacity-90" />
@@ -228,13 +247,15 @@ export default async function Home() {
                     <div className="font-special text-2xl font-bold text-black leading-none mt-0.5">{eventDay}</div>
                   </div>
 
-                  {/* Poster Graphic blended onto paper texture */}
-                  {event.posterUrl && (
-                    <div 
-                      className="absolute inset-0 opacity-[0.24] pointer-events-none mix-blend-multiply bg-center bg-cover bg-no-repeat grayscale"
-                      style={{ backgroundImage: `url(${publicAsset(event.posterUrl)})` }}
-                    />
-                  )}
+                  {/* Poster Graphic blended onto paper texture (clipped to rounded ticket) */}
+                  <div className="absolute inset-0 rounded-[3px] overflow-hidden pointer-events-none z-0">
+                    {event.posterUrl && (
+                      <div 
+                        className="absolute inset-0 opacity-[0.24] mix-blend-multiply bg-center bg-cover bg-no-repeat grayscale"
+                        style={{ backgroundImage: `url(${publicAsset(event.posterUrl)})` }}
+                      />
+                    )}
+                  </div>
 
                   {/* Screening Title */}
                   <div className="flex-1 flex flex-col justify-center items-center text-center pt-8 px-2 z-10">
@@ -248,13 +269,13 @@ export default async function Home() {
                     </h4>
                   </div>
 
-                  {/* Tape style badge */}
+                  {/* Dymo-style Tape badge */}
                   <div className="flex justify-center mt-3 z-10">
                     <span className={`${
-                      index === 0 ? "bg-[#2d7e5d] text-white" :
-                      index === 1 ? "bg-[#a83428] text-white" :
-                      "bg-[#2d5f8e] text-white"
-                    } font-special px-3 py-0.5 text-[0.58rem] font-bold uppercase tracking-wider rotate-[0.8deg] shadow-sm select-none`}>
+                      index === 0 ? "bg-[#1f5436] text-white" :
+                      index === 1 ? "bg-[#9d251a] text-white" :
+                      "bg-[#214b73] text-white"
+                    } font-special px-3 py-1 text-[0.55rem] font-bold uppercase tracking-wider rotate-[0.8deg] shadow-md select-none border border-black/10 rounded-[1.5px] inset-y-shadow`}>
                       {index === 0 ? "DOUBLE FEATURE" : index === 1 ? "DISCUSSION TO FOLLOW" : "PRIVATE SCREENING"}
                     </span>
                   </div>
