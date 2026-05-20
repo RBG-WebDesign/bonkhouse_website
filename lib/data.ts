@@ -1,6 +1,12 @@
 import { sampleEvents, sampleMerch, samplePhotos } from "@/lib/sample-data";
 import type { BonkhouseEvent, MerchProduct, Photo } from "@/types/bonkhouse";
 
+const tempPhotoUrls = [
+  "https://images.pexels.com/photos/7991312/pexels-photo-7991312.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  "https://images.pexels.com/photos/7991567/pexels-photo-7991567.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  "https://images.pexels.com/photos/7991584/pexels-photo-7991584.jpeg?auto=compress&cs=tinysrgb&w=1200"
+];
+
 export async function getEvents() {
   try {
     const { createClient } = await import("@/lib/supabase/server");
@@ -38,11 +44,11 @@ export async function getPhotos(): Promise<Photo[]> {
       return samplePhotos;
     }
 
-    return data.map((photo) => ({
+    return data.map((photo, index) => ({
       id: photo.id,
       eventTitle: photo.event_title,
       caption: photo.caption,
-      imageUrl: photo.image_url,
+      imageUrl: photo.image_url || tempPhotoUrls[index % tempPhotoUrls.length],
       shotAt: photo.shot_at
     }));
   } catch {

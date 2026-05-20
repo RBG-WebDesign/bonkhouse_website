@@ -5,24 +5,22 @@ export default function AboutPage() {
     <div className="club-container grid gap-8 py-10 lg:grid-cols-[1fr_0.9fr]">
       <section>
         <p className="eyebrow">About</p>
-        <h1 className="font-display text-6xl uppercase leading-none tracking-[-0.06em] text-white">
-          A social club pretending to be a screening series
+        <h1 className="max-w-2xl font-display text-5xl uppercase leading-[0.92] tracking-[-0.05em] text-white sm:text-6xl">
+          Handmade movie afternoons for people who like the weird stuff between the movies
         </h1>
         <div className="mt-6 space-y-5 text-lg leading-8 text-white/70">
           <p>
-            Sunday Afternoon Bonkhouse started as a reason to gather friends and watch movies.
-            It has grown into a Culver City community ritual with double features, trailers,
-            a pre-show, and a room that sometimes needs overflow chairs.
+            Sunday Afternoon Bonkhouse grew out of five years of friends gathering around
+            a screen and turning movie day into something handmade.
           </p>
           <p>
-            The point is simple: arrive before the gate closes, find a seat, talk to someone
-            you did not know yet, and let Sunday become a little stranger and warmer than it
-            was supposed to be.
+            We build custom double features from movies, old trailers, commercials, shorts,
+            animations, videos, and art made by people we love. The feature is the anchor,
+            but the pre-show, intermission, and surprises are part of the reason to show up.
           </p>
           <p>
-            Screenings are public for the community, but the room has real limits. The RSVP
-            system helps us know when the house is full, when the overflow chairs come out,
-            and when the waitlist needs a kind note.
+            Come for the movies, stay for the original pieces, the odd little discoveries,
+            and the room full of people letting Sunday get stranger than planned.
           </p>
         </div>
       </section>

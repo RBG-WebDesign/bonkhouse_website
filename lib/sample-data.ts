@@ -58,6 +58,48 @@ export const sampleEvents: BonkhouseEvent[] = [
     textForEntry: "If the gate is closed, text the host number in your ticket email."
   },
   {
+    id: "it-came-from-outer-space-horror-double-feature",
+    slug: "it-came-from-outer-space-horror-double-feature",
+    title: "It Came From Outer Space Horror Double Feature",
+    kicker: "The Blob and Night of the Creeps with a spooky pre-show.",
+    description:
+      "The first Sunday Afternoon Bonkhouse screening, a private horror double feature with The Blob, Night of the Creeps, and a spooky pre-show by your hosts.",
+    posterUrl: "/posters/it-came-from-outer-space.jpg",
+    startsAt: "2022-10-09T11:45:00-07:00",
+    doorsAt: "2022-10-09T11:00:00-07:00",
+    gateClosesAt: "2022-10-09T11:55:00-07:00",
+    venue: lookGlendale,
+    capacityStandard: 40,
+    capacityOverflow: 0,
+    status: "archived",
+    isInviteOnly: true,
+    program: ["Spooky pre-show", "The Blob", "Intermission", "Night of the Creeps"],
+    hostNote: "Archived first screening.",
+    accessibilityNote: "Archived private event.",
+    textForEntry: "Archived event."
+  },
+  {
+    id: "merry-axe-mas-christmas-horror-double-feature",
+    slug: "merry-axe-mas-christmas-horror-double-feature",
+    title: "Merry Axe-Mas Christmas Horror Double Feature",
+    kicker: "Silent Night, Deadly Night 2 Redux and Dark Angel with a jolly pre-show.",
+    description:
+      "The second Sunday Afternoon Bonkhouse screening, a private Christmas horror double feature with Silent Night, Deadly Night 2 Redux, Dark Angel, and a jolly pre-show by your hosts.",
+    posterUrl: "/posters/merry-axe-mas.jpg",
+    startsAt: "2022-12-11T11:45:00-08:00",
+    doorsAt: "2022-12-11T11:00:00-08:00",
+    gateClosesAt: "2022-12-11T11:55:00-08:00",
+    venue: lookGlendale,
+    capacityStandard: 40,
+    capacityOverflow: 0,
+    status: "archived",
+    isInviteOnly: true,
+    program: ["Jolly pre-show", "Silent Night, Deadly Night 2 Redux", "Intermission", "Dark Angel"],
+    hostNote: "Archived second screening.",
+    accessibilityNote: "Archived private event.",
+    textForEntry: "Archived event."
+  },
+  {
     id: "return-of-the-sunday-afternoon-bonkhouse-of-the-dead",
     slug: "return-of-the-sunday-afternoon-bonkhouse-of-the-dead",
     title: "The Return of the Sunday Afternoon BONKHOUSE of the Dead",
@@ -148,21 +190,21 @@ export const samplePhotos: Photo[] = [
     id: "lobby",
     eventTitle: "Sunday Double Feature",
     caption: "Lobby table before doors.",
-    imageUrl: "",
+    imageUrl: "https://images.pexels.com/photos/7991312/pexels-photo-7991312.jpeg?auto=compress&cs=tinysrgb&w=1200",
     shotAt: "2026-04-12"
   },
   {
     id: "chairs",
     eventTitle: "First Bonkhouse Afternoon",
     caption: "The overflow chair math begins.",
-    imageUrl: "",
+    imageUrl: "https://images.pexels.com/photos/7991567/pexels-photo-7991567.jpeg?auto=compress&cs=tinysrgb&w=1200",
     shotAt: "2026-03-03"
   },
   {
     id: "trailers",
     eventTitle: "Sunday Double Feature",
     caption: "Pre-show trailer reel warming up.",
-    imageUrl: "",
+    imageUrl: "https://images.pexels.com/photos/7991584/pexels-photo-7991584.jpeg?auto=compress&cs=tinysrgb&w=1200",
     shotAt: "2026-04-12"
   }
 ];

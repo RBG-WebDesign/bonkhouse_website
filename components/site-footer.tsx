@@ -38,8 +38,8 @@ export function SiteFooter() {
         </div>
         <div className="relative min-h-24 border border-butter/70 p-4 text-butter">
           <Ticket className="absolute right-4 top-4" size={28} />
-          <p className="font-display text-2xl uppercase leading-none">Good films</p>
-          <p className="font-display text-2xl uppercase leading-none">Good people</p>
+          <p className="font-display text-2xl uppercase leading-none">Every Sunday</p>
+          <p className="font-display text-2xl uppercase leading-none">Every Bonk</p>
           <p className="mt-3 text-xs uppercase tracking-[0.2em]">Admit one Sunday</p>
         </div>
       </div>

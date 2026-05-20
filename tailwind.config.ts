@@ -20,7 +20,9 @@ const config: Config = {
       },
       fontFamily: {
         display: ["Arial Black", "Trebuchet MS", "sans-serif"],
-        hand: ["Bradley Hand ITC", "Segoe Print", "Comic Sans MS", "cursive"],
+        hand: ["var(--font-hand)", "Bradley Hand ITC", "Segoe Print", "cursive"],
+        bebas: ["var(--font-bebas)", "Arial Black", "sans-serif"],
+        special: ["var(--font-special)", "Courier New", "monospace"],
         serif: ["Georgia", "Cambria", "serif"],
         sans: ["Trebuchet MS", "Verdana", "sans-serif"]
       },

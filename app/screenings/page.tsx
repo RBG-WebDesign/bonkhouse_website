@@ -4,7 +4,9 @@ import { getEvents } from "@/lib/data";
 export default async function ScreeningsPage() {
   const events = await getEvents();
   const upcoming = events.filter((event) => new Date(event.startsAt) >= new Date() && event.status !== "archived");
-  const past = events.filter((event) => new Date(event.startsAt) < new Date() || event.status === "archived");
+  const past = events
+    .filter((event) => new Date(event.startsAt) < new Date() || event.status === "archived")
+    .sort((a, b) => new Date(a.startsAt).getTime() - new Date(b.startsAt).getTime());
 
   return (
     <div className="club-container py-10">

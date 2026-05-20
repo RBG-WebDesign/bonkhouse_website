@@ -5,10 +5,8 @@ import { publicAsset } from "@/lib/utils";
 
 const links = [
   { href: "/screenings", label: "Screenings" },
-  { href: "/photos", label: "Journal" },
-  { href: "/merch", label: "Membership" },
-  { href: "/about", label: "About" },
-  { href: "/about", label: "Contact" }
+  { href: "/photos", label: "Photos" },
+  { href: "/about", label: "About" }
 ];
 
 export function SiteHeader() {
@@ -22,21 +20,23 @@ export function SiteHeader() {
             src={publicAsset("/bonkhouse-title.png")}
           />
         </Link>
-        <nav className="hidden items-center gap-8 lg:flex">
-          {links.map((link) => (
-            <Link
-              className="text-xs font-black uppercase tracking-[0.03em] text-white transition hover:text-butter"
-              href={link.href}
-              key={link.href}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
-        <Link className={buttonVariants({ className: "hidden sm:inline-flex", variant: "default" })} href="/screenings">
-          Join the club
-          <ArrowRight size={16} />
-        </Link>
+        <div className="flex items-center gap-8">
+          <nav className="hidden items-center gap-8 lg:flex">
+            {links.map((link) => (
+              <Link
+                className="inline-flex h-11 items-center text-xs font-black uppercase leading-none tracking-[0.05em] text-white transition hover:text-butter"
+                href={link.href}
+                key={link.href}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+          <Link className={buttonVariants({ className: "hidden h-11 leading-none sm:inline-flex", variant: "default" })} href="/screenings">
+            JOIN THE CLUB
+            <ArrowRight size={16} />
+          </Link>
+        </div>
       </div>
     </header>
   );
