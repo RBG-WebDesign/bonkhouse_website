@@ -6,7 +6,7 @@ export default async function ScreeningsPage() {
   const upcoming = events.filter((event) => new Date(event.startsAt) >= new Date() && event.status !== "archived");
   const past = events
     .filter((event) => new Date(event.startsAt) < new Date() || event.status === "archived")
-    .sort((a, b) => new Date(a.startsAt).getTime() - new Date(b.startsAt).getTime());
+    .sort((a, b) => new Date(b.startsAt).getTime() - new Date(a.startsAt).getTime());
 
   return (
     <div className="club-container py-10">

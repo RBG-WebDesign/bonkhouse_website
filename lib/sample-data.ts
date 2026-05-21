@@ -188,25 +188,103 @@ export const sampleEvents: BonkhouseEvent[] = [
 
 export const samplePhotos: Photo[] = [
   {
-    id: "lobby",
-    eventTitle: "Sunday Double Feature",
-    caption: "Lobby table before doors.",
-    imageUrl: "https://images.pexels.com/photos/7991312/pexels-photo-7991312.jpeg?auto=compress&cs=tinysrgb&w=1200",
-    shotAt: "2026-04-12"
+    id: "house-house-screening-room",
+    eventTitle: "HOUSE HOUSE Halloween Double Feature",
+    caption: "The room filling up before the lights went down.",
+    imageUrl: "/photos/house-house-2024/mg-1639.jpg",
+    shotAt: "2024-10-13",
+    featured: true,
+    sortOrder: 1
   },
   {
-    id: "chairs",
-    eventTitle: "First Bonkhouse Afternoon",
-    caption: "The overflow chair math begins.",
-    imageUrl: "https://images.pexels.com/photos/7991567/pexels-photo-7991567.jpeg?auto=compress&cs=tinysrgb&w=1200",
-    shotAt: "2026-03-03"
+    id: "house-house-lobby-posters",
+    eventTitle: "HOUSE HOUSE Halloween Double Feature",
+    caption: "Lobby chatter under the poster wall.",
+    imageUrl: "/photos/house-house-2024/mg-1633.jpg",
+    shotAt: "2024-10-13",
+    featured: true,
+    sortOrder: 2
   },
   {
-    id: "trailers",
-    eventTitle: "Sunday Double Feature",
-    caption: "Pre-show trailer reel warming up.",
-    imageUrl: "https://images.pexels.com/photos/7991584/pexels-photo-7991584.jpeg?auto=compress&cs=tinysrgb&w=1200",
-    shotAt: "2026-04-12"
+    id: "house-house-audience-laughing",
+    eventTitle: "HOUSE HOUSE Halloween Double Feature",
+    caption: "Audience laughter between reels.",
+    imageUrl: "/photos/house-house-2024/img-0937.jpg",
+    shotAt: "2024-10-13",
+    featured: true,
+    sortOrder: 3
+  },
+  {
+    id: "house-house-screen-and-lobby",
+    eventTitle: "HOUSE HOUSE Halloween Double Feature",
+    caption: "The pre-show running while people drifted in.",
+    imageUrl: "/photos/house-house-2024/mg-1638.jpg",
+    shotAt: "2024-10-13",
+    sortOrder: 4
+  },
+  {
+    id: "house-house-lobby-wide",
+    eventTitle: "HOUSE HOUSE Halloween Double Feature",
+    caption: "A wide room full of pre-show arrivals.",
+    imageUrl: "/photos/house-house-2024/mg-1634.jpg",
+    shotAt: "2024-10-13",
+    sortOrder: 5
+  },
+  {
+    id: "house-house-screen-subtitle",
+    eventTitle: "HOUSE HOUSE Halloween Double Feature",
+    caption: "A very useful warning from the screen.",
+    imageUrl: "/photos/house-house-2024/mg-1646.jpg",
+    shotAt: "2024-10-13",
+    sortOrder: 6
+  },
+  {
+    id: "house-house-costume-portrait",
+    eventTitle: "HOUSE HOUSE Halloween Double Feature",
+    caption: "Friends in full creature-feature form.",
+    imageUrl: "/photos/house-house-2024/img-0901.jpg",
+    shotAt: "2024-10-13",
+    sortOrder: 7
+  },
+  {
+    id: "house-house-cat-guest",
+    eventTitle: "HOUSE HOUSE Halloween Double Feature",
+    caption: "A lobby conversation with excellent eyewear.",
+    imageUrl: "/photos/house-house-2024/img-0915.jpg",
+    shotAt: "2024-10-13",
+    sortOrder: 8
+  },
+  {
+    id: "house-house-popcorn-line",
+    eventTitle: "HOUSE HOUSE Halloween Double Feature",
+    caption: "Popcorn, costumes, and the pre-show crowd.",
+    imageUrl: "/photos/house-house-2024/img-0919.jpg",
+    shotAt: "2024-10-13",
+    sortOrder: 9
+  },
+  {
+    id: "house-house-post-show",
+    eventTitle: "HOUSE HOUSE Halloween Double Feature",
+    caption: "Post-show arguments, theories, and bits.",
+    imageUrl: "/photos/house-house-2024/img-0939.jpg",
+    shotAt: "2024-10-13",
+    sortOrder: 10
+  },
+  {
+    id: "house-house-theater-ad",
+    eventTitle: "HOUSE HOUSE Halloween Double Feature",
+    caption: "The custom pre-show taking over the theater.",
+    imageUrl: "/photos/house-house-2024/img-5960.jpg",
+    shotAt: "2024-10-13",
+    sortOrder: 11
+  },
+  {
+    id: "house-house-theater-cartoon",
+    eventTitle: "HOUSE HOUSE Halloween Double Feature",
+    caption: "A quiet room watching something deeply normal.",
+    imageUrl: "/photos/house-house-2024/img-5961.jpg",
+    shotAt: "2024-10-13",
+    sortOrder: 12
   }
 ];
 

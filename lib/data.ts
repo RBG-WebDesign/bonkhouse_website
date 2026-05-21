@@ -1,12 +1,6 @@
 import { sampleEvents, sampleMerch, samplePhotos } from "@/lib/sample-data";
 import type { BonkhouseEvent, MerchProduct, Photo } from "@/types/bonkhouse";
 
-const tempPhotoUrls = [
-  "https://images.pexels.com/photos/7991312/pexels-photo-7991312.jpeg?auto=compress&cs=tinysrgb&w=1200",
-  "https://images.pexels.com/photos/7991567/pexels-photo-7991567.jpeg?auto=compress&cs=tinysrgb&w=1200",
-  "https://images.pexels.com/photos/7991584/pexels-photo-7991584.jpeg?auto=compress&cs=tinysrgb&w=1200"
-];
-
 export async function getEvents() {
   try {
     const { createClient } = await import("@/lib/supabase/server");
@@ -41,18 +35,20 @@ export async function getPhotos(): Promise<Photo[]> {
       .order("shot_at", { ascending: false });
 
     if (error || !data?.length) {
-      return samplePhotos;
+      return sortPhotos(samplePhotos);
     }
 
-    return data.map((photo, index) => ({
+    const databasePhotos = data.map((photo) => ({
       id: photo.id,
       eventTitle: photo.event_title,
       caption: photo.caption,
-      imageUrl: photo.image_url || tempPhotoUrls[index % tempPhotoUrls.length],
+      imageUrl: photo.image_url,
       shotAt: photo.shot_at
     }));
+
+    return sortPhotos([...samplePhotos, ...databasePhotos]);
   } catch {
-    return samplePhotos;
+    return sortPhotos(samplePhotos);
   }
 }
 
@@ -80,6 +76,31 @@ export async function getMerch(): Promise<MerchProduct[]> {
   } catch {
     return sampleMerch;
   }
+}
+
+function sortPhotos(photos: Photo[]) {
+  const seen = new Set<string>();
+
+  return photos
+    .filter((photo) => {
+      if (seen.has(photo.id)) {
+        return false;
+      }
+
+      seen.add(photo.id);
+      return Boolean(photo.imageUrl);
+    })
+    .sort((a, b) => {
+      if (Boolean(a.featured) !== Boolean(b.featured)) {
+        return a.featured ? -1 : 1;
+      }
+
+      if ((a.sortOrder ?? 9999) !== (b.sortOrder ?? 9999)) {
+        return (a.sortOrder ?? 9999) - (b.sortOrder ?? 9999);
+      }
+
+      return new Date(b.shotAt).getTime() - new Date(a.shotAt).getTime();
+    });
 }
 
 function mapEvent(row: any): BonkhouseEvent {

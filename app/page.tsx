@@ -28,11 +28,11 @@ export default async function Home() {
   return (
     <div className="bg-black text-ink">
       {/* SECTION 1: HERO SECTION */}
-      <section className="relative flex min-h-[44rem] items-center overflow-hidden bg-black py-16 lg:py-0">
+      <section className="home-hero-section relative flex min-h-[44rem] items-center overflow-hidden bg-black py-16 lg:py-0">
         <HeroShaderBackground src="/hero/background-bonkhouse.png" />
         
-        <div className="club-container relative z-10 grid w-full gap-8 lg:grid-cols-12">
-          <div className="relative z-10 flex flex-col justify-center py-10 lg:col-span-8">
+        <div className="home-hero-grid club-container relative z-10 grid w-full gap-8 lg:grid-cols-12">
+          <div className="home-hero-copy relative z-10 flex flex-col justify-center py-10 lg:col-span-8">
             <span aria-label="Welcome to" className="hero-handwritten-mark mb-1 self-start">
               {"Welcome to".split("").map((letter, index) => (
                 <span
@@ -62,9 +62,10 @@ export default async function Home() {
               Come watch something weird with us.
             </div>
 
-            <div className="mt-8 flex flex-wrap gap-4">
+            <div className="home-hero-actions mt-8 flex flex-wrap gap-4">
               <Link className={buttonVariants({ size: "lg", variant: "default" }) + " h-16 px-9 font-bebas text-xl tracking-wider sm:h-[4.25rem] sm:px-12 sm:text-2xl"} href="/screenings">
-                SEE WHAT'S SCREENING →
+                SEE WHAT'S SCREENING
+                <ArrowRight className="ml-2" size={22} />
               </Link>
               <Link className={buttonVariants({ size: "lg", variant: "secondary" }) + " h-16 border-butter/40 bg-black/40 px-9 font-bebas text-xl tracking-wider text-butter backdrop-blur sm:h-[4.25rem] sm:px-12 sm:text-2xl"} href="/about">
                 JOIN THE CLUB
@@ -73,7 +74,7 @@ export default async function Home() {
           </div>
 
           {/* Right Column: Floating Free Screenings Sticker */}
-          <div className="relative hidden items-center justify-center lg:col-span-4 lg:flex">
+          <div className="home-hero-sticker-wrap relative hidden items-center justify-center lg:col-span-4 lg:flex">
             <div
               aria-label="Dirty old sticker that says Your Sundays are belong to us"
               className="free-screenings-sticker h-56 w-56 rotate-[3deg] animate-float select-none"
@@ -114,9 +115,9 @@ export default async function Home() {
       </section>
 
       {/* SECTION 2: UPCOMING SCREENING */}
-      <section className="relative z-10 bg-black py-20">
-        <div className="club-container grid gap-12 lg:grid-cols-[1.1fr_1.9fr] items-center">
-          <div>
+      <section className="home-upcoming-section relative z-10 bg-black py-20">
+        <div className="home-upcoming-grid club-container grid gap-12 lg:grid-cols-[1.1fr_1.9fr] items-center">
+          <div className="home-upcoming-copy">
             <h2 className="font-bebas text-4xl sm:text-5xl text-butter tracking-wider uppercase border-b border-butter/25 pb-2 inline-block">
               Upcoming Screening
             </h2>
@@ -125,7 +126,8 @@ export default async function Home() {
             </p>
             <div className="mt-8">
               <Link className={buttonVariants({ size: "lg", variant: "default" }) + " h-16 px-9 font-bebas text-xl tracking-wider sm:h-[4.25rem] sm:px-12 sm:text-2xl"} href="/screenings">
-                SEE WHAT'S SCREENING →
+                SEE WHAT'S SCREENING
+                <ArrowRight className="ml-2" size={22} />
               </Link>
             </div>
           </div>
@@ -133,7 +135,7 @@ export default async function Home() {
           {/* Double-feature Card Ticket Flyer */}
           <Link
             aria-label={`Open ${heroEvent.title}`}
-            className="focus-ring relative p-6 bg-[#dfdacb] border border-[#c3bba6] shadow-sticker rounded-[3px] text-black overflow-visible flex min-h-[17rem] md:min-h-[20rem] select-none hover:-translate-y-1 transition duration-300 cursor-pointer"
+            className="home-ticket-link focus-ring relative p-6 bg-[#dfdacb] border border-[#c3bba6] shadow-sticker rounded-[3px] text-black overflow-visible flex min-h-[17rem] md:min-h-[20rem] select-none hover:-translate-y-1 transition duration-300 cursor-pointer"
             href={`/events/${heroEvent.slug}`}
           >
             {/* Ticket Punches */}
@@ -150,13 +152,13 @@ export default async function Home() {
             <div className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#000_1px,transparent_1px)] bg-[size:14px_14px] rounded-[3px] overflow-hidden" />
 
             {/* Date Stamp Column */}
-            <div className="flex flex-col justify-center items-center pr-6 border-r border-dashed border-[#c5bead] select-none z-10">
+            <div className="home-ticket-date flex flex-col justify-center items-center pr-6 border-r border-dashed border-[#c5bead] select-none z-10">
               <span className="font-sans font-black text-xs tracking-widest text-[#a83428] uppercase">{upcomingMonth}</span>
               <span className="font-special text-5xl md:text-6xl font-bold tracking-tight text-black leading-none mt-1">{upcomingDay}</span>
             </div>
 
             {/* Ticket Info Area */}
-            <div className="flex-1 pl-6 flex flex-col justify-between relative z-10">
+            <div className="home-ticket-info flex-1 pl-6 flex flex-col justify-between relative z-10">
               {heroEvent.slug === "society-videodrome-double-feature" ? (
                 <>
                   {/* Subtle graphics collage bg (clipped to rounded corners) */}
@@ -212,7 +214,7 @@ export default async function Home() {
               )}
 
               {/* Flyer Bottom Bar */}
-              <div className="border-t border-[#c5bead] pt-3 flex justify-between items-center text-[0.62rem] font-black uppercase tracking-widest text-black/60 font-sans">
+              <div className="home-ticket-meta border-t border-[#c5bead] pt-3 flex justify-between items-center text-[0.62rem] font-black uppercase tracking-widest text-black/60 font-sans">
                 <span>TIME: {formatEventTimeRange(heroEvent.startsAt, heroEvent.endsAt)}</span>
                 <span>VENUE: {heroEvent.venue.name}</span>
               </div>
@@ -295,7 +297,8 @@ export default async function Home() {
 
           <div className="mt-12 text-center">
             <Link className={buttonVariants({ size: "lg", variant: "default" }) + " h-16 px-9 font-bebas text-xl tracking-wider sm:h-[4.25rem] sm:px-12 sm:text-2xl"} href="/screenings">
-              SEE ALL PAST SCREENINGS →
+              SEE ALL PAST SCREENINGS
+              <ArrowRight className="ml-2" size={22} />
             </Link>
           </div>
         </div>
@@ -324,6 +327,8 @@ export default async function Home() {
                     <img 
                       alt={photo.caption}
                       className="w-full h-full object-cover grayscale transition duration-300 hover:grayscale-0"
+                      decoding="async"
+                      loading="lazy"
                       src={publicAsset(photo.imageUrl)}
                     />
                   ) : (

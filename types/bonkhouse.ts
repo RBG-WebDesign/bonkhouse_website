@@ -37,6 +37,8 @@ export type Photo = {
   caption: string;
   imageUrl: string;
   shotAt: string;
+  featured?: boolean;
+  sortOrder?: number;
 };
 
 export type MerchProduct = {
