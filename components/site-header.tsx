@@ -17,7 +17,7 @@ export function SiteHeader() {
           <img
             alt="Sunday Afternoon Bonk House"
             className="site-header-logo grindhouse-logo h-auto w-44 transition duration-200 group-hover:brightness-125 sm:w-56"
-            src={publicAsset("/bonkhouse-title.png")}
+            src={publicAsset("/bonkhouse-title.webp")}
           />
         </Link>
         <div className="site-header-actions flex items-center gap-8">

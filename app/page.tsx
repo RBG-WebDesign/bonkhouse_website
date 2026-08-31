@@ -33,34 +33,12 @@ export default async function Home() {
         
         <div className="home-hero-grid club-container relative z-10 grid w-full gap-8 lg:grid-cols-12">
           <div className="home-hero-copy relative z-10 flex flex-col justify-center py-10 lg:col-span-8">
-            <span aria-label="Welcome to" className="hero-handwritten-mark mb-1 self-start">
-              {"Welcome to".split("").map((letter, index) => (
-                <span
-                  aria-hidden="true"
-                  className={letter === " " ? "hero-handwritten-space" : undefined}
-                  key={`${letter}-${index}`}
-                >
-                  {letter}
-                </span>
-              ))}
-            </span>
-            <h1 
-              className="font-bebas text-7xl sm:text-8xl md:text-9xl leading-[0.8] tracking-[0.1em] select-none uppercase"
-              style={{ WebkitTextStroke: "2px #ffd400", color: "transparent" }}
-            >
-              BONKHOUSE
-            </h1>
-            <p className="mt-6 max-w-2xl font-special text-[1.05rem] leading-[1.25] tracking-[0.015em] text-white sm:text-[1.35rem] md:text-[1.55rem]">
-              A Sunday afternoon film thing for friends, freaks, and anyone who loves movies{" "}
-              <span className="brush-underline text-butter">more than life itself</span>.
-            </p>
-            <p className="mt-4 max-w-xl text-sm text-white/70 leading-relaxed font-sans">
-              As the empire falls, we gather before the screen to remember its visions: the films, trailers, and commercials that promised us what could have been.
-            </p>
-            
-            <div className="mt-6 self-start dymo-tape-yellow text-[0.62rem] font-bold uppercase tracking-[0.08em] rotate-[1.5deg] shadow-md">
-              Come watch something weird with us.
-            </div>
+            <h1 className="sr-only">Sunday Afternoon Bonk House</h1>
+            <img
+              alt="Sunday Afternoon Bonk House"
+              className="h-auto w-full max-w-4xl self-start select-none"
+              src={publicAsset("/bonkhouse-title.webp")}
+            />
 
             <div className="home-hero-actions mt-8 flex flex-wrap gap-4">
               <Link className={buttonVariants({ size: "lg", variant: "default" }) + " h-16 px-9 font-bebas text-xl tracking-wider sm:h-[4.25rem] sm:px-12 sm:text-2xl"} href="/screenings">
@@ -75,16 +53,11 @@ export default async function Home() {
 
           {/* Right Column: Floating Free Screenings Sticker */}
           <div className="home-hero-sticker-wrap relative hidden items-center justify-center lg:col-span-4 lg:flex">
-            <div
-              aria-label="Dirty old sticker that says Your Sundays are belong to us"
-              className="free-screenings-sticker h-56 w-56 rotate-[3deg] animate-float select-none"
-            >
-              <span className="sticker-grime sticker-grime-one" />
-              <span className="sticker-grime sticker-grime-two" />
-              <span className="sticker-slogan sticker-slogan-top">Your Sundays</span>
-              <span className="sticker-slogan sticker-slogan-mid">are belong</span>
-              <span className="sticker-slogan sticker-slogan-bottom">to us</span>
-            </div>
+            <img
+              alt="Society + Videodrome double feature poster"
+              className="h-auto w-[22rem] rotate-[3deg] select-none shadow-2xl"
+              src={publicAsset("/death-to-bonkhouse-poster.webp")}
+            />
           </div>
         </div>
 

@@ -10,7 +10,7 @@ export function SiteFooter() {
           <img
             alt="Sunday Afternoon Bonk House"
             className="h-auto w-56"
-            src={publicAsset("/bonkhouse-title.png")}
+            src={publicAsset("/bonkhouse-title.webp")}
           />
           <p className="mt-4 max-w-xs text-sm leading-6 text-white/62">
             A Culver City excuse to watch movies together, with double features, trailers,
