@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<base href="/">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Covered+By+Your+Grace&amp;family=Special+Elite&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;min-height:100vh;overflow-x:hidden;color:#f7f4ea;font-family:"Trebuchet MS",Verdana,sans-serif;background:radial-gradient(circle at 65% 12%,rgba(255,212,0,.075),transparent 24rem),radial-gradient(circle at 18% 20%,rgba(129,39,24,.11),transparent 18rem),linear-gradient(180deg,#050403 0%,#090705 48%,#000 100%)}
+*{box-sizing:border-box}
+a{color:inherit;text-decoration:none}
+a:hover{color:#ffd400}
+body::after{position:fixed;inset:0;z-index:71;pointer-events:none;content:"";opacity:.26;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.92' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.42'/%3E%3C/svg%3E"),radial-gradient(ellipse at center,transparent 48%,rgba(0,0,0,.45) 100%);mix-blend-mode:overlay}
+@media (max-width:899px){[data-m="nav"]{display:none!important}}
+@media (max-width:767px){[data-m="hpad"]{padding:0 16px!important}[data-m="grid"]{grid-template-columns:1fr!important}[data-m="stack"]{flex-direction:column!important}[data-m="stack"] > *{width:100%}[data-m="fullbtn"] > a{flex:1 1 100%}[data-m="ticketmeta"]{flex-direction:column!important;align-items:flex-start!important;gap:6px!important}[data-m="ticketmeta"] > span[aria-hidden]{display:none!important}[data-m="ticket"]{flex-direction:column!important;gap:16px}[data-m="ticketstub"]{padding-right:0!important;padding-bottom:12px;justify-content:center;border-bottom:1px dashed rgba(247,244,234,.3)}[data-m="tickettext"]{writing-mode:horizontal-tb!important;transform:none!important}[data-m="ticketdiv"]{display:none!important}[data-m="ticketbody"]{padding-left:0!important}[data-m="secpad"]{padding-left:16px!important;padding-right:16px!important}[data-m="secpad"] > h1{font-size:44px!important}[data-m="secpad"] > h2{font-size:40px!important}[data-m="grid"]{gap:28px!important}}
+</style>
+</helmet>
+
+<div style="background:#000;color:#f7f4ea">
+
+<dc-import name="SiteHeader" active="screenings" style="position:sticky;top:0;z-index:50;display:block" hint-size="100%,81px"></dc-import>
+
+<section data-m="secpad" style="max-width:1280px;margin:0 auto;padding:56px 32px 0">
+  <h1 style="display:inline-block;margin:0;padding-bottom:8px;border-bottom:1px solid rgba(255,212,0,.25);font-family:'Bebas Neue',Impact,sans-serif;font-size:56px;font-weight:400;line-height:1;letter-spacing:.05em;text-transform:uppercase;color:#ffd400;text-shadow:1px 1px 0 rgba(135,25,12,.7),0 0 18px rgba(255,212,0,.12)">Now Screening</h1>
+
+  <div data-m="grid" style="display:grid;grid-template-columns:1.9fr 1.1fr;gap:48px;align-items:center;margin-top:40px">
+    <a data-m="ticket" href="Society Videodrome Screening.dc.html" style="position:relative;display:flex;min-height:320px;padding:24px;background:radial-gradient(circle at 62% 40%,rgba(90,60,20,.28),transparent 22rem),linear-gradient(180deg,#1b1610,#0d0b08);border:1px solid #4a3d2c;border-radius:3px;color:#f7f4ea;overflow:visible;user-select:none;isolation:isolate;box-shadow:0 0 0 1px rgba(255,212,0,.16),0 18px 48px rgba(0,0,0,.6),inset 0 0 34px rgba(0,0,0,.6);transition:transform .3s" style-hover="transform:translateY(-4px)">
+      <div style="position:absolute;left:-13px;top:50%;transform:translateY(-50%);width:24px;height:24px;border-radius:50%;background:#000;border-right:1.5px solid #4a3d2c;z-index:15"></div>
+      <div style="position:absolute;right:-13px;top:50%;transform:translateY(-50%);width:24px;height:24px;border-radius:50%;background:#000;border-left:1.5px solid #4a3d2c;z-index:15"></div>
+      <div style="position:absolute;inset:0;opacity:.14;pointer-events:none;border-radius:3px;overflow:hidden;background-image:radial-gradient(rgba(255,255,255,.55) 1px,transparent 1px);background-size:14px 14px"></div>
+      <div style="position:absolute;inset:8px;pointer-events:none;border:1px dashed rgba(247,244,234,.16);border-radius:2px"></div>
+      <div data-m="ticketstub" style="position:relative;z-index:10;display:flex;align-items:center;gap:16px;padding-right:22px">
+        <span data-m="tickettext" style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'Special Elite',monospace;font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:rgba(255,212,0,.7)">Admit one &middot; Sunday</span>
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <span style="font-size:12px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#ff6a4d">OCT</span>
+          <span style="margin-top:4px;font-family:'Special Elite',monospace;font-size:60px;font-weight:700;letter-spacing:-.02em;line-height:1;color:#f7f4ea">18</span>
+          <span style="margin-top:8px;font-family:'Special Elite',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(247,244,234,.45)">No. 018</span>
+        </div>
+        <div data-m="ticketdiv" style="position:absolute;right:0;top:-24px;bottom:-24px;width:1px;background:repeating-linear-gradient(180deg,rgba(247,244,234,.4) 0 5px,transparent 5px 11px)"></div>
+      </div>
+      <div data-m="ticketbody" style="position:relative;z-index:10;flex:1;padding-left:24px;display:flex;flex-direction:column;justify-content:space-between">
+        <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;height:100%;padding:12px 0">
+          <p style="margin:0;font-size:9.92px;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:rgba(247,244,234,.65)">SUNDAY AFTERNOON DOUBLE FEATURE</p>
+          <div style="width:100%;max-width:min(100%,27rem);overflow:hidden;line-height:0;margin:8px 0 4px">
+            <img alt="Death to Bonk House — Long Live the New Flesh" src="public/logo_fixed_transparent.png" style="display:block;width:100%;height:auto;margin:-8% 0 -9%;user-select:none;filter:drop-shadow(0 4px 16px rgba(0,0,0,.55))">
+          </div>
+          <h3 style="margin:2px 0 0;font-family:'Bebas Neue',Impact,sans-serif;font-size:clamp(20px,2.2vw,30px);font-weight:400;letter-spacing:.08em;line-height:.95;text-align:center;color:#f7f4ea">SOCIETY + VIDEODROME</h3>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;width:100%;margin-top:12px">
+            <span style="display:inline-block;padding:3px 8px;border:1px solid rgba(0,0,0,.08);border-radius:1.5px;background:#ffd400;color:#000;font-family:'Special Elite',monospace;font-size:9.6px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;transform:rotate(-1deg);text-shadow:0 .5px 0 rgba(255,255,255,.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 1.5px 3px rgba(0,0,0,.3);white-space:nowrap;line-height:1.4">BODY HORROR DOUBLE FEATURE</span>
+          </div>
+        </div>
+        <div data-m="ticketmeta" style="display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid #4a3d2c;font-size:9.92px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:rgba(247,244,234,.6)">
+          <span>TIME: 1:00 PM to 5:00 PM</span>
+          <span aria-hidden="true" style="flex:none;width:88px;height:16px;background:repeating-linear-gradient(90deg,rgba(247,244,234,.6) 0 2px,transparent 2px 4px,rgba(247,244,234,.6) 4px 5px,transparent 5px 8px);opacity:.5"></span>
+          <span>VENUE: Gloria Kaufman Community Center</span>
+        </div>
+      </div>
+    </a>
+
+    <div>
+      <p style="margin:0;font-size:20px;line-height:1.6;color:rgba(255,255,255,.9)">Sunday, October 18 &middot; Doors at 1:00 PM &middot; Free with RSVP.</p>
+      <div data-m="fullbtn" style="display:flex;flex-wrap:wrap;gap:16px;margin-top:24px">
+        <a href="Society Videodrome Screening.dc.html" style="position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:60px;padding:0 40px;border:1px solid #ffd400;border-radius:3px;background:#ffd400;color:#000;font-family:'Bebas Neue',Impact,sans-serif;font-size:24px;letter-spacing:.05em;text-transform:uppercase;box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 8px 22px rgba(0,0,0,.32),0 0 26px rgba(255,212,0,.18)" style-hover="background:#ffe15a;transform:translateY(-2px)">RSVP
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section data-m="secpad" style="max-width:1280px;margin:0 auto;padding:80px 32px 96px">
+  <h2 style="display:inline-block;margin:0;padding-bottom:8px;border-bottom:1px solid rgba(255,212,0,.25);font-family:'Bebas Neue',Impact,sans-serif;font-size:48px;font-weight:400;line-height:1;letter-spacing:.05em;text-transform:uppercase;color:#ffd400;text-shadow:1px 1px 0 rgba(135,25,12,.7),0 0 18px rgba(255,212,0,.12)">Past Screenings</h2>
+
+  <div data-m="grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:36px 32px;margin-top:48px;align-items:start">
+    <a href="#" style="position:relative;display:flex;flex-direction:column;background:linear-gradient(180deg,#1b1610,#0d0b08);border:1px solid #4a3d2c;border-radius:4px;overflow:hidden;color:#f7f4ea;user-select:none;isolation:isolate;box-shadow:0 0 0 1px rgba(255,212,0,.12),0 18px 48px rgba(0,0,0,.6);transform:rotate(-0.6deg);transition:transform .3s" style-hover="transform:translateY(-6px) rotate(0deg)">
+      <div style="position:relative;aspect-ratio:3/4;overflow:hidden;background:#101010">
+        <img alt="The Return of the Sunday Afternoon Bonkhouse of the Dead poster" src="public/posters/return-of-the-sunday-afternoon.webp" style="display:block;width:100%;height:100%;object-fit:cover;transition:transform .4s" style-hover="transform:scale(1.04)">
+        <div style="position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 40px rgba(0,0,0,.4);background:linear-gradient(180deg,rgba(0,0,0,.12),transparent 22%,transparent 76%,rgba(0,0,0,.45))"></div>
+        <div style="position:absolute;top:10px;left:10px;padding:2px 8px;text-align:center;background:#f2ede0;border:1px solid rgba(0,0,0,.1);border-radius:2px;box-shadow:0 2px 6px rgba(0,0,0,.35);transform:rotate(-2deg)">
+          <div style="font-size:9.6px;font-weight:900;line-height:1;color:#a83428">OCT</div>
+          <div style="margin-top:2px;font-family:'Special Elite',monospace;font-size:24px;font-weight:700;line-height:1;color:#000">19</div>
+          <div style="margin-top:2px;font-family:'Special Elite',monospace;font-size:9px;letter-spacing:.08em;line-height:1;color:rgba(0,0,0,.5)">2025</div>
+        </div>
+      </div>
+      <div style="position:relative;height:0;border-top:2px dashed rgba(247,244,234,.22)">
+        <div style="position:absolute;left:-13px;top:-13px;width:24px;height:24px;border-radius:50%;background:#000;border-right:1.5px solid #4a3d2c"></div>
+        <div style="position:absolute;right:-13px;top:-13px;width:24px;height:24px;border-radius:50%;background:#000;border-left:1.5px solid #4a3d2c"></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;padding:18px 18px 16px">
+        <p style="margin:0;font-family:'Special Elite',monospace;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#ffd400">1:00 PM &middot; Lumiere Music Hall</p>
+        <h4 style="margin:0;font-family:'Bebas Neue',Impact,sans-serif;font-size:26px;font-weight:400;letter-spacing:.03em;line-height:.98;text-transform:uppercase;color:#f7f4ea;text-wrap:balance">The Return of the Sunday Afternoon Bonkhouse of the Dead</h4>
+        <p style="margin:0;font-size:12.5px;line-height:1.55;color:rgba(247,244,234,.6)">Halloween returns with pre-show and a room full of the living.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px">
+          <span style="display:inline-block;padding:3px 10px;border:1px solid rgba(247,244,234,.3);border-radius:1.5px;color:rgba(247,244,234,.65);font-family:'Special Elite',monospace;font-size:8.8px;font-weight:700;letter-spacing:.06em;text-transform:uppercase">ARCHIVED</span>
+          <span style="display:inline-block;padding:3px 10px;border:1px solid rgba(0,0,0,.1);border-radius:1.5px;background:#1f5436;color:#fff;font-family:'Special Elite',monospace;font-size:8.8px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;transform:rotate(.8deg);box-shadow:0 4px 6px -1px rgba(0,0,0,.3)">DISCUSSION TO FOLLOW</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="#" style="position:relative;display:flex;flex-direction:column;background:linear-gradient(180deg,#1b1610,#0d0b08);border:1px solid #4a3d2c;border-radius:4px;overflow:hidden;color:#f7f4ea;user-select:none;isolation:isolate;box-shadow:0 0 0 1px rgba(255,212,0,.12),0 18px 48px rgba(0,0,0,.6);transform:rotate(0.5deg);transition:transform .3s" style-hover="transform:translateY(-6px) rotate(0deg)">
+      <div style="position:relative;aspect-ratio:3/4;overflow:hidden;background:#101010">
+        <img alt="Bonkhouse and House Pardee Present: House House Halloween Double Feature poster" src="public/posters/house-house.webp" style="display:block;width:100%;height:100%;object-fit:cover;transition:transform .4s" style-hover="transform:scale(1.04)">
+        <div style="position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 40px rgba(0,0,0,.4);background:linear-gradient(180deg,rgba(0,0,0,.12),transparent 22%,transparent 76%,rgba(0,0,0,.45))"></div>
+        <div style="position:absolute;top:10px;left:10px;padding:2px 8px;text-align:center;background:#f2ede0;border:1px solid rgba(0,0,0,.1);border-radius:2px;box-shadow:0 2px 6px rgba(0,0,0,.35);transform:rotate(-2deg)">
+          <div style="font-size:9.6px;font-weight:900;line-height:1;color:#a83428">OCT</div>
+          <div style="margin-top:2px;font-family:'Special Elite',monospace;font-size:24px;font-weight:700;line-height:1;color:#000">13</div>
+          <div style="margin-top:2px;font-family:'Special Elite',monospace;font-size:9px;letter-spacing:.08em;line-height:1;color:rgba(0,0,0,.5)">2024</div>
+        </div>
+      </div>
+      <div style="position:relative;height:0;border-top:2px dashed rgba(247,244,234,.22)">
+        <div style="position:absolute;left:-13px;top:-13px;width:24px;height:24px;border-radius:50%;background:#000;border-right:1.5px solid #4a3d2c"></div>
+        <div style="position:absolute;right:-13px;top:-13px;width:24px;height:24px;border-radius:50%;background:#000;border-left:1.5px solid #4a3d2c"></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;padding:18px 18px 16px">
+        <p style="margin:0;font-family:'Special Elite',monospace;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#ffd400">1:00 PM &middot; Lumiere Music Hall</p>
+        <h4 style="margin:0;font-family:'Bebas Neue',Impact,sans-serif;font-size:26px;font-weight:400;letter-spacing:.03em;line-height:.98;text-transform:uppercase;color:#f7f4ea;text-wrap:balance">Bonkhouse and House Pardee Present: House House Halloween Double Feature</h4>
+        <p style="margin:0;font-size:12.5px;line-height:1.55;color:rgba(247,244,234,.6)">In this house, houses are born to house the dead.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px">
+          <span style="display:inline-block;padding:3px 10px;border:1px solid rgba(247,244,234,.3);border-radius:1.5px;color:rgba(247,244,234,.65);font-family:'Special Elite',monospace;font-size:8.8px;font-weight:700;letter-spacing:.06em;text-transform:uppercase">ARCHIVED</span>
+          <span style="display:inline-block;padding:3px 10px;border:1px solid rgba(0,0,0,.1);border-radius:1.5px;background:#1f5436;color:#fff;font-family:'Special Elite',monospace;font-size:8.8px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;transform:rotate(.8deg);box-shadow:0 4px 6px -1px rgba(0,0,0,.3)">DISCUSSION TO FOLLOW</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="#" style="position:relative;display:flex;flex-direction:column;background:linear-gradient(180deg,#1b1610,#0d0b08);border:1px solid #4a3d2c;border-radius:4px;overflow:hidden;color:#f7f4ea;user-select:none;isolation:isolate;box-shadow:0 0 0 1px rgba(255,212,0,.12),0 18px 48px rgba(0,0,0,.6);transform:rotate(-0.4deg);transition:transform .3s" style-hover="transform:translateY(-6px) rotate(0deg)">
+      <div style="position:relative;aspect-ratio:3/4;overflow:hidden;background:#101010">
+        <img alt="Infested: A Creature Double Feature poster" src="public/posters/infested-creature-double-feature.webp" style="display:block;width:100%;height:100%;object-fit:cover;transition:transform .4s" style-hover="transform:scale(1.04)">
+        <div style="position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 40px rgba(0,0,0,.4);background:linear-gradient(180deg,rgba(0,0,0,.12),transparent 22%,transparent 76%,rgba(0,0,0,.45))"></div>
+        <div style="position:absolute;top:10px;left:10px;padding:2px 8px;text-align:center;background:#f2ede0;border:1px solid rgba(0,0,0,.1);border-radius:2px;box-shadow:0 2px 6px rgba(0,0,0,.35);transform:rotate(-2deg)">
+          <div style="font-size:9.6px;font-weight:900;line-height:1;color:#a83428">OCT</div>
+          <div style="margin-top:2px;font-family:'Special Elite',monospace;font-size:24px;font-weight:700;line-height:1;color:#000">22</div>
+          <div style="margin-top:2px;font-family:'Special Elite',monospace;font-size:9px;letter-spacing:.08em;line-height:1;color:rgba(0,0,0,.5)">2023</div>
+        </div>
+      </div>
+      <div style="position:relative;height:0;border-top:2px dashed rgba(247,244,234,.22)">
+        <div style="position:absolute;left:-13px;top:-13px;width:24px;height:24px;border-radius:50%;background:#000;border-right:1.5px solid #4a3d2c"></div>
+        <div style="position:absolute;right:-13px;top:-13px;width:24px;height:24px;border-radius:50%;background:#000;border-left:1.5px solid #4a3d2c"></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;padding:18px 18px 16px">
+        <p style="margin:0;font-family:'Special Elite',monospace;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#ffd400">1:00 PM &middot; LOOK Dine-In Cinemas Glendale</p>
+        <h4 style="margin:0;font-family:'Bebas Neue',Impact,sans-serif;font-size:26px;font-weight:400;letter-spacing:.03em;line-height:.98;text-transform:uppercase;color:#f7f4ea;text-wrap:balance">Infested: A Creature Double Feature</h4>
+        <p style="margin:0;font-size:12.5px;line-height:1.55;color:rgba(247,244,234,.6)">This theater is just itching to have you.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px">
+          <span style="display:inline-block;padding:3px 10px;border:1px solid rgba(247,244,234,.3);border-radius:1.5px;color:rgba(247,244,234,.65);font-family:'Special Elite',monospace;font-size:8.8px;font-weight:700;letter-spacing:.06em;text-transform:uppercase">ARCHIVED</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="#" style="position:relative;display:flex;flex-direction:column;background:linear-gradient(180deg,#1b1610,#0d0b08);border:1px solid #4a3d2c;border-radius:4px;overflow:hidden;color:#f7f4ea;user-select:none;isolation:isolate;box-shadow:0 0 0 1px rgba(255,212,0,.12),0 18px 48px rgba(0,0,0,.6);transform:rotate(0.6deg);transition:transform .3s" style-hover="transform:translateY(-6px) rotate(0deg)">
+      <div style="position:relative;aspect-ratio:3/4;overflow:hidden;background:#101010">
+        <img alt="Sunday Afternoon Bonkhouse Presents 80's B-Movie Mystery Double Feature poster" src="public/posters/retail-rampage-prom-dance-bloodbath.webp" style="display:block;width:100%;height:100%;object-fit:cover;transition:transform .4s" style-hover="transform:scale(1.04)">
+        <div style="position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 40px rgba(0,0,0,.4);background:linear-gradient(180deg,rgba(0,0,0,.12),transparent 22%,transparent 76%,rgba(0,0,0,.45))"></div>
+        <div style="position:absolute;top:10px;left:10px;padding:2px 8px;text-align:center;background:#f2ede0;border:1px solid rgba(0,0,0,.1);border-radius:2px;box-shadow:0 2px 6px rgba(0,0,0,.35);transform:rotate(-2deg)">
+          <div style="font-size:9.6px;font-weight:900;line-height:1;color:#a83428">JUL</div>
+          <div style="margin-top:2px;font-family:'Special Elite',monospace;font-size:24px;font-weight:700;line-height:1;color:#000">9</div>
+          <div style="margin-top:2px;font-family:'Special Elite',monospace;font-size:9px;letter-spacing:.08em;line-height:1;color:rgba(0,0,0,.5)">2023</div>
+        </div>
+      </div>
+      <div style="position:relative;height:0;border-top:2px dashed rgba(247,244,234,.22)">
+        <div style="position:absolute;left:-13px;top:-13px;width:24px;height:24px;border-radius:50%;background:#000;border-right:1.5px solid #4a3d2c"></div>
+        <div style="position:absolute;right:-13px;top:-13px;width:24px;height:24px;border-radius:50%;background:#000;border-left:1.5px solid #4a3d2c"></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;padding:18px 18px 16px">
+        <p style="margin:0;font-family:'Special Elite',monospace;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#ffd400">12:00 PM &middot; 1917 Bay St 2nd Floor</p>
+        <h4 style="margin:0;font-family:'Bebas Neue',Impact,sans-serif;font-size:26px;font-weight:400;letter-spacing:.03em;line-height:.98;text-transform:uppercase;color:#f7f4ea;text-wrap:balance">Sunday Afternoon Bonkhouse Presents 80's B-Movie Mystery Double Feature</h4>
+        <p style="margin:0;font-size:12.5px;line-height:1.55;color:rgba(247,244,234,.6)">Retail Rampage. Prom Dance. Bloodbath.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px">
+          <span style="display:inline-block;padding:3px 10px;border:1px solid rgba(247,244,234,.3);border-radius:1.5px;color:rgba(247,244,234,.65);font-family:'Special Elite',monospace;font-size:8.8px;font-weight:700;letter-spacing:.06em;text-transform:uppercase">ARCHIVED</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="#" style="position:relative;display:flex;flex-direction:column;background:linear-gradient(180deg,#1b1610,#0d0b08);border:1px solid #4a3d2c;border-radius:4px;overflow:hidden;color:#f7f4ea;user-select:none;isolation:isolate;box-shadow:0 0 0 1px rgba(255,212,0,.12),0 18px 48px rgba(0,0,0,.6);transform:rotate(-0.5deg);transition:transform .3s" style-hover="transform:translateY(-6px) rotate(0deg)">
+      <div style="position:relative;aspect-ratio:3/4;overflow:hidden;background:#101010">
+        <img alt="Merry Axe-Mas Christmas Horror Double Feature poster" src="public/posters/merry-axe-mas.jpg" style="display:block;width:100%;height:100%;object-fit:cover;transition:transform .4s" style-hover="transform:scale(1.04)">
+        <div style="position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 40px rgba(0,0,0,.4);background:linear-gradient(180deg,rgba(0,0,0,.12),transparent 22%,transparent 76%,rgba(0,0,0,.45))"></div>
+        <div style="position:absolute;top:10px;left:10px;padding:2px 8px;text-align:center;background:#f2ede0;border:1px solid rgba(0,0,0,.1);border-radius:2px;box-shadow:0 2px 6px rgba(0,0,0,.35);transform:rotate(-2deg)">
+          <div style="font-size:9.6px;font-weight:900;line-height:1;color:#a83428">DEC</div>
+          <div style="margin-top:2px;font-family:'Special Elite',monospace;font-size:24px;font-weight:700;line-height:1;color:#000">11</div>
+          <div style="margin-top:2px;font-family:'Special Elite',monospace;font-size:9px;letter-spacing:.08em;line-height:1;color:rgba(0,0,0,.5)">2022</div>
+        </div>
+      </div>
+      <div style="position:relative;height:0;border-top:2px dashed rgba(247,244,234,.22)">
+        <div style="position:absolute;left:-13px;top:-13px;width:24px;height:24px;border-radius:50%;background:#000;border-right:1.5px solid #4a3d2c"></div>
+        <div style="position:absolute;right:-13px;top:-13px;width:24px;height:24px;border-radius:50%;background:#000;border-left:1.5px solid #4a3d2c"></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;padding:18px 18px 16px">
+        <p style="margin:0;font-family:'Special Elite',monospace;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#ffd400">11:45 AM &middot; LOOK Dine-In Cinemas Glendale</p>
+        <h4 style="margin:0;font-family:'Bebas Neue',Impact,sans-serif;font-size:26px;font-weight:400;letter-spacing:.03em;line-height:.98;text-transform:uppercase;color:#f7f4ea;text-wrap:balance">Merry Axe-Mas Christmas Horror Double Feature</h4>
+        <p style="margin:0;font-size:12.5px;line-height:1.55;color:rgba(247,244,234,.6)">Silent Night, Deadly Night 2 Redux and Dark Angel with a jolly pre-show.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px">
+          <span style="display:inline-block;padding:3px 10px;border:1px solid rgba(247,244,234,.3);border-radius:1.5px;color:rgba(247,244,234,.65);font-family:'Special Elite',monospace;font-size:8.8px;font-weight:700;letter-spacing:.06em;text-transform:uppercase">ARCHIVED</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="#" style="position:relative;display:flex;flex-direction:column;background:linear-gradient(180deg,#1b1610,#0d0b08);border:1px solid #4a3d2c;border-radius:4px;overflow:hidden;color:#f7f4ea;user-select:none;isolation:isolate;box-shadow:0 0 0 1px rgba(255,212,0,.12),0 18px 48px rgba(0,0,0,.6);transform:rotate(0.4deg);transition:transform .3s" style-hover="transform:translateY(-6px) rotate(0deg)">
+      <div style="position:relative;aspect-ratio:3/4;overflow:hidden;background:#101010">
+        <img alt="It Came From Outer Space Horror Double Feature poster" src="public/posters/it-came-from-outer-space.jpg" style="display:block;width:100%;height:100%;object-fit:cover;transition:transform .4s" style-hover="transform:scale(1.04)">
+        <div style="position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 40px rgba(0,0,0,.4);background:linear-gradient(180deg,rgba(0,0,0,.12),transparent 22%,transparent 76%,rgba(0,0,0,.45))"></div>
+        <div style="position:absolute;top:10px;left:10px;padding:2px 8px;text-align:center;background:#f2ede0;border:1px solid rgba(0,0,0,.1);border-radius:2px;box-shadow:0 2px 6px rgba(0,0,0,.35);transform:rotate(-2deg)">
+          <div style="font-size:9.6px;font-weight:900;line-height:1;color:#a83428">OCT</div>
+          <div style="margin-top:2px;font-family:'Special Elite',monospace;font-size:24px;font-weight:700;line-height:1;color:#000">9</div>
+          <div style="margin-top:2px;font-family:'Special Elite',monospace;font-size:9px;letter-spacing:.08em;line-height:1;color:rgba(0,0,0,.5)">2022</div>
+        </div>
+      </div>
+      <div style="position:relative;height:0;border-top:2px dashed rgba(247,244,234,.22)">
+        <div style="position:absolute;left:-13px;top:-13px;width:24px;height:24px;border-radius:50%;background:#000;border-right:1.5px solid #4a3d2c"></div>
+        <div style="position:absolute;right:-13px;top:-13px;width:24px;height:24px;border-radius:50%;background:#000;border-left:1.5px solid #4a3d2c"></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;padding:18px 18px 16px">
+        <p style="margin:0;font-family:'Special Elite',monospace;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#ffd400">11:45 AM &middot; LOOK Dine-In Cinemas Glendale</p>
+        <h4 style="margin:0;font-family:'Bebas Neue',Impact,sans-serif;font-size:26px;font-weight:400;letter-spacing:.03em;line-height:.98;text-transform:uppercase;color:#f7f4ea;text-wrap:balance">It Came From Outer Space Horror Double Feature</h4>
+        <p style="margin:0;font-size:12.5px;line-height:1.55;color:rgba(247,244,234,.6)">The Blob and Night of the Creeps with a spooky pre-show.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px">
+          <span style="display:inline-block;padding:3px 10px;border:1px solid rgba(247,244,234,.3);border-radius:1.5px;color:rgba(247,244,234,.65);font-family:'Special Elite',monospace;font-size:8.8px;font-weight:700;letter-spacing:.06em;text-transform:uppercase">ARCHIVED</span>
+        </div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<footer style="border-top:1px solid rgba(255,255,255,.15);background:#000">
+  <div style="max-width:1280px;margin:0 auto;padding:16px 32px;text-align:center;font-size:12px;color:rgba(255,255,255,.4)">(c) 2026 Sunday Afternoon Bonkhouse. All rights reserved. &middot; <a href="Bonkhouse Home - Current.dc.html" style="color:rgba(255,255,255,.6)">Back to the clubhouse</a></div>
+</footer>
+
+</div>
+</x-dc>
+</body>
+</html>

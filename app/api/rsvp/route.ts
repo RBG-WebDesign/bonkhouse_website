@@ -7,25 +7,34 @@ import { formatEventDate, siteUrl } from "@/lib/utils";
 export async function POST(request: Request) {
   const body = await request.json();
   const eventId = String(body.eventId || "");
+  const eventSlug = String(body.eventSlug || "").trim();
   const name = String(body.name || "").trim();
   const email = String(body.email || "").trim().toLowerCase();
   const quantity = Math.max(1, Math.min(4, Number(body.quantity || 1)));
   const inviteCode = String(body.inviteCode || "").trim();
 
-  if (!eventId || !name || !email) {
+  if ((!eventId && !eventSlug) || !name || !email) {
     return NextResponse.json({ error: "Name, email, and event are required." }, { status: 400 });
   }
 
   const supabase = await createClient();
-  const { data: event, error: eventError } = await supabase
+  let eventQuery = supabase
     .from("events")
-    .select("*, venues(*)")
-    .eq("id", eventId)
-    .single();
+    .select("*, venues(*)");
+
+  eventQuery = eventId ? eventQuery.eq("id", eventId) : eventQuery.eq("slug", eventSlug);
+
+  const { data: event, error: eventError } = await eventQuery.single();
 
   if (eventError || !event) {
     return NextResponse.json({ error: "Event not found." }, { status: 404 });
   }
+
+  if (event.status !== "published") {
+    return NextResponse.json({ error: "RSVPs are not open for this event." }, { status: 403 });
+  }
+
+  const resolvedEventId = event.id;
 
   if (event.is_invite_only && !inviteCode) {
     return NextResponse.json({ error: "This event requires an invite code." }, { status: 403 });
@@ -35,7 +44,7 @@ export async function POST(request: Request) {
     const { data: code } = await supabase
       .from("invite_codes")
       .select("*")
-      .eq("event_id", eventId)
+      .eq("event_id", resolvedEventId)
       .eq("code", inviteCode.toUpperCase())
       .eq("is_active", true)
       .maybeSingle();
@@ -45,7 +54,7 @@ export async function POST(request: Request) {
     }
   }
 
-  const { data: counts } = await supabase.rpc("get_event_ticket_counts", { event_uuid: eventId });
+  const { data: counts } = await supabase.rpc("get_event_ticket_counts", { event_uuid: resolvedEventId });
   const taken = Number(counts?.[0]?.confirmed_count || 0);
   const standardCapacity = Number(event.capacity_standard || 100);
   const overflowCapacity = Number(event.capacity_overflow || 20);
@@ -65,29 +74,29 @@ export async function POST(request: Request) {
   const reservationStatus = generated.every((ticket) => ticket.seatType === "waitlist")
     ? "waitlisted"
     : "confirmed";
+  const reservationId = crypto.randomUUID();
   const cancelToken = makeTicketToken();
 
-  const { data: reservation, error: reservationError } = await supabase
+  const { error: reservationError } = await supabase
     .from("reservations")
     .insert({
-      event_id: eventId,
+      id: reservationId,
+      event_id: resolvedEventId,
       guest_name: name,
       guest_email: email,
       quantity,
       status: reservationStatus,
       invite_code: inviteCode || null,
       cancel_token_hash: await hashTicketToken(cancelToken)
-    })
-    .select("id")
-    .single();
+    });
 
-  if (reservationError || !reservation) {
+  if (reservationError) {
     return NextResponse.json({ error: "Could not create the reservation." }, { status: 500 });
   }
 
   const ticketRows = generated.map((ticket) => ({
-    event_id: eventId,
-    reservation_id: reservation.id,
+    event_id: resolvedEventId,
+    reservation_id: reservationId,
     token_hash: ticket.tokenHash,
     seat_type: ticket.seatType,
     status: ticket.seatType === "waitlist" ? "waitlisted" : "valid"
@@ -103,8 +112,8 @@ export async function POST(request: Request) {
     .map((ticket, index) => ({ ticket, index }))
     .filter(({ ticket }) => ticket.seatType === "waitlist")
     .map(({ index }) => ({
-      event_id: eventId,
-      reservation_id: reservation.id,
+      event_id: resolvedEventId,
+      reservation_id: reservationId,
       guest_name: name,
       guest_email: email,
       party_size: quantity,
@@ -117,7 +126,7 @@ export async function POST(request: Request) {
 
   if (inviteCode) {
     await supabase.rpc("increment_invite_code_use", {
-      event_uuid: eventId,
+      event_uuid: resolvedEventId,
       invite_code: inviteCode.toUpperCase()
     });
   }
@@ -127,8 +136,9 @@ export async function POST(request: Request) {
     guestName: name,
     eventTitle: event.title,
     eventDate: formatEventDate(event.starts_at),
-    cancelUrl: `${siteUrl()}/api/rsvp/cancel?reservation=${reservation.id}&token=${encodeURIComponent(cancelToken)}`,
+    cancelUrl: `${siteUrl()}/api/rsvp/cancel?reservation=${reservationId}&token=${encodeURIComponent(cancelToken)}`,
     arrivalInstructions: event.entry_instructions || event.venues?.entry_instructions || "",
+    confirmationCode: `BONK-${reservationId.slice(0, 8).toUpperCase()}`,
     tickets: generated.map((ticket, index) => ({
       label: `Ticket ${index + 1}`,
       seatType: ticket.seatType,
@@ -137,7 +147,7 @@ export async function POST(request: Request) {
   });
 
   return NextResponse.json({
-    reservationId: reservation.id,
+    reservationId,
     status: reservationStatus,
     tickets: generated.map((ticket, index) => ({
       label: `Ticket ${index + 1}`,

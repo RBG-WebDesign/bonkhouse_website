@@ -17,6 +17,7 @@ export async function POST(request: Request) {
       email,
       name,
       tags,
+      status: "active",
       subscribed_at: new Date().toISOString()
     },
     { onConflict: "email" }

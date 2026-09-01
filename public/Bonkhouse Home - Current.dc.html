@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<base href="/">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Covered+By+Your+Grace&amp;family=Special+Elite&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;min-height:100vh;overflow-x:hidden;color:#f7f4ea;font-family:"Trebuchet MS",Verdana,sans-serif;background:radial-gradient(circle at 65% 12%,rgba(255,212,0,.075),transparent 24rem),radial-gradient(circle at 18% 20%,rgba(129,39,24,.11),transparent 18rem),linear-gradient(180deg,#050403 0%,#090705 48%,#000 100%)}
+*{box-sizing:border-box}
+a{color:inherit;text-decoration:none}
+a:hover{color:#ffd400}
+.poster-cycle{position:relative;display:block;width:100%;aspect-ratio:2/3;overflow:hidden;background:#050505}
+.poster-cycle img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;user-select:none}
+.poster-cycle img:first-child{animation:poster-cycle-first 10s ease-in-out infinite}
+.poster-cycle img:last-child{opacity:0;animation:poster-cycle-second 10s ease-in-out infinite}
+@keyframes poster-cycle-first{0%,42%,100%{opacity:1}50%,92%{opacity:0}}
+@keyframes poster-cycle-second{0%,42%,100%{opacity:0}50%,92%{opacity:1}}
+@media (prefers-reduced-motion:reduce){.poster-cycle img{animation:none!important}.poster-cycle img:last-child{display:none}}
+body::before{position:fixed;inset:0;z-index:70;pointer-events:none;content:"";opacity:.13;background-image:radial-gradient(circle at 14% 21%,rgba(255,216,120,.32),transparent .08rem),radial-gradient(circle at 72% 18%,rgba(255,216,120,.2),transparent .06rem),radial-gradient(circle at 86% 72%,rgba(0,0,0,.7),transparent .1rem),radial-gradient(circle at 31% 84%,rgba(255,255,255,.24),transparent .07rem),linear-gradient(90deg,transparent 0 3%,rgba(255,218,120,.2) 3.1%,transparent 3.3% 96.4%,rgba(255,218,120,.14) 96.6%,transparent 97%),repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 1px,transparent 1px 9px);background-size:240px 240px,180px 180px,220px 220px,150px 150px,100% 100%,100% 100%;mix-blend-mode:screen}
+@media (max-width:1023px){[data-hero-poster]{display:none!important}[data-hero-copy]{grid-column:1 / -1!important}}
+@media (max-width:767px){[data-m="herogrid"]{grid-template-columns:1fr!important;gap:24px!important;padding:0 20px!important}[data-hero-poster]{display:flex!important;grid-column:1 / -1!important;padding:0 0 56px}[data-hero-poster] .poster-cycle{max-width:250px!important;transform:rotate(2deg)!important}}
+body::after{position:fixed;inset:0;z-index:71;pointer-events:none;content:"";opacity:.26;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.92' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.42'/%3E%3C/svg%3E"),radial-gradient(ellipse at center,transparent 48%,rgba(0,0,0,.45) 100%);mix-blend-mode:overlay}
+@media (max-width:899px){[data-m="nav"]{display:none!important}}
+@media (max-width:767px){[data-m="hpad"]{padding:0 16px!important}[data-m="grid"]{grid-template-columns:1fr!important}[data-m="stack"]{flex-direction:column!important}[data-m="stack"] > *{width:100%}[data-m="fullbtn"] > a{flex:1 1 100%}[data-m="ticketmeta"]{flex-direction:column!important;align-items:flex-start!important;gap:6px!important}[data-m="ticketmeta"] > span[aria-hidden]{display:none!important}[data-m="ticket"]{flex-direction:column!important;gap:16px}[data-m="ticketstub"]{padding-right:0!important;padding-bottom:12px;justify-content:center;border-bottom:1px dashed rgba(247,244,234,.3)}[data-m="tickettext"]{writing-mode:horizontal-tb!important;transform:none!important}[data-m="ticketdiv"]{display:none!important}[data-m="ticketbody"]{padding-left:0!important}}
+</style>
+</helmet>
+
+<div style="background:#000;color:#f7f4ea">
+
+<dc-import name="SiteHeader" active="home" style="position:sticky;top:0;z-index:50;display:block" hint-size="100%,81px"></dc-import>
+
+<section style="position:relative;display:flex;min-height:704px;align-items:center;overflow:hidden;background:#000;isolation:isolate">
+  <div style="position:absolute;inset:0;overflow:hidden;pointer-events:none;background:#050505 url('public/hero/background-bonkhouse.png') center / cover no-repeat"></div>
+  <div style="position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(circle at 62% 50%,rgba(255,188,0,.08),transparent 15rem),linear-gradient(90deg,rgba(0,0,0,.72),rgba(0,0,0,.34) 48%,rgba(0,0,0,.6)),linear-gradient(180deg,rgba(61,22,10,.16),rgba(0,0,0,.62))"></div>
+  <div style="position:absolute;inset:0;z-index:2;pointer-events:none;opacity:.34;background-image:radial-gradient(circle,rgba(255,232,164,.28) 0 1px,transparent 1.2px),url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.92' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='96' height='96' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E&quot;);background-size:5px 5px,96px 96px;mix-blend-mode:overlay"></div>
+
+  <div data-m="herogrid" style="position:relative;z-index:10;display:grid;grid-template-columns:repeat(12,1fr);gap:32px;width:100%;max-width:1280px;margin:0 auto;padding:0 32px">
+    <div data-hero-copy="" style="position:relative;z-index:10;grid-column:span 8;display:flex;flex-direction:column;justify-content:center;padding:40px 0">
+      
+      <img alt="Sunday Afternoon Bonk House" src="public/bonkhouse-title.webp" style="width: 712px; max-width: 100%; height: auto; align-self: flex-start; user-select: none"><div data-m="fullbtn" style="display:flex;flex-wrap:wrap;gap:16px;margin-top:32px">
+        <a href="Society Videodrome Screening.dc.html" style="position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:68px;padding:0 48px;border:1px solid #ffd400;border-radius:3px;background:#ffd400;color:#000;font-family:'Bebas Neue',Impact,sans-serif;font-size:24px;letter-spacing:.05em;text-transform:uppercase;box-shadow:inset 0 1px 0 rgba(255,255,255,.18),inset 0 -8px 18px rgba(83,51,0,.14),0 8px 22px rgba(0,0,0,.32),0 0 26px rgba(255,212,0,.18)" style-hover="background:#ffe15a;transform:translateY(-2px)">RSVP
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+        </a>
+        <a href="Screenings.dc.html" style="position:relative;display:inline-flex;align-items:center;justify-content:center;height:68px;padding:0 48px;border:1px solid rgba(255,212,0,.4);border-radius:3px;background:rgba(0,0,0,.4);backdrop-filter:blur(8px);color:#ffd400;font-family:'Bebas Neue',Impact,sans-serif;font-size:24px;letter-spacing:.05em;text-transform:uppercase;box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 8px 22px rgba(0,0,0,.32)" style-hover="background:#ffd400;color:#000;transform:translateY(-2px)">SEE WHAT'S SCREENING</a>
+      </div>
+    </div>
+    <div data-hero-poster="" style="position:relative;grid-column:span 4;display:flex;align-items:center;justify-content:center">
+      <div class="poster-cycle" style="max-width:352px;transform:rotate(3deg);box-shadow:0 25px 50px -12px rgba(0,0,0,.75)">
+        <img alt="Society double-feature poster" src="/society-poster.jpg">
+        <img alt="Videodrome double-feature poster" src="/videodrome-poster.webp">
+      </div>
+    </div>
+  </div>
+
+  <div style="position:absolute;bottom:0;left:0;right:0;z-index:20;pointer-events:none">
+    <div style="position:absolute;left:0;right:0;bottom:0;height:64px;background:linear-gradient(180deg,transparent,rgba(0,0,0,.32),#000)"></div>
+    <svg aria-hidden="true" preserveAspectRatio="none" viewBox="0 0 1440 48" xmlns="http://www.w3.org/2000/svg" style="position:relative;display:block;width:100%;height:56px;fill:rgba(255,255,255,.1);transform:translateY(2px)"><path d="M0 32L24 24L48 35L72 20L96 30L120 22L144 38L168 25L192 33L216 19L240 28L264 22L288 35L312 21L336 29L360 23L384 37L408 26L432 32L456 18L480 30L504 22L528 35L552 24L576 31L600 20L624 28L648 22L672 36L696 25L720 33L744 19L768 29L792 21L816 35L840 24L864 30L888 20L912 28L936 23L960 36L984 25L1008 32L1032 19L1056 29L1080 22L1104 35L1128 24L1152 31L1176 20L1200 28L1224 22L1248 36L1272 25L1296 33L1320 19L1344 28L1368 22L1392 35L1416 23L1440 30V48H0Z"></path></svg>
+    <svg aria-hidden="true" preserveAspectRatio="none" viewBox="0 0 1440 48" xmlns="http://www.w3.org/2000/svg" style="position:relative;display:block;width:100%;height:56px;margin-top:-56px;fill:#000;filter:drop-shadow(0 -8px 14px rgba(0,0,0,.45))"><path d="M0 32L24 24L48 35L72 20L96 30L120 22L144 38L168 25L192 33L216 19L240 28L264 22L288 35L312 21L336 29L360 23L384 37L408 26L432 32L456 18L480 30L504 22L528 35L552 24L576 31L600 20L624 28L648 22L672 36L696 25L720 33L744 19L768 29L792 21L816 35L840 24L864 30L888 20L912 28L936 23L960 36L984 25L1008 32L1032 19L1056 29L1080 22L1104 35L1128 24L1152 31L1176 20L1200 28L1224 22L1248 36L1272 25L1296 33L1320 19L1344 28L1368 22L1392 35L1416 23L1440 30V48H0Z"></path></svg>
+  </div>
+</section>
+
+<section style="position:relative;z-index:10;background:#000;padding:80px 0">
+  <div data-m="grid" style="display:grid;grid-template-columns:1.1fr 1.9fr;gap:48px;align-items:center;max-width:1280px;margin:0 auto;padding:0 32px">
+    <div>
+      <h2 style="display:inline-block;margin:0;padding-bottom:8px;border-bottom:1px solid rgba(255,212,0,.25);font-family:'Bebas Neue',Impact,sans-serif;font-size:48px;font-weight:400;line-height:1;letter-spacing:.05em;text-transform:uppercase;color:#ffd400;text-shadow:1px 1px 0 rgba(135,25,12,.7),0 0 18px rgba(255,212,0,.12)">Upcoming Screening</h2>
+      <p style="margin:24px 0 0;font-size:24px;line-height:1.625;color:rgba(255,255,255,.9)">The next thing we have chosen to inflict upon you, lovingly.</p>
+      <div style="margin-top:32px">
+        <a href="Society Videodrome Screening.dc.html" style="position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:68px;padding:0 48px;border:1px solid #ffd400;border-radius:3px;background:#ffd400;color:#000;font-family:'Bebas Neue',Impact,sans-serif;font-size:24px;letter-spacing:.05em;text-transform:uppercase;box-shadow:inset 0 1px 0 rgba(255,255,255,.18),inset 0 -8px 18px rgba(83,51,0,.14),0 8px 22px rgba(0,0,0,.32),0 0 26px rgba(255,212,0,.18)" style-hover="background:#ffe15a;transform:translateY(-2px)">RSVP NOW
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+        </a>
+      </div>
+    </div>
+
+    <a data-m="ticket" href="Society Videodrome Screening.dc.html" style="position:relative;display:flex;min-height:320px;padding:24px;background:radial-gradient(circle at 62% 40%,rgba(90,60,20,.28),transparent 22rem),linear-gradient(180deg,#1b1610,#0d0b08);border:1px solid #4a3d2c;border-radius:3px;color:#f7f4ea;overflow:visible;user-select:none;isolation:isolate;box-shadow:0 0 0 1px rgba(255,212,0,.16),0 18px 48px rgba(0,0,0,.6),inset 0 0 34px rgba(0,0,0,.6);transition:transform .3s" style-hover="transform:translateY(-4px)">
+      <div style="position:absolute;left:-13px;top:50%;transform:translateY(-50%);width:24px;height:24px;border-radius:50%;background:#000;border-right:1.5px solid #4a3d2c;z-index:15"></div>
+      <div style="position:absolute;right:-13px;top:50%;transform:translateY(-50%);width:24px;height:24px;border-radius:50%;background:#000;border-left:1.5px solid #4a3d2c;z-index:15"></div>
+      <div style="position:absolute;top:-8px;left:-32px;width:90px;height:28px;transform:rotate(-35deg);background:rgba(218,195,140,.35);border-left:1px dashed rgba(0,0,0,.12);border-right:1px dashed rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.08),inset 0 0 6px rgba(255,255,255,.15);z-index:20"></div>
+      <div style="position:absolute;top:-8px;right:-32px;width:90px;height:28px;transform:rotate(35deg);background:rgba(218,195,140,.35);border-left:1px dashed rgba(0,0,0,.12);border-right:1px dashed rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.08),inset 0 0 6px rgba(255,255,255,.15);z-index:20"></div>
+      <div style="position:absolute;bottom:-8px;left:-32px;width:90px;height:28px;transform:rotate(35deg);background:rgba(218,195,140,.35);border-left:1px dashed rgba(0,0,0,.12);border-right:1px dashed rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.08),inset 0 0 6px rgba(255,255,255,.15);z-index:20"></div>
+      <div style="position:absolute;bottom:-8px;right:-32px;width:90px;height:28px;transform:rotate(-35deg);background:rgba(218,195,140,.35);border-left:1px dashed rgba(0,0,0,.12);border-right:1px dashed rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.08),inset 0 0 6px rgba(255,255,255,.15);z-index:20"></div>
+      <div style="position:absolute;inset:0;opacity:.14;pointer-events:none;border-radius:3px;overflow:hidden;background-image:radial-gradient(rgba(255,255,255,.55) 1px,transparent 1px);background-size:14px 14px"></div>
+      <div style="position:absolute;inset:8px;pointer-events:none;border:1px dashed rgba(247,244,234,.16);border-radius:2px"></div>
+
+      <div data-m="ticketstub" style="position:relative;z-index:10;display:flex;align-items:center;gap:16px;padding-right:22px">
+        <span data-m="tickettext" style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'Special Elite',monospace;font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:rgba(255,212,0,.7)">Admit one · Sunday</span>
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <span style="font-size:12px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#ff6a4d">{{ curMon }}</span>
+          <span style="margin-top:4px;font-family:'Special Elite',monospace;font-size:60px;font-weight:700;letter-spacing:-.02em;line-height:1;color:#f7f4ea">{{ curDay }}</span>
+          <span style="margin-top:8px;font-family:'Special Elite',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(247,244,234,.45)">No. {{ curNo }}</span>
+        </div>
+        <div data-m="ticketdiv" style="position:absolute;right:0;top:-24px;bottom:-24px;width:1px;background:repeating-linear-gradient(180deg,rgba(247,244,234,.4) 0 5px,transparent 5px 11px)"></div>
+      </div>
+
+      <div data-m="ticketbody" style="position:relative;z-index:10;flex:1;padding-left:24px;display:flex;flex-direction:column;justify-content:space-between">
+        <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;height:100%;padding:12px 0">
+          <p style="margin:0;font-size:9.92px;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:rgba(247,244,234,.65)">SUNDAY AFTERNOON DOUBLE FEATURE</p>
+          <div style="width:100%;max-width:min(100%,27rem);overflow:hidden;line-height:0;margin:8px 0 4px">
+            <img alt="Death to Bonk House — Long Live the New Flesh" src="{{ curLogo }}" style="display:block;width:{{ curLogoW }};height:auto;margin:{{ curLogoM }};user-select:none;filter:drop-shadow(0 4px 16px rgba(0,0,0,.55))">
+          </div>
+          <h3 style="margin:2px 0 0;font-family:'Bebas Neue',Impact,sans-serif;font-size:clamp(20px,2.2vw,30px);font-weight:400;letter-spacing:.08em;line-height:.95;text-align:center;color:#f7f4ea">{{ curShort }}</h3>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;width:100%;margin-top:12px">
+            <span style="display:inline-block;padding:3px 8px;border:1px solid rgba(0,0,0,.08);border-radius:1.5px;background:#ffd400;color:#000;font-family:'Special Elite',monospace;font-size:9.6px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;transform:rotate(-1deg);text-shadow:0 .5px 0 rgba(255,255,255,.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 1.5px 3px rgba(0,0,0,.3);white-space:nowrap;line-height:1.4">{{ curBadge }}</span>
+            
+          </div>
+        </div>
+
+        <div data-m="ticketmeta" style="display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid #4a3d2c;font-size:9.92px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:rgba(247,244,234,.6)">
+          <span>TIME: {{ curTime }}</span>
+          <span aria-hidden="true" style="flex:none;width:88px;height:16px;background:repeating-linear-gradient(90deg,rgba(247,244,234,.6) 0 2px,transparent 2px 4px,rgba(247,244,234,.6) 4px 5px,transparent 5px 8px);opacity:.5"></span>
+          <span>VENUE: {{ curVenue }}</span>
+        </div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<section style="position:relative;z-index:10;background:#000;padding:80px 0;border-top:1px solid rgba(255,255,255,.1)">
+  <div style="max-width:1280px;margin:0 auto;padding:0 32px">
+    <h2 style="display:inline-block;margin:0;padding-bottom:8px;border-bottom:1px solid rgba(255,212,0,.25);font-family:'Bebas Neue',Impact,sans-serif;font-size:48px;font-weight:400;line-height:1;letter-spacing:.05em;text-transform:uppercase;color:#ffd400;text-shadow:1px 1px 0 rgba(135,25,12,.7),0 0 18px rgba(255,212,0,.12)">Past Screenings</h2>
+
+    <div data-m="grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:48px">
+      <sc-for list="{{ past }}" as="p" hint-placeholder-count="3">
+        <a href="Screenings.dc.html" style="position:relative;display:flex;flex-direction:column;justify-content:space-between;min-height:248px;padding:20px;background:linear-gradient(180deg,#3a332a,#1d1813);border:1px solid #4a3d2c;border-radius:3px;color:#f7f4ea;user-select:none;isolation:isolate;box-shadow:0 0 0 1px rgba(255,212,0,.12),0 18px 48px rgba(0,0,0,.6),inset 0 0 34px rgba(0,0,0,.55);transform:rotate({{ p.rot }});transition:transform .3s">
+          <div style="position:absolute;left:-13px;top:50%;transform:translateY(-50%);width:24px;height:24px;border-radius:50%;background:#000;border-right:1.5px solid #4a3d2c;z-index:15"></div>
+          <div style="position:absolute;right:-13px;top:50%;transform:translateY(-50%);width:24px;height:24px;border-radius:50%;background:#000;border-left:1.5px solid #4a3d2c;z-index:15"></div>
+          <div style="position:absolute;top:12px;left:12px;z-index:10;padding:2px 8px;text-align:center;background:#f2ede0;border:1px solid rgba(0,0,0,.1);border-radius:2px;box-shadow:0 1px 2px rgba(0,0,0,.05)">
+            <div style="font-size:9.6px;font-weight:900;line-height:1;color:#a83428">{{ p.mon }}</div>
+            <div style="margin-top:2px;font-family:'Special Elite',monospace;font-size:24px;font-weight:700;line-height:1;color:#000">{{ p.day }}</div>
+            <div style="margin-top:2px;font-family:'Special Elite',monospace;font-size:9px;letter-spacing:.08em;line-height:1;color:rgba(0,0,0,.5)">{{ p.year }}</div>
+          </div>
+          <div style="position:absolute;inset:0;z-index:0;border-radius:3px;overflow:hidden;pointer-events:none">
+            <div style="position:absolute;inset:0;opacity:.16;mix-blend-mode:screen;filter:grayscale(1);background-position:center;background-size:cover;background-repeat:no-repeat;background-image:url({{ p.poster }})"></div>
+          </div>
+          <div style="position:relative;z-index:10;flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:16px 8px">
+            <sc-if value="{{ p.hasLogo }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;justify-content:center;align-items:center;overflow:hidden;width:100%"><img alt="{{ p.title }}" src="{{ p.logo }}" style="width:{{ p.logoW }};max-width:none;height:auto;margin:{{ p.logoM }};flex:none"></div>
+            </sc-if>
+            <sc-if value="{{ p.noLogo }}" hint-placeholder-val="{{ false }}">
+              <h4 style="margin:0;font-family:'Bebas Neue',Impact,sans-serif;font-size:clamp(20px,1.9vw,30px);font-weight:400;letter-spacing:.025em;line-height:.98;text-transform:uppercase;color:#f7f4ea;text-wrap:balance">{{ p.title }}</h4>
+            </sc-if>
+          </div>
+          <div style="position:relative;z-index:10;display:flex;justify-content:center;margin-top:12px">
+            <span style="display:inline-block;padding:4px 12px;border:1px solid rgba(0,0,0,.1);border-radius:1.5px;background:{{ p.cbBg }};color:#fff;font-family:'Special Elite',monospace;font-size:8.8px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;transform:rotate(.8deg);box-shadow:0 4px 6px -1px rgba(0,0,0,.3)">{{ p.cbLabel }}</span>
+          </div>
+        </a>
+      </sc-for>
+    </div>
+
+    <div style="display:flex;justify-content:center;margin-top:48px">
+      <a href="Screenings.dc.html" style="position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:68px;padding:0 48px;border:1px solid #ffd400;border-radius:3px;background:#ffd400;color:#000;font-family:'Bebas Neue',Impact,sans-serif;font-size:24px;letter-spacing:.05em;text-transform:uppercase;box-shadow:inset 0 1px 0 rgba(255,255,255,.18),inset 0 -8px 18px rgba(83,51,0,.14),0 8px 22px rgba(0,0,0,.32),0 0 26px rgba(255,212,0,.18)" style-hover="background:#ffe15a;transform:translateY(-2px)">SEE ALL PAST SCREENINGS
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section style="position:relative;z-index:10;background:#000;padding:80px 0;border-top:1px solid rgba(255,255,255,.1)">
+  <div style="max-width:1280px;margin:0 auto;padding:0 32px">
+    <h2 style="display:inline-block;margin:0;padding-bottom:8px;border-bottom:1px solid rgba(255,212,0,.25);font-family:'Bebas Neue',Impact,sans-serif;font-size:48px;font-weight:400;line-height:1;letter-spacing:.05em;text-transform:uppercase;color:#ffd400;text-shadow:1px 1px 0 rgba(135,25,12,.7),0 0 18px rgba(255,212,0,.12)">Photos</h2>
+    <div data-m="grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:48px">
+      <div style="position:relative;overflow:hidden;padding:10px 10px 28px;background:#f7f4ea;color:#1a1a1a;border:1px solid rgba(255,255,255,.05);box-shadow:0 10px 30px rgba(0,0,0,.5),inset 0 0 22px rgba(88,64,24,.12);transform:rotate(1.5deg);transition:all .3s;user-select:none">
+          <div style="position:absolute;inset:0;z-index:3;pointer-events:none;mix-blend-mode:multiply;background:radial-gradient(circle at 18% 22%,rgba(52,33,0,.15),transparent .12rem),radial-gradient(circle at 79% 73%,rgba(52,33,0,.12),transparent .14rem),repeating-linear-gradient(103deg,rgba(0,0,0,.035) 0 1px,transparent 1px 8px)"></div>
+          <div style="position:relative;aspect-ratio:1;overflow:hidden;background:#101010;border:1px solid rgba(0,0,0,.05)">
+            <img alt="The room filling up before the lights went down." src="public/photos/house-house-2024/mg-1639.jpg" style="width:100%;height:100%;object-fit:cover;filter:grayscale(1);transition:filter .3s" style-hover="filter:grayscale(0)">
+          </div>
+        </div>
+      
+
+        <div style="position:relative;overflow:hidden;padding:10px 10px 28px;background:#f7f4ea;color:#1a1a1a;border:1px solid rgba(255,255,255,.05);box-shadow:0 10px 30px rgba(0,0,0,.5),inset 0 0 22px rgba(88,64,24,.12);transform:rotate(-3deg);transition:all .3s;user-select:none">
+          <div style="position:absolute;inset:0;z-index:3;pointer-events:none;mix-blend-mode:multiply;background:radial-gradient(circle at 18% 22%,rgba(52,33,0,.15),transparent .12rem),radial-gradient(circle at 79% 73%,rgba(52,33,0,.12),transparent .14rem),repeating-linear-gradient(103deg,rgba(0,0,0,.035) 0 1px,transparent 1px 8px)"></div>
+          <div style="position:relative;aspect-ratio:1;overflow:hidden;background:#101010;border:1px solid rgba(0,0,0,.05)">
+            <img alt="Lobby chatter under the poster wall." src="public/photos/house-house-2024/mg-1633.jpg" style="width:100%;height:100%;object-fit:cover;filter:grayscale(1);transition:filter .3s" style-hover="filter:grayscale(0)">
+          </div>
+        </div>
+      
+
+        <div style="position:relative;overflow:hidden;padding:10px 10px 28px;background:#f7f4ea;color:#1a1a1a;border:1px solid rgba(255,255,255,.05);box-shadow:0 10px 30px rgba(0,0,0,.5),inset 0 0 22px rgba(88,64,24,.12);transform:rotate(4.5deg);transition:all .3s;user-select:none">
+          <div style="position:absolute;inset:0;z-index:3;pointer-events:none;mix-blend-mode:multiply;background:radial-gradient(circle at 18% 22%,rgba(52,33,0,.15),transparent .12rem),radial-gradient(circle at 79% 73%,rgba(52,33,0,.12),transparent .14rem),repeating-linear-gradient(103deg,rgba(0,0,0,.035) 0 1px,transparent 1px 8px)"></div>
+          <div style="position:relative;aspect-ratio:1;overflow:hidden;background:#101010;border:1px solid rgba(0,0,0,.05)">
+            <img alt="Audience laughter between reels." src="public/photos/house-house-2024/img-0937.jpg" style="width:100%;height:100%;object-fit:cover;filter:grayscale(1);transition:filter .3s" style-hover="filter:grayscale(0)">
+          </div>
+        </div>
+    </div>
+  </div>
+</section>
+
+<section style="position:relative;z-index:10;background:#000;padding:80px 0;border-top:1px solid rgba(255,255,255,.1)">
+  <div style="max-width:1280px;margin:0 auto;padding:0 32px">
+    <div data-m="grid" style="display:grid;grid-template-columns:1fr 1.5fr;gap:48px;align-items:start">
+      <div>
+        <h2 style="display:inline-block;margin:0;padding-bottom:8px;border-bottom:1px solid rgba(255,212,0,.25);font-family:'Bebas Neue',Impact,sans-serif;font-size:48px;font-weight:400;line-height:1;letter-spacing:.05em;text-transform:uppercase;color:#ffd400;text-shadow:1px 1px 0 rgba(135,25,12,.7),0 0 18px rgba(255,212,0,.12)">About Us</h2>
+        <div style="box-sizing: border-box; display: flex; flex-direction: column; gap: 12px"></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:24px;font-size:16px;line-height:2;color:rgba(255,255,255,.7)">
+        <p style="margin:0">Sunday Afternoon Bonkhouse grew out of five years of art nerd sickos coming together to watch the very BEST and very WORST of horror cult classics on the big screen. Each October, we assemble a themed double feature and cut retro era trailers, commercials, shorts, and animations from people we love into custom pre-shows that turn the double feature into its own strange little event.&nbsp;</p>
+        
+        
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="position:relative;z-index:10;background:rgba(9,9,11,.4);padding:64px 0;border-top:1px solid rgba(255,255,255,.1)">
+  <div style="max-width:576px;margin:0 auto;padding:0 32px;text-align:center">
+    <form onSubmit="{{ subscribe }}" style="position:relative;border:1px solid rgba(255,212,0,.8);background:#000;padding:32px;box-shadow:0 0 30px rgba(255,212,0,.08);text-align:left">
+      <div style="position:absolute;left:-1px;top:12px;height:80px;border-left:2px dashed rgba(255,212,0,.8)"></div>
+      <div style="position:absolute;right:-1px;bottom:12px;height:80px;border-right:2px dashed rgba(255,212,0,.8)"></div>
+      <p style="margin:0;font-family:'Bebas Neue',Impact,sans-serif;font-size:36px;line-height:1;letter-spacing:.03em;text-transform:uppercase;color:#fff">Stay in the loop.</p>
+      <p style="margin:8px 0 0;font-size:14px;line-height:1.7;color:rgba(255,255,255,.62)">Get the next screening in your inbox.</p>
+      <div data-m="stack" style="display:flex;gap:12px;margin-top:20px">
+        <input name="email" placeholder="Email" required="" type="email" style="flex:1;min-width:0;border:1px solid rgba(255,255,255,.2);border-radius:6px;background:#000;padding:12px 16px;font-size:16px;color:#fff">
+        <button type="submit" disabled="{{ subscribing }}" style="display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 24px;border:1px solid #ffd400;border-radius:6px;background:#ffd400;color:#000;font-family:'Bebas Neue',Impact,sans-serif;font-size:20px;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;box-shadow:0 0 26px rgba(255,212,0,.18)" style-hover="background:#ffe15a">{{ subscribeLabel }}</button>
+      </div>
+      <sc-if value="{{ subscribed }}" hint-placeholder-val="{{ false }}">
+        <p style="margin:14px 0 0;font-family:'Special Elite',monospace;font-size:13px;font-weight:700;color:#ffd400">You are on the list.</p>
+      </sc-if>
+      <sc-if value="{{ subscribeFailed }}" hint-placeholder-val="{{ false }}">
+        <p role="alert" style="margin:14px 0 0;font-size:13px;font-weight:700;color:#ff9c88">{{ subscribeError }}</p>
+      </sc-if>
+    </form>
+  </div>
+</section>
+
+<footer style="border-top:1px solid rgba(255,255,255,.15);background:#000;color:#f7f4ea">
+  <div data-m="grid" style="display:grid;grid-template-columns:1.2fr .8fr .8fr .9fr;gap:32px;max-width:1280px;margin:0 auto;padding:40px 32px">
+    <div>
+      <img alt="Sunday Afternoon Bonk House" src="public/bonkhouse-title.webp" style="display:block;width:224px;height:auto">
+      <p style="margin:16px 0 0;max-width:20rem;font-size:14px;line-height:1.7;color:rgba(255,255,255,.62)">Come Bonk with us.</p>
+    </div>
+    <div>
+      <p style="margin:0;font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#ffd400">Clubhouse</p>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px;font-size:14px;color:rgba(255,255,255,.72)">
+        <a href="Screenings.dc.html">Upcoming screenings</a>
+        <a href="#">Photos</a>
+        <a href="#">Merch</a>
+        <a href="#">About us</a>
+      </div>
+    </div>
+    <div>
+      <p style="margin:0;font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#ffd400">Follow us</p>
+      <div style="display:flex;gap:12px;margin-top:16px">
+        <span style="display:grid;place-items:center;width:40px;height:40px;border:1px solid rgba(255,255,255,.25);border-radius:8px;color:#ffd400"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></span>
+        <span style="display:grid;place-items:center;width:40px;height:40px;border:1px solid rgba(255,255,255,.25);border-radius:8px;color:#ffd400"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="8" cy="12" r=".5" fill="currentColor"></circle><circle cx="12" cy="12" r=".5" fill="currentColor"></circle><circle cx="16" cy="12" r=".5" fill="currentColor"></circle></svg></span>
+        <span style="display:grid;place-items:center;width:40px;height:40px;border:1px solid rgba(255,255,255,.25);border-radius:8px;color:#ffd400"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3l14 9-14 9V3z"></path></svg></span>
+      </div>
+    </div>
+    <div style="position:relative;min-height:96px;border:1px solid rgba(255,212,0,.7);padding:16px;color:#ffd400">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute;right:16px;top:16px"><path d="M2 9V7a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v2a2 2 0 0 0 0 6v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-6z"></path><path d="M13 5v14"></path></svg>
+      <p style="margin:0;font-family:'Arial Black','Trebuchet MS',sans-serif;font-size:24px;line-height:1;text-transform:uppercase">Every Sunday</p>
+      <p style="margin:0;font-family:'Arial Black','Trebuchet MS',sans-serif;font-size:24px;line-height:1;text-transform:uppercase">Every Bonk</p>
+      <p style="margin:12px 0 0;font-size:12px;letter-spacing:.2em;text-transform:uppercase">Admit one Sunday</p>
+    </div>
+  </div>
+  <div style="max-width:1280px;margin:0 auto;padding:16px 32px;border-top:1px solid rgba(255,255,255,.1);text-align:center;font-size:12px;color:rgba(255,255,255,.4)">(c) 2026 Sunday Afternoon Bonkhouse. All rights reserved.</div>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { cur: null, past: [], subscribeState: "idle", subscribeError: "" };
+  componentDidMount() {
+    import("./events.js").then((m) => {
+      const { current, past } = m.splitEvents();
+      this.setState({
+        cur: current,
+        past: past.slice(0, 3).map((e, i) => ({
+          ...e, rot: i % 2 ? "0.64deg" : "-0.96deg",
+          hasLogo: !!e.logo, noLogo: !e.logo,
+          cbLabel: e.cardBadge.label, cbBg: e.cardBadge.bg
+        }))
+      });
+    });
+  }
+  renderVals() {
+    const c = this.state.cur || {};
+    return {
+      heroPoster: c.poster ?? "/videodrome-poster.webp",
+      curLogo: c.logo ?? "public/logo_fixed_transparent.png",
+      curLogoW: c.logoW ?? "100%", curLogoM: c.logoM ?? "-8% 0 -9%",
+      curShort: c.shortTitle ?? "", curBadge: c.heroBadge ?? "",
+      curMon: c.mon ?? "", curDay: c.day ?? "", curNo: c.no ?? "",
+      curTime: c.timeLabel ?? "", curVenue: c.venueShort ?? "",
+      past: this.state.past,
+      subscribing: this.state.subscribeState === "saving",
+      subscribed: this.state.subscribeState === "success",
+      subscribeFailed: this.state.subscribeState === "error",
+      subscribeLabel: this.state.subscribeState === "saving" ? "Joining..." : "Subscribe",
+      subscribeError: this.state.subscribeError,
+      subscribe: async (e) => {
+        e.preventDefault();
+        if (this.state.subscribeState === "saving") return;
+        const form = e.target;
+        const email = form.elements.namedItem("email").value.trim();
+        if (!email) return;
+        this.setState({ subscribeState: "saving", subscribeError: "" });
+        try {
+          const response = await fetch("/api/mailing-list", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, tags: ["website"] })
+          });
+          const payload = await response.json();
+          if (!response.ok) throw new Error(payload.error || "Could not join the list.");
+          form.reset();
+          this.setState({ subscribeState: "success", subscribeError: "" });
+        } catch (error) {
+          this.setState({ subscribeState: "error", subscribeError: error.message || "Could not join the list." });
+        }
+      }
+    };
+  }
+}
+</script>
+<script>
+(function () {
+  var VS = "attribute vec2 a_position;varying vec2 v_uv;void main(){v_uv=a_position*0.5+0.5;gl_Position=vec4(a_position,0.0,1.0);}";
+  var FS = [
+    "precision mediump float;",
+    "uniform float u_time;uniform vec2 u_mouse;uniform vec2 u_resolution;uniform vec2 u_image_resolution;uniform sampler2D u_texture;varying vec2 v_uv;",
+    "float noise(vec2 st){return fract(sin(dot(st.xy,vec2(12.9898,78.233)))*43758.5453123);}",
+    "float smoothNoise(vec2 st){vec2 i=floor(st);vec2 f=fract(st);f=f*f*(3.0-2.0*f);float bl=noise(i);float br=noise(i+vec2(1.0,0.0));float tl=noise(i+vec2(0.0,1.0));float tr=noise(i+vec2(1.0,1.0));return mix(mix(bl,br,f.x),mix(tl,tr,f.x),f.y);}",
+    "vec2 coverUv(vec2 uv){float sa=u_resolution.x/u_resolution.y;float ia=u_image_resolution.x/u_image_resolution.y;vec2 s=vec2(1.0);if(sa>ia){s.y=ia/sa;}else{s.x=sa/ia;}return (uv-0.5)*s+0.5;}",
+    "vec2 rippleFromCenter(vec2 uv,vec2 nuv,float aspect){vec2 dir=nuv;float dist=max(length(dir),0.001);vec2 rd=dir/dist;vec2 ud=vec2(rd.x/aspect,rd.y);float outerFade=smoothstep(1.05,0.05,dist);float innerFade=smoothstep(0.0,0.16,dist);float wave=sin(dist*42.0-u_time*2.35);float wideWave=sin(dist*18.0-u_time*1.35+smoothNoise(nuv*4.0)*1.8);float shimmer=smoothNoise(nuv*10.0+u_time*0.18)-0.5;float disp=(wave*0.024+wideWave*0.012+shimmer*0.004)*outerFade*innerFade;return uv+ud*disp;}",
+    "vec3 chromaticAberration(sampler2D tex,vec2 uv,float strength){float edge=length(vec2(0.5)-uv)*2.0;strength*=edge*1.5;vec2 off=vec2(strength,0.0);float r=texture2D(tex,coverUv(uv-off)).r;float g=texture2D(tex,coverUv(uv)).g;float b=texture2D(tex,coverUv(uv+off)).b;return vec3(r,g,b);}",
+    "void main(){vec2 uv=v_uv;float aspect=u_resolution.x/u_resolution.y;vec2 nuv=vec2((uv.x-0.5)*aspect,uv.y-0.5);vec2 nm=vec2((u_mouse.x-0.5)*aspect,u_mouse.y-0.5);",
+    "vec2 duv=rippleFromCenter(uv,nuv,aspect);",
+    "float md=max(length(nuv-nm),0.001);float mi=1.0-smoothstep(0.0,0.34,md);vec2 mdel=nuv-nm;vec2 mdir=mdel/max(length(mdel),0.001);vec2 mud=vec2(mdir.x/aspect,mdir.y);float mw=sin(md*38.0-u_time*2.8)*0.008*mi;",
+    "float nv=smoothNoise(nuv*3.0+u_time*0.1)*0.006;duv+=mud*(mw+nv*mi);",
+    "float cd=length(nuv);float rg=0.5+0.5*sin(cd*32.0-u_time*2.35);vec3 color=chromaticAberration(u_texture,duv,0.008+rg*0.006+mi*0.008);",
+    "color*=smoothstep(1.2,0.5,length(v_uv-vec2(0.5)));",
+    "float pulse=0.5+0.5*sin(u_time*2.0);float glow=smoothstep(0.3+0.1*pulse,0.0,length(nuv-nm));color+=vec3(0.1,0.05,0.2)*glow;",
+    "gl_FragColor=vec4(color,1.0);}"
+  ].join("\n");
+
+  function findHost() {
+    var divs = document.querySelectorAll("section > div");
+    for (var i = 0; i < divs.length; i++) {
+      var s = divs[i].getAttribute("style") || "";
+      if (s.indexOf("background-bonkhouse") !== -1) return divs[i];
+    }
+    return null;
+  }
+
+  var canvas = document.createElement("canvas");
+  canvas.setAttribute("aria-hidden", "true");
+  canvas.style.cssText = "position:absolute;inset:0;width:100%;height:100%";
+  var gl = canvas.getContext("webgl", { alpha: true, antialias: false, depth: false, stencil: false });
+  if (!gl) return;
+
+  function makeShader(type, src) {
+    var sh = gl.createShader(type);
+    gl.shaderSource(sh, src);
+    gl.compileShader(sh);
+    return gl.getShaderParameter(sh, gl.COMPILE_STATUS) ? sh : null;
+  }
+  var vs = makeShader(gl.VERTEX_SHADER, VS);
+  var fs = makeShader(gl.FRAGMENT_SHADER, FS);
+  if (!vs || !fs) return;
+  var program = gl.createProgram();
+  gl.attachShader(program, vs);
+  gl.attachShader(program, fs);
+  gl.linkProgram(program);
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return;
+
+  var posLoc = gl.getAttribLocation(program, "a_position");
+  var timeLoc = gl.getUniformLocation(program, "u_time");
+  var mouseLoc = gl.getUniformLocation(program, "u_mouse");
+  var resLoc = gl.getUniformLocation(program, "u_resolution");
+  var imgResLoc = gl.getUniformLocation(program, "u_image_resolution");
+  var texLoc = gl.getUniformLocation(program, "u_texture");
+  var buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]), gl.STATIC_DRAW);
+  var texture = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+
+  var pointer = { x: 0.5, y: 0.5 };
+  var imageSize = { width: 1, height: 1 };
+  var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var start = performance.now();
+
+  document.addEventListener("pointermove", function (e) {
+    var host = canvas.parentElement;
+    if (!host) return;
+    var rect = host.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+    var x = (e.clientX - rect.left) / rect.width;
+    var y = 1 - (e.clientY - rect.top) / rect.height;
+    pointer.x = Math.max(0, Math.min(1, x));
+    pointer.y = Math.max(0, Math.min(1, y));
+  });
+
+  function render(now) {
+    // the dc runtime re-renders the hero after data loads; re-attach if our canvas got dropped
+    if (!canvas.isConnected) {
+      var host = findHost();
+      if (host) host.appendChild(canvas);
+    }
+    if (canvas.isConnected) {
+      var rect = canvas.parentElement.getBoundingClientRect();
+      var ratio = Math.min(window.devicePixelRatio || 1, 2);
+      var w = Math.max(1, Math.floor(rect.width * ratio));
+      var h = Math.max(1, Math.floor(rect.height * ratio));
+      if (canvas.width !== w || canvas.height !== h) {
+        canvas.width = w;
+        canvas.height = h;
+      }
+      gl.viewport(0, 0, w, h);
+      gl.useProgram(program);
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+      gl.enableVertexAttribArray(posLoc);
+      gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+      gl.activeTexture(gl.TEXTURE0);
+      gl.bindTexture(gl.TEXTURE_2D, texture);
+      gl.uniform1i(texLoc, 0);
+      gl.uniform1f(timeLoc, reducedMotion ? 0 : (now - start) / 1000);
+      gl.uniform2f(mouseLoc, pointer.x, pointer.y);
+      gl.uniform2f(resLoc, canvas.width, canvas.height);
+      gl.uniform2f(imgResLoc, imageSize.width, imageSize.height);
+      gl.drawArrays(gl.TRIANGLES, 0, 6);
+    }
+    requestAnimationFrame(render);
+  }
+
+  var image = new Image();
+  image.onload = function () {
+    imageSize = { width: image.naturalWidth, height: image.naturalHeight };
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+    requestAnimationFrame(render);
+  };
+  image.src = "public/hero/background-bonkhouse.png";
+})();
+</script>
+</body>
+</html>

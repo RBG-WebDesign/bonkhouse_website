@@ -1,3 +1,5 @@
+import { renderBonkhouseEmail } from "@/lib/email-templates";
+
 type TicketEmailInput = {
   to: string;
   guestName: string;
@@ -10,6 +12,7 @@ type TicketEmailInput = {
     qrUrl: string;
   }>;
   arrivalInstructions: string;
+  confirmationCode: string;
 };
 
 export async function sendTicketEmail(input: TicketEmailInput) {
@@ -27,10 +30,21 @@ export async function sendTicketEmail(input: TicketEmailInput) {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      from: process.env.RESEND_FROM || "Sunday Afternoon Bonkhouse <tickets@example.com>",
+      from: process.env.RESEND_FROM || "Sunday Afternoon Bonkhouse <onboarding@resend.dev>",
       to: input.to,
       subject: `Your Bonkhouse tickets for ${input.eventTitle}`,
-      html: renderTicketEmail(input)
+      html: renderBonkhouseEmail({
+        variant: "confirmed",
+        guestName: input.guestName,
+        eventTitle: input.eventTitle,
+        eventDate: input.eventDate,
+        venue: "Gloria Kaufman Community Center · Culver City, CA",
+        arrivalInstructions: input.arrivalInstructions,
+        cancelUrl: input.cancelUrl,
+        tickets: input.tickets,
+        confirmationCode: input.confirmationCode,
+        logoUrl: `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/logo_fixed_transparent.png`
+      })
     })
   });
 
@@ -39,27 +53,4 @@ export async function sendTicketEmail(input: TicketEmailInput) {
   }
 
   return { ok: true, mode: "sent" as const };
-}
-
-function renderTicketEmail(input: TicketEmailInput) {
-  const tickets = input.tickets
-    .map(
-      (ticket) => `
-        <li>
-          <strong>${ticket.label}</strong> (${ticket.seatType})<br />
-          <a href="${ticket.qrUrl}">Open ticket QR</a>
-        </li>`
-    )
-    .join("");
-
-  return `
-    <div style="font-family: Georgia, serif; color: #20160f;">
-      <h1>Sunday Afternoon Bonkhouse</h1>
-      <p>Hi ${input.guestName}, your free tickets are confirmed for <strong>${input.eventTitle}</strong>.</p>
-      <p>${input.eventDate}</p>
-      <ul>${tickets}</ul>
-      <p>${input.arrivalInstructions}</p>
-      <p><a href="${input.cancelUrl}">Cancel this RSVP</a></p>
-    </div>
-  `;
 }

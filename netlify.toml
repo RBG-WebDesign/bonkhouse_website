@@ -6,6 +6,8 @@
   NODE_VERSION = "22"
   NEXT_PUBLIC_SUPABASE_URL = "https://nwnxoqrmqsjyznegykfc.supabase.co"
   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY = "sb_publishable_FJGSI523nOCGZ6JuZSjBsg_1wnLTCma"
+  NEXT_PUBLIC_SITE_URL = "https://sundaybonkhouse.netlify.app"
+  RESEND_FROM = "Sunday Afternoon Bonkhouse <onboarding@resend.dev>"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"

@@ -12,20 +12,14 @@ export async function GET(request: Request) {
   }
 
   const supabase = await createClient();
-  const tokenHash = await hashTicketToken(token);
-  const { data: reservation } = await supabase
-    .from("reservations")
-    .select("id")
-    .eq("id", reservationId)
-    .eq("cancel_token_hash", tokenHash)
-    .maybeSingle();
+  const { data: cancelled, error } = await supabase.rpc("cancel_reservation", {
+    reservation_uuid: reservationId,
+    supplied_token_hash: await hashTicketToken(token)
+  });
 
-  if (!reservation) {
-    return NextResponse.json({ error: "Reservation not found." }, { status: 404 });
+  if (error || !cancelled) {
+    return NextResponse.json({ error: "Reservation not found or cancellation token invalid." }, { status: 404 });
   }
-
-  await supabase.from("reservations").update({ status: "cancelled" }).eq("id", reservationId);
-  await supabase.from("tickets").update({ status: "cancelled" }).eq("reservation_id", reservationId);
 
   return new Response("Your Bonkhouse RSVP has been cancelled.", {
     headers: { "Content-Type": "text/plain" }

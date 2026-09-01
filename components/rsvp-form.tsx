@@ -14,7 +14,7 @@ type RsvpResult = {
   }>;
 };
 
-export function RsvpForm({ eventId }: { eventId: string }) {
+export function RsvpForm({ eventId, standardCapacity, overflowCapacity }: { eventId: string; standardCapacity: number; overflowCapacity: number }) {
   const [result, setResult] = useState<RsvpResult | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -77,7 +77,7 @@ export function RsvpForm({ eventId }: { eventId: string }) {
     <form action={submit} className="club-card rounded-lg p-5">
       <p className="font-display text-3xl uppercase text-white">Free RSVP</p>
       <p className="mt-2 text-sm leading-6 text-white/66">
-        First 100 RSVPs get standard seats. The next 20 are confirmed overflow, then the waitlist starts.
+        First {standardCapacity} RSVPs get standard seats. The next {overflowCapacity} are confirmed overflow, then the waitlist starts.
       </p>
       <div className="mt-5 grid gap-3">
         <input className="focus-ring rounded-md border border-white/20 bg-black px-4 py-3 text-white placeholder:text-white/42" name="name" placeholder="Name" required />

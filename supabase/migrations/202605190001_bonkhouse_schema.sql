@@ -113,6 +113,7 @@ create table if not exists public.email_subscribers (
   email text not null unique,
   name text not null default '',
   tags text[] not null default array[]::text[],
+  status text not null default 'active' check (status in ('active', 'unsubscribed')),
   subscribed_at timestamptz not null default now()
 );
 
@@ -210,13 +211,35 @@ alter table public.merch_products enable row level security;
 alter table public.email_subscribers enable row level security;
 alter table public.admin_profiles enable row level security;
 
+drop policy if exists "public read venues" on public.venues;
+drop policy if exists "public read published events" on public.events;
+drop policy if exists "public read photos" on public.photos;
+drop policy if exists "public read merch" on public.merch_products;
+drop policy if exists "public create reservations" on public.reservations;
+drop policy if exists "public cancel own reservations by token" on public.reservations;
+drop policy if exists "public create tickets" on public.tickets;
+drop policy if exists "public create waitlist" on public.waitlist_entries;
+drop policy if exists "public join mailing list" on public.email_subscribers;
+drop policy if exists "public update mailing list" on public.email_subscribers;
+drop policy if exists "admins manage venues" on public.venues;
+drop policy if exists "admins manage events" on public.events;
+drop policy if exists "admins manage reservations" on public.reservations;
+drop policy if exists "admins manage tickets" on public.tickets;
+drop policy if exists "admins manage invite codes" on public.invite_codes;
+drop policy if exists "admins manage checkins" on public.checkins;
+drop policy if exists "admins manage waitlist" on public.waitlist_entries;
+drop policy if exists "admins manage photos" on public.photos;
+drop policy if exists "admins manage merch" on public.merch_products;
+drop policy if exists "admins manage subscribers" on public.email_subscribers;
+drop policy if exists "admins read admin profiles" on public.admin_profiles;
+drop policy if exists "admins manage admin profiles" on public.admin_profiles;
+
 create policy "public read venues" on public.venues for select using (true);
 create policy "public read published events" on public.events for select using (status in ('published', 'archived') or public.is_admin());
 create policy "public read photos" on public.photos for select using (true);
 create policy "public read merch" on public.merch_products for select using (true);
 
 create policy "public create reservations" on public.reservations for insert with check (true);
-create policy "public cancel own reservations by token" on public.reservations for update using (true) with check (status = 'cancelled');
 create policy "public create tickets" on public.tickets for insert with check (true);
 create policy "public create waitlist" on public.waitlist_entries for insert with check (true);
 create policy "public join mailing list" on public.email_subscribers for insert with check (true);
@@ -244,20 +267,3 @@ values (
 )
 on conflict (name) do update
 set entry_instructions = excluded.entry_instructions;
-
-insert into storage.buckets (id, name, public)
-values ('event-posters', 'event-posters', true), ('event-photos', 'event-photos', true)
-on conflict (id) do nothing;
-
-create policy "public read event poster files"
-on storage.objects for select
-using (bucket_id in ('event-posters', 'event-photos'));
-
-create policy "admins upload event files"
-on storage.objects for insert
-with check (bucket_id in ('event-posters', 'event-photos') and public.is_admin());
-
-create policy "admins update event files"
-on storage.objects for update
-using (bucket_id in ('event-posters', 'event-photos') and public.is_admin())
-with check (bucket_id in ('event-posters', 'event-photos') and public.is_admin());

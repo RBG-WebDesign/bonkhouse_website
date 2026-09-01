@@ -80,10 +80,16 @@ export default async function EventDetailPage({
           <div className="club-card rounded-lg p-5">
             <h2 className="font-display text-3xl uppercase text-white">Arrival notes</h2>
             <p className="mt-3 leading-7 text-white/70">{event.venue.entryInstructions}</p>
-            <p className="mt-3 leading-7 text-white/70">{event.hostNote}</p>
+            {event.hostNote ? <p className="mt-3 leading-7 text-white/70">{event.hostNote}</p> : null}
             <p className="mt-3 text-sm font-bold text-butter">{event.accessibilityNote}</p>
           </div>
-          {archived ? null : <RsvpForm eventId={event.id} />}
+          {archived ? null : (
+            <RsvpForm
+              eventId={event.id}
+              overflowCapacity={event.capacityOverflow}
+              standardCapacity={event.capacityStandard}
+            />
+          )}
         </section>
       </div>
     </div>

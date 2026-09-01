@@ -56,7 +56,7 @@ export default async function Home() {
             <img
               alt="Society + Videodrome double feature poster"
               className="h-auto w-[22rem] rotate-[3deg] select-none shadow-2xl"
-              src={publicAsset("/death-to-bonkhouse-poster.webp")}
+              src={publicAsset("/videodrome-poster.webp")}
             />
           </div>
         </div>
@@ -370,15 +370,15 @@ function makeHeroEvent(event: BonkhouseEvent): BonkhouseEvent {
     ...event,
     id: "society-videodrome-double-feature",
     slug: "society-videodrome-double-feature",
-    title: "Society / Videodrome Double Feature",
-    kicker: "Bryan Yuzna's Society meets Videodrome for a body-horror Sunday.",
+    title: "DEATH TO BONKHOUSE LONG LIVE THE NEW FLESH - VIDEODROME/SOCIETY DOUBLE FEATURE",
+    kicker: "Join us for a very fleshy body-horror double feature Sunday.",
     description:
-      "A neighborhood body-horror movie afternoon with a pre-show, Society, intermission, Videodrome, and enough lobby chatter to make leaving immediately feel rude.",
+      "This October, Bonkhouse celebrates 5 years of bonkers screenings with two of the craziest, goopiest, fleshy-ist cult movies of all time! Join us for Videodrome and Society along with a curated preshow and intermission.",
     posterUrl: "/posters/long-live-the-new-bonk.png",
     startsAt: "2026-10-18T13:00:00-07:00",
     endsAt: "2026-10-18T17:00:00-07:00",
     doorsAt: "2026-10-18T13:00:00-07:00",
-    gateClosesAt: "2026-10-18T13:10:00-07:00",
-    program: ["Pre-show trailers", "Society", "Intermission ads", "Videodrome"]
+    gateClosesAt: "2026-10-18T13:20:00-07:00",
+    program: ["Pre-show trailers", "Videodrome", "Intermission", "Society"]
   };
 }
