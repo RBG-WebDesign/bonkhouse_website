@@ -32,7 +32,7 @@ export async function sendTicketEmail(input: TicketEmailInput) {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      from: process.env.RESEND_FROM || "Sunday Afternoon Bonkhouse <onboarding@resend.dev>",
+      from: process.env.RESEND_FROM || "Sunday Afternoon Bonkhouse <tickets@bonkhouse.com>",
       to: input.to,
       subject: `Your Bonkhouse tickets for ${input.eventTitle}`,
       html: renderBonkhouseEmail({
