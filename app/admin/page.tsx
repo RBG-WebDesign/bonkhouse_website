@@ -102,7 +102,7 @@ export default async function AdminPage({
                     const taken = claimed.get(event.id) || 0;
                     return (
                       <Link
-                        className="rounded-[1.2rem] border-2 border-ink bg-white/70 p-4 shadow-[4px_4px_0_#20160f] transition hover:-translate-y-0.5"
+                        className="rounded-[1.2rem] border-2 border-ink bg-white/10 p-4 text-ink shadow-[4px_4px_0_#20160f] transition hover:-translate-y-0.5"
                         href={`/admin/events/${event.id}`}
                         key={event.id}
                       >

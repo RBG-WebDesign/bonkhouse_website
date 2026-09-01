@@ -242,7 +242,7 @@ export function AdminEventForm({ event }: { event?: EventRecord }) {
   }
 
   return (
-    <form action={submit} className="rounded-[1.4rem] border-2 border-ink bg-white/70 p-5 shadow-sticker">
+    <form action={submit} className="rounded-[1.4rem] border-2 border-ink bg-white/10 p-5 text-ink shadow-sticker">
       <p className="font-display text-3xl">{event ? "Edit screening" : "Create screening"}</p>
       <div className="mt-5 grid gap-3">
         <input

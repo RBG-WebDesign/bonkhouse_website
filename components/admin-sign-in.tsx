@@ -23,7 +23,7 @@ export function AdminSignIn() {
   }
 
   return (
-    <form action={submit} className="rounded-[1.4rem] border-2 border-ink bg-white/70 p-5 shadow-sticker">
+    <form action={submit} className="rounded-[1.4rem] border-2 border-ink bg-white/10 p-5 shadow-sticker">
       <p className="font-display text-3xl">Admin sign in</p>
       <p className="mt-2 text-sm leading-6">
         Use an approved admin email. Supabase will send a magic link.

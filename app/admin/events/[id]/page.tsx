@@ -64,7 +64,7 @@ export default async function AdminEventPage({
           ["Waitlist", counts.waitlist],
           ["Checked in", counts.checkedIn]
         ].map(([label, value]) => (
-          <div className="rounded-2xl border-2 border-ink bg-white/70 p-4" key={label}>
+          <div className="rounded-2xl border-2 border-ink bg-white/10 p-4 text-ink" key={label}>
             <p className="text-xs font-black uppercase">{label}</p>
             <p className="font-display text-4xl">{value}</p>
           </div>
@@ -72,7 +72,7 @@ export default async function AdminEventPage({
       </div>
 
       <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_0.75fr]">
-        <section className="rounded-[1.4rem] border-2 border-ink bg-white/70 p-5 shadow-sticker">
+        <section className="rounded-[1.4rem] border-2 border-ink bg-white/10 p-5 text-ink shadow-sticker">
           <h2 className="font-display text-4xl">Guestlist</h2>
           <div className="mt-5 overflow-x-auto">
             <table className="w-full min-w-[760px] border-collapse text-left text-sm">
