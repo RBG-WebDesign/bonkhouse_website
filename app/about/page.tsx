@@ -17,19 +17,23 @@ const PHOTOS = [
   "mg-1646.jpg"
 ].map((f) => `/photos/house-house-2024/${f}`);
 
-const GLYPHS = "ABEKNOZX?!#%&Ж▲◼△Ø¥";
+const PHRASE = [
+  "BONK", "WE", "DON'T", "KNOW", "BONK", "WHO", "WE", "ARE", "YET",
+  "BONK", "RUNNING", "OUT", "OF", "TIME", "BONK", "WE", "DO", "THIS",
+  "BONK", "BECAUSE", "WE", "LOVE", "TO", "BONK", "AND", "WITHOUT",
+  "THE", "BONK", "WE", "WOULD", "BE", "DEAD"
+];
 
-function pickWord() {
-  const r = Math.random();
-  if (r < 0.08) return "JOSH";
-  if (r < 0.5) return "BONK";
-  let s = "";
-  const len = 3 + Math.floor(Math.random() * 4);
-  for (let i = 0; i < len; i++) {
-    s += GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
-  }
-  return s;
-}
+type WordEvent = {
+  text: string;
+  x: number;
+  y: number;
+  size: number;
+  rotation: number;
+  frames: number;
+  maxFrames: number;
+  style: number;
+};
 
 export default function AboutPage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -40,8 +44,8 @@ export default function AboutPage() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const W = 320;
-    const H = 180;
+    const W = 480;
+    const H = 270;
     const buffer = document.createElement("canvas");
     buffer.width = W;
     buffer.height = H;
@@ -59,8 +63,9 @@ export default function AboutPage() {
     let burst = 0;
     let flashPhoto = -1;
     let flashFrames = 0;
-    let word = "";
-    let wordFrames = 0;
+    let phraseIndex = 0;
+    const activeWords: WordEvent[] = [];
+    let nextWordAt = performance.now() + 300;
     const bebas =
       getComputedStyle(document.documentElement)
         .getPropertyValue("--font-bebas")
@@ -81,12 +86,125 @@ export default function AboutPage() {
       mouseY = e.clientY / window.innerHeight;
       burst = Math.min(burst + 0.5, 6);
     };
+    const makeWordEvent = (text: string): WordEvent => {
+      const isBonk = text === "BONK";
+
+      // words favor the outer parts of the frame, avoiding dead center
+      let x: number;
+      let y: number;
+      const zone = Math.floor(Math.random() * 8);
+      switch (zone) {
+        case 0: x = 0.08 + Math.random() * 0.28; y = 0.10 + Math.random() * 0.25; break;
+        case 1: x = 0.62 + Math.random() * 0.30; y = 0.08 + Math.random() * 0.28; break;
+        case 2: x = 0.05 + Math.random() * 0.30; y = 0.62 + Math.random() * 0.28; break;
+        case 3: x = 0.64 + Math.random() * 0.30; y = 0.62 + Math.random() * 0.28; break;
+        case 4: x = 0.03 + Math.random() * 0.24; y = 0.30 + Math.random() * 0.40; break;
+        case 5: x = 0.73 + Math.random() * 0.24; y = 0.30 + Math.random() * 0.40; break;
+        case 6: x = 0.25 + Math.random() * 0.50; y = 0.05 + Math.random() * 0.18; break;
+        default: x = 0.20 + Math.random() * 0.60; y = 0.78 + Math.random() * 0.17; break;
+      }
+
+      const size = isBonk ? 72 + Math.random() * 72 : 38 + Math.random() * 58;
+      const maxFrames = isBonk
+        ? 7 + Math.floor(Math.random() * 8)
+        : 10 + Math.floor(Math.random() * 15);
+
+      return {
+        text,
+        x,
+        y,
+        size,
+        rotation: (Math.random() - 0.5) * (isBonk ? 0.24 : 0.12),
+        frames: maxFrames,
+        maxFrames,
+        style: Math.floor(Math.random() * 4)
+      };
+    };
+
+    const spawnNextWord = () => {
+      const text = PHRASE[phraseIndex];
+      activeWords.push(makeWordEvent(text));
+      phraseIndex = (phraseIndex + 1) % PHRASE.length;
+
+      // old words can linger and overlap for a beat, but only a few at once
+      while (activeWords.length > 5) {
+        activeWords.shift();
+      }
+
+      if (text === "BONK") {
+        burst = Math.max(burst, 7);
+        nextWordAt = performance.now() + 80 + Math.random() * 140;
+      } else {
+        // irregular timing stops the sentence from feeling like subtitles
+        const r = Math.random();
+        if (r < 0.12) {
+          nextWordAt = performance.now() + 500 + Math.random() * 500;
+        } else if (r < 0.38) {
+          nextWordAt = performance.now() + 80 + Math.random() * 100;
+        } else {
+          nextWordAt = performance.now() + 180 + Math.random() * 260;
+        }
+      }
+    };
+
+    const drawWordEvent = (event: WordEvent) => {
+      const progress = event.frames / event.maxFrames;
+      const isBonk = event.text === "BONK";
+      const jitter = isBonk ? 6 : 2.5;
+      const x = event.x * W + (Math.random() - 0.5) * jitter;
+      const y = event.y * H + (Math.random() - 0.5) * jitter;
+      const alpha = Math.min(1, progress * 2.5);
+
+      bctx.save();
+      bctx.translate(x, y);
+      bctx.rotate(event.rotation + (Math.random() - 0.5) * 0.015);
+      bctx.font = `${event.size}px ${bebas}`;
+      bctx.textAlign = "center";
+      bctx.textBaseline = "middle";
+
+      // chromatic registration ghosts
+      bctx.globalAlpha = alpha * 0.65;
+      bctx.fillStyle = "rgb(255,0,45)";
+      bctx.fillText(event.text, -4 - Math.random() * 3, 1);
+      bctx.fillStyle = "rgb(0,255,255)";
+      bctx.fillText(event.text, 4 + Math.random() * 3, -1);
+
+      bctx.globalAlpha = alpha;
+      switch (event.style) {
+        case 0: bctx.fillStyle = "#fff"; break;
+        case 1: bctx.fillStyle = "#ffd400"; break;
+        case 2: bctx.fillStyle = "#ff003c"; break;
+        default: bctx.fillStyle = isBonk ? "#fff" : "#d7d7d7"; break;
+      }
+      bctx.fillText(event.text, 0, 0);
+
+      if (isBonk && Math.random() < 0.25) {
+        bctx.globalAlpha = 0.9;
+        bctx.fillStyle = "#000";
+        bctx.fillText(event.text, (Math.random() - 0.5) * 12, (Math.random() - 0.5) * 8);
+      }
+
+      bctx.restore();
+    };
+
+    const drawActiveWords = () => {
+      for (let i = activeWords.length - 1; i >= 0; i--) {
+        const event = activeWords[i];
+        drawWordEvent(event);
+        event.frames--;
+        if (event.frames <= 0) {
+          activeWords.splice(i, 1);
+        }
+      }
+    };
+
     const onDown = () => {
       burst = 24;
       flashPhoto = Math.floor(Math.random() * photos.length);
       flashFrames = 4;
-      word = "BONK";
-      wordFrames = 7;
+      // a click forces BONK into the sequence without resetting the sentence
+      activeWords.push(makeWordEvent("BONK"));
+      nextWordAt = performance.now() + 90;
     };
     window.addEventListener("pointermove", onMove);
     window.addEventListener("pointerdown", onDown);
@@ -139,29 +257,11 @@ export default function AboutPage() {
         flashFrames--;
       }
 
-      // giant flashing words, drawn low-res so they come out chunky
-      if (wordFrames <= 0 && Math.random() < 0.015) {
-        word = pickWord();
-        wordFrames = 6 + Math.floor(Math.random() * 10);
+      // the phrase runs continuously, one scattered word at a time
+      if (performance.now() >= nextWordAt) {
+        spawnNextWord();
       }
-      if (wordFrames > 0) {
-        const size = 70 + Math.random() * 30;
-        const x = W / 2 + (Math.random() - 0.5) * 30;
-        const y = H / 2 + (Math.random() - 0.5) * 44;
-        bctx.save();
-        bctx.font = `${size}px ${bebas}`;
-        bctx.textAlign = "center";
-        bctx.textBaseline = "middle";
-        bctx.fillStyle = "rgba(255,0,60,0.75)";
-        bctx.fillText(word, x - 3, y + 1);
-        bctx.fillStyle = "rgba(0,255,255,0.75)";
-        bctx.fillText(word, x + 3, y - 1);
-        bctx.fillStyle =
-          Math.random() < 0.2 ? "#000" : Math.random() < 0.55 ? "#ffd400" : "#fff";
-        bctx.fillText(word, x, y);
-        bctx.restore();
-        wordFrames--;
-      }
+      drawActiveWords();
 
       // vertical hold slipping
       const jumpY =
