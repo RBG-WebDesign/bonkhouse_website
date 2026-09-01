@@ -20,14 +20,14 @@
   <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(255,212,0,.06),transparent),repeating-linear-gradient(0deg,rgba(255,255,255,.07) 0 1px,transparent 1px 9px);mix-blend-mode:overlay;opacity:.48"></div>
   <div style="position:absolute;left:0;right:0;bottom:-1px;height:2px;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(177,38,21,.8) 12%,rgba(255,212,0,.35) 50%,rgba(177,38,21,.8) 88%,transparent);opacity:.65"></div>
   <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:80px;max-width:1280px;margin:0 auto;padding:0 32px" data-m="hpad">
-    <a href="Bonkhouse Home - Current.dc.html" style="display:block;flex:0 1 auto;min-width:0">
+    <a href="/" style="display:block;flex:0 1 auto;min-width:0">
       <img alt="Sunday Afternoon Bonk House" src="public/bonkhouse-title.webp" style="display:block;height:52px;width:auto;filter:sepia(.16) contrast(1.1) drop-shadow(1px 1px 0 rgba(132,22,13,.5))">
     </a>
     <div style="display:flex;align-items:center;gap:32px">
       <nav data-m="nav" style="display:flex;align-items:center;gap:32px">
-        <a href="Screenings.dc.html" style="display:inline-flex;height:44px;align-items:center;font-family:'Bebas Neue',Impact,sans-serif;font-size:24px;letter-spacing:.05em;text-transform:uppercase;color:{{ screeningsColor }}" style-hover="color:#ffd400">Screenings</a>
-        <a href="Bonkhouse Home - Current.dc.html" style="display:inline-flex;height:44px;align-items:center;font-family:'Bebas Neue',Impact,sans-serif;font-size:24px;letter-spacing:.05em;text-transform:uppercase;color:{{ photosColor }}" style-hover="color:#ffd400">Photos</a>
-        <a href="Bonkhouse Home - Current.dc.html" style="display:inline-flex;height:44px;align-items:center;font-family:'Bebas Neue',Impact,sans-serif;font-size:24px;letter-spacing:.05em;text-transform:uppercase;color:{{ aboutColor }}" style-hover="color:#ffd400">About</a>
+        <a href="/screenings" style="display:inline-flex;height:44px;align-items:center;font-family:'Bebas Neue',Impact,sans-serif;font-size:24px;letter-spacing:.05em;text-transform:uppercase;color:{{ screeningsColor }}" style-hover="color:#ffd400">Screenings</a>
+        <a href="/" style="display:inline-flex;height:44px;align-items:center;font-family:'Bebas Neue',Impact,sans-serif;font-size:24px;letter-spacing:.05em;text-transform:uppercase;color:{{ photosColor }}" style-hover="color:#ffd400">Photos</a>
+        <a href="/" style="display:inline-flex;height:44px;align-items:center;font-family:'Bebas Neue',Impact,sans-serif;font-size:24px;letter-spacing:.05em;text-transform:uppercase;color:{{ aboutColor }}" style-hover="color:#ffd400">About</a>
       </nav>
       <a href="{{ ctaHref }}" style="position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:48px;padding:0 24px;border:1px solid #ffd400;border-radius:3px;background:#ffd400;color:#000;font-family:'Bebas Neue',Impact,sans-serif;font-size:24px;letter-spacing:.05em;line-height:1;text-transform:uppercase;box-shadow:inset 0 1px 0 rgba(255,255,255,.18),inset 0 -8px 18px rgba(83,51,0,.14),0 8px 22px rgba(0,0,0,.32),0 0 26px rgba(255,212,0,.18)" style-hover="background:#ffe15a;transform:translateY(-2px)">{{ ctaLabel }}
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
@@ -36,7 +36,7 @@
   </div>
 </header>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:96},&quot;active&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;none&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;none&quot;,&quot;screenings&quot;,&quot;photos&quot;,&quot;about&quot;],&quot;section&quot;:&quot;Header&quot;},&quot;ctaHref&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Society Videodrome Screening.dc.html&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Header&quot;},&quot;ctaLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;RSVP&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Header&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:96},&quot;active&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;none&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;none&quot;,&quot;screenings&quot;,&quot;photos&quot;,&quot;about&quot;],&quot;section&quot;:&quot;Header&quot;},&quot;ctaHref&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;/events/society-videodrome-double-feature&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Header&quot;},&quot;ctaLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;RSVP&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Header&quot;}}">
 class Component extends DCLogic {
   renderVals() {
     const active = this.props.active ?? "none";
@@ -45,7 +45,7 @@ class Component extends DCLogic {
       screeningsColor: c("screenings"),
       photosColor: c("photos"),
       aboutColor: c("about"),
-      ctaHref: this.props.ctaHref ?? "Society Videodrome Screening.dc.html",
+      ctaHref: this.props.ctaHref ?? "/events/society-videodrome-double-feature",
       ctaLabel: this.props.ctaLabel ?? "RSVP"
     };
   }
