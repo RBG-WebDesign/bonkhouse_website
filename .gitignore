@@ -7,3 +7,7 @@ coverage/
 *.tsbuildinfo
 .playwright-mcp/
 tmp-dev*.log
+
+public/logos past/
+public/uploads/pasted-*
+._*

@@ -7,15 +7,15 @@ const nextConfig: NextConfig = {
       beforeFiles: [
         {
           source: "/",
-          destination: "/Bonkhouse%20Home%20-%20Current.dc.html"
+          destination: "/home.dc.html"
         },
         {
           source: "/screenings",
-          destination: "/Screenings.dc.html"
+          destination: "/screenings.dc.html"
         },
         {
           source: "/events/society-videodrome-double-feature",
-          destination: "/Society%20Videodrome%20Screening.dc.html"
+          destination: "/society-videodrome-screening.dc.html"
         }
       ],
       afterFiles: [],
