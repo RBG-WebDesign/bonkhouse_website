@@ -50,19 +50,14 @@ export default async function AdminPage({
     .order("starts_at", { ascending: false })
     .limit(30);
 
-  const { data: ticketRows } = events?.length
-    ? await supabase
-        .from("tickets")
-        .select("event_id,status")
-        .in("event_id", events.map((event) => event.id))
-    : { data: [] };
-
+  // Exact server-side counts per event (the aggregate function already exists).
   const claimed = new Map<string, number>();
-  (ticketRows || []).forEach((ticket) => {
-    if (ticket.status === "valid") {
-      claimed.set(ticket.event_id, (claimed.get(ticket.event_id) || 0) + 1);
-    }
-  });
+  await Promise.all(
+    (events || []).map(async (event) => {
+      const { data: counts } = await supabase.rpc("get_event_ticket_counts", { event_uuid: event.id });
+      claimed.set(event.id, Number(counts?.[0]?.confirmed_count || 0));
+    })
+  );
 
   const now = Date.now();
   const groups: Array<[string, typeof events]> = [

@@ -30,14 +30,25 @@ export default async function EventDetailPage({
   }
 
   const archived = event.status === "archived" || new Date(event.startsAt) < new Date();
+  const now = Date.now();
+  const rsvpNotYetOpen = Boolean(event.rsvpOpensAt && now < new Date(event.rsvpOpensAt).getTime());
+  const rsvpClosed = Boolean(event.rsvpClosesAt && now > new Date(event.rsvpClosesAt).getTime());
+  const rsvpOpen = !archived && event.status === "published" && !rsvpNotYetOpen && !rsvpClosed;
+  const rsvpBadge = archived
+    ? "Past screening"
+    : rsvpNotYetOpen
+      ? "RSVPs open soon"
+      : rsvpClosed
+        ? "RSVPs closed"
+        : "RSVP open";
 
   return (
     <div className="club-container grid gap-8 py-10 lg:grid-cols-[0.92fr_1.08fr]">
       <PosterCard event={event} />
       <div>
         <div className="flex flex-wrap gap-2">
-          <Badge className={archived ? "border-sage/60 text-sage" : "border-butter/60 text-butter"}>
-            {archived ? "Past screening" : "RSVP open"}
+          <Badge className={rsvpOpen ? "border-butter/60 text-butter" : "border-sage/60 text-sage"}>
+            {rsvpBadge}
           </Badge>
           <Badge>{event.capacityStandard} seats + {event.capacityOverflow} overflow</Badge>
         </div>
@@ -83,12 +94,24 @@ export default async function EventDetailPage({
             {event.hostNote ? <p className="mt-3 leading-7 text-white/70">{event.hostNote}</p> : null}
             <p className="mt-3 text-sm font-bold text-butter">{event.accessibilityNote}</p>
           </div>
-          {archived ? null : (
+          {rsvpOpen ? (
             <RsvpForm
               eventId={event.id}
+              maxTickets={event.maxTicketsPerRsvp}
               overflowCapacity={event.capacityOverflow}
               standardCapacity={event.capacityStandard}
             />
+          ) : archived ? null : (
+            <div className="club-card rounded-lg p-5">
+              <p className="font-display text-3xl uppercase text-white">
+                {rsvpNotYetOpen ? "RSVPs open soon" : "RSVPs are closed"}
+              </p>
+              <p className="mt-2 text-sm leading-6 text-white/66">
+                {rsvpNotYetOpen && event.rsvpOpensAt
+                  ? `RSVPs open ${formatEventDate(event.rsvpOpensAt)} at ${formatEventTime(event.rsvpOpensAt)}.`
+                  : "This screening is no longer taking RSVPs."}
+              </p>
+            </div>
           )}
         </section>
       </div>

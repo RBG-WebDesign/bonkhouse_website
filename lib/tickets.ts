@@ -40,14 +40,5 @@ export async function ticketQrPngBuffer(token: string) {
   });
 }
 
-export function allocateSeatType(index: number, standardCapacity = 100, overflowCapacity = 20) {
-  if (index < standardCapacity) {
-    return "standard";
-  }
-
-  if (index < standardCapacity + overflowCapacity) {
-    return "overflow";
-  }
-
-  return "waitlist";
-}
+// Seat allocation lives in the database (create_reservation_atomic) so it can
+// run with the event row locked; do not reimplement it here.

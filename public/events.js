@@ -128,7 +128,7 @@ function timeLA(iso) {
   return fmtLA(iso, { hour: "numeric", minute: "2-digit" });
 }
 
-function mapRow(row, index, p) {
+function mapRow(row, index, p, total) {
   p = p || {};
   const startT = timeLA(row.starts_at);
   const endT = row.ends_at ? timeLA(row.ends_at) : "";
@@ -142,7 +142,7 @@ function mapRow(row, index, p) {
     shortTitle: p.shortTitle || row.subtitle || row.title,
     kicker: row.kicker || "",
     desc: row.description || "",
-    poster: row.poster_url || p.poster || "",
+    poster: row.poster_url || p.poster || null,
     logo: row.logo_url || p.logo || null,
     logoW: p.logoW || "100%",
     logoM: p.logoM || "0",
@@ -150,7 +150,9 @@ function mapRow(row, index, p) {
     mon: fmtLA(row.starts_at, { month: "short" }).toUpperCase(),
     day: fmtLA(row.starts_at, { day: "numeric" }),
     year: fmtLA(row.starts_at, { year: "numeric" }),
-    no: p.no || String(index + 1).padStart(3, "0"),
+    // rows arrive newest-first; number ascending from the oldest so existing
+    // screenings keep their number when a new one is published
+    no: p.no || String(total - index).padStart(3, "0"),
     timeLabel: endT ? startT + " to " + endT : startT,
     doorsLabel: gateT ? doorsT + " · gate closes " + gateT : doorsT,
     dateLong: fmtLA(row.starts_at, { weekday: "long", month: "long", day: "numeric", year: "numeric" }),
@@ -184,7 +186,7 @@ export function loadEvents() {
         if (!Array.isArray(rows) || !rows.length) return events;
         const overrides = new Map(events.map((e) => [e.slug, e]));
         const dbSlugs = new Set(rows.map((r) => r.slug));
-        const mapped = rows.map((row, i) => mapRow(row, i, overrides.get(row.slug)));
+        const mapped = rows.map((row, i) => mapRow(row, i, overrides.get(row.slug), rows.length));
         // Keep hand-written events the database doesn't know about (old history).
         return mapped.concat(events.filter((e) => !dbSlugs.has(e.slug)));
       })

@@ -1,5 +1,5 @@
 export type SeatType = "standard" | "overflow" | "waitlist";
-export type EventStatus = "draft" | "published" | "archived";
+export type EventStatus = "draft" | "published" | "archived" | "cancelled";
 
 export type Venue = {
   id: string;
@@ -23,6 +23,11 @@ export type BonkhouseEvent = {
   venue: Venue;
   capacityStandard: number;
   capacityOverflow: number;
+  maxTicketsPerRsvp: number;
+  rsvpOpensAt: string | null;
+  rsvpClosesAt: string | null;
+  subtitle: string;
+  logoUrl: string | null;
   status: EventStatus;
   isInviteOnly: boolean;
   program: string[];

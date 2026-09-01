@@ -33,7 +33,16 @@ const bayStreet = {
   entryInstructions: "Archived private screening."
 };
 
-export const sampleEvents: BonkhouseEvent[] = [
+// Fields added after these samples were written; every sample gets the defaults.
+const eventDefaults = {
+  maxTicketsPerRsvp: 4,
+  rsvpOpensAt: null,
+  rsvpClosesAt: null,
+  subtitle: "",
+  logoUrl: null
+};
+
+export const sampleEvents: BonkhouseEvent[] = ([
   {
     id: "sample-next-screening",
     slug: "society-videodrome-double-feature",
@@ -183,7 +192,7 @@ export const sampleEvents: BonkhouseEvent[] = [
     accessibilityNote: "Archived private event.",
     textForEntry: "Archived event."
   }
-];
+] as Array<Omit<BonkhouseEvent, keyof typeof eventDefaults>>).map((event) => ({ ...eventDefaults, ...event }));
 
 export const samplePhotos: Photo[] = [
   {

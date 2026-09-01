@@ -156,18 +156,18 @@ function DateTimeField({
 }) {
   const initial = isoToLaParts(initialIso);
   return (
-    <label className="grid gap-1 text-xs font-black uppercase">
+    <label className="grid gap-1.5 rounded-xl border border-ink/25 bg-paper/60 p-3 text-[0.65rem] font-black uppercase tracking-wider text-ink/70">
       {label}
-      <span className="flex gap-2">
+      <span className="grid grid-cols-[1.4fr_1fr] gap-2">
         <input
-          className="focus-ring w-full rounded-full border-2 border-ink bg-paper px-3 py-2 text-sm font-bold normal-case"
+          className="focus-ring min-w-0 rounded-lg border-2 border-ink bg-paper px-3 py-2 text-sm font-bold normal-case tracking-normal text-ink"
           defaultValue={initial.date}
           name={`${namePrefix}Date`}
           required={required}
           type="date"
         />
         <input
-          className="focus-ring w-full rounded-full border-2 border-ink bg-paper px-3 py-2 text-sm font-bold normal-case"
+          className="focus-ring min-w-0 rounded-lg border-2 border-ink bg-paper px-3 py-2 text-sm font-bold normal-case tracking-normal text-ink"
           defaultValue={initial.time}
           name={`${namePrefix}Time`}
           required={required}
@@ -180,6 +180,15 @@ function DateTimeField({
 
 const field = "focus-ring rounded-full border-2 border-ink bg-paper px-4 py-3";
 const area = "focus-ring rounded-[1.2rem] border-2 border-ink bg-paper px-4 py-3";
+
+function SectionHeading({ title, hint }: { title: string; hint?: string }) {
+  return (
+    <div className="mt-4 border-t border-ink/20 pt-4">
+      <p className="font-display text-xl tracking-wide text-butter">{title}</p>
+      {hint ? <p className="mt-0.5 text-xs text-ink/60">{hint}</p> : null}
+    </div>
+  );
+}
 
 export function AdminEventForm({ event }: { event?: EventRecord }) {
   const router = useRouter();
@@ -195,6 +204,25 @@ export function AdminEventForm({ event }: { event?: EventRecord }) {
 
     const value = (name: string) => String(formData.get(name) || "");
     const dt = (prefix: string) => toIso(value(`${prefix}Date`), value(`${prefix}Time`));
+
+    // A date without a time (or vice versa) would silently save as nothing —
+    // stop and ask instead.
+    const pairLabels: Record<string, string> = {
+      doors: "Doors open",
+      starts: "Screening starts",
+      ends: "Screening ends",
+      gateCloses: "Gate closes",
+      rsvpOpens: "RSVPs open",
+      rsvpCloses: "RSVPs close"
+    };
+    const halfFilled = Object.entries(pairLabels)
+      .filter(([prefix]) => Boolean(value(`${prefix}Date`)) !== Boolean(value(`${prefix}Time`)))
+      .map(([, label]) => label);
+    if (halfFilled.length) {
+      setMessage(`Fill in both the date and the time for: ${halfFilled.join(", ")} (or clear both).`);
+      setSaving(false);
+      return;
+    }
 
     const payload = {
       title: value("title"),
@@ -278,7 +306,7 @@ export function AdminEventForm({ event }: { event?: EventRecord }) {
           <ImageField initialUrl={event?.logo_url} label="Event logo (optional)" name="logoUrl" />
         </div>
 
-        <p className="mt-2 text-xs font-black uppercase">Schedule (Los Angeles time)</p>
+        <SectionHeading hint="All times are Los Angeles time." title="Schedule" />
         <div className="grid gap-3 sm:grid-cols-2">
           <DateTimeField initialIso={event?.doors_at} label="Doors open" namePrefix="doors" required />
           <DateTimeField initialIso={event?.starts_at} label="Screening starts" namePrefix="starts" required />
@@ -286,38 +314,50 @@ export function AdminEventForm({ event }: { event?: EventRecord }) {
           <DateTimeField initialIso={event?.gate_closes_at} label="Gate closes" namePrefix="gateCloses" />
         </div>
 
-        <p className="mt-2 text-xs font-black uppercase">RSVP window (leave blank to keep RSVPs open until showtime)</p>
+        <SectionHeading hint="Leave blank to keep RSVPs open until showtime." title="RSVP window" />
         <div className="grid gap-3 sm:grid-cols-2">
           <DateTimeField initialIso={event?.rsvp_opens_at} label="RSVPs open" namePrefix="rsvpOpens" />
           <DateTimeField initialIso={event?.rsvp_closes_at} label="RSVPs close" namePrefix="rsvpCloses" />
         </div>
 
+        <SectionHeading hint="Standard fills first, then overflow, then the waitlist starts." title="Capacity" />
         <div className="grid gap-3 sm:grid-cols-3">
-          <label className="grid gap-1 text-xs font-black uppercase">
-            Standard seats
-            <input className={field} defaultValue={event?.capacity_standard ?? 80} min={0} name="capacityStandard" type="number" />
-          </label>
-          <label className="grid gap-1 text-xs font-black uppercase">
-            Overflow seats
-            <input className={field} defaultValue={event?.capacity_overflow ?? 20} min={0} name="capacityOverflow" type="number" />
-          </label>
-          <label className="grid gap-1 text-xs font-black uppercase">
-            Max tickets per RSVP
-            <input className={field} defaultValue={event?.max_tickets_per_rsvp ?? 4} max={10} min={1} name="maxTicketsPerRsvp" type="number" />
-          </label>
+          {[
+            ["Standard seats", "capacityStandard", event?.capacity_standard ?? 80, 0, undefined],
+            ["Overflow seats", "capacityOverflow", event?.capacity_overflow ?? 20, 0, undefined],
+            ["Max per RSVP", "maxTicketsPerRsvp", event?.max_tickets_per_rsvp ?? 4, 1, 10]
+          ].map(([label, name, value, min, max]) => (
+            <label
+              className="grid gap-1.5 rounded-xl border border-ink/25 bg-paper/60 p-3 text-[0.65rem] font-black uppercase tracking-wider text-ink/70"
+              key={String(name)}
+            >
+              {label}
+              <input
+                className="focus-ring min-w-0 rounded-lg border-2 border-ink bg-paper px-3 py-2 text-center font-display text-2xl normal-case tracking-normal text-ink"
+                defaultValue={Number(value)}
+                max={max as number | undefined}
+                min={min as number}
+                name={String(name)}
+                type="number"
+              />
+            </label>
+          ))}
         </div>
 
+        <SectionHeading hint="One item per line, shown in order on the event page." title="Program" />
         <textarea
-          className={`${area} min-h-20`}
+          className={`${area} min-h-24`}
           defaultValue={(event?.program || []).join("\n")}
           name="program"
-          placeholder={"Program, one item per line:\nPre-show trailers\nFeature one\nIntermission\nFeature two"}
+          placeholder={"Pre-show trailers\nFeature one\nIntermission\nFeature two"}
         />
+        <SectionHeading hint="Gate instructions go in the confirmation email; notes appear on the event page." title="Notes" />
         <textarea className={`${area} min-h-20`} defaultValue={event?.entry_instructions || ""} name="entryInstructions" placeholder="How guests get in (gate instructions)" />
         <textarea className={`${area} min-h-16`} defaultValue={event?.host_note || ""} name="hostNote" placeholder="Host note (optional)" />
         <textarea className={`${area} min-h-16`} defaultValue={event?.accessibility_note || ""} name="accessibilityNote" placeholder="Accessibility note (optional)" />
         <textarea className={`${area} min-h-16`} defaultValue={event?.admin_notes || ""} name="adminNotes" placeholder="Private team notes (never shown to guests)" />
 
+        <SectionHeading hint="Only published screenings appear on the site and take RSVPs." title="Visibility" />
         <label className="grid gap-1 text-xs font-black uppercase">
           Status
           <select className={`${field} normal-case`} defaultValue={event?.status || "draft"} name="status">

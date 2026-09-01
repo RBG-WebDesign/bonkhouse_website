@@ -10,7 +10,11 @@ export async function POST(request: Request) {
   const eventSlug = String(body.eventSlug || "").trim();
   const name = String(body.name || "").trim();
   const email = String(body.email || "").trim().toLowerCase();
-  const quantity = Math.max(1, Math.min(10, Number(body.quantity || 1)));
+  const rawQuantity = Number(body.quantity ?? 1);
+  if (!Number.isFinite(rawQuantity)) {
+    return NextResponse.json({ error: "Ticket quantity must be a number." }, { status: 400 });
+  }
+  const quantity = Math.max(1, Math.min(10, Math.round(rawQuantity)));
   const inviteCode = String(body.inviteCode || "").trim();
 
   if ((!eventId && !eventSlug) || !name || !email) {

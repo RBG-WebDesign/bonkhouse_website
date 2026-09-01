@@ -14,7 +14,17 @@ type RsvpResult = {
   }>;
 };
 
-export function RsvpForm({ eventId, standardCapacity, overflowCapacity }: { eventId: string; standardCapacity: number; overflowCapacity: number }) {
+export function RsvpForm({
+  eventId,
+  standardCapacity,
+  overflowCapacity,
+  maxTickets = 4
+}: {
+  eventId: string;
+  standardCapacity: number;
+  overflowCapacity: number;
+  maxTickets?: number;
+}) {
   const [result, setResult] = useState<RsvpResult | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -84,7 +94,7 @@ export function RsvpForm({ eventId, standardCapacity, overflowCapacity }: { even
         <input className="focus-ring rounded-md border border-white/20 bg-black px-4 py-3 text-white placeholder:text-white/42" name="email" placeholder="Email" required type="email" />
         <div className="grid gap-3 sm:grid-cols-[8rem_1fr]">
           <select className="focus-ring rounded-md border border-white/20 bg-black px-4 py-3 text-white" defaultValue="1" name="quantity">
-            {[1, 2, 3, 4].map((quantity) => (
+            {Array.from({ length: Math.max(1, Math.min(10, maxTickets)) }, (_, i) => i + 1).map((quantity) => (
               <option key={quantity} value={quantity}>
                 {quantity}
               </option>

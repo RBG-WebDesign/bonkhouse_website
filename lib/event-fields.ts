@@ -15,7 +15,7 @@ export function eventPayloadToRow(body: any): { row?: Record<string, unknown>; e
     return { error: "The URL slug can only contain lowercase letters, numbers, and dashes." };
   }
 
-  if (!body.startsAt || !body.doorsAt) {
+  if (!isoOrNull(body.startsAt) || !isoOrNull(body.doorsAt)) {
     return { error: "Event date, doors time, and start time are required." };
   }
 
@@ -51,9 +51,10 @@ export function eventPayloadToRow(body: any): { row?: Record<string, unknown>; e
       entry_instructions: String(body.entryInstructions || "").trim(),
       host_note: String(body.hostNote || "").trim(),
       accessibility_note: String(body.accessibilityNote || "").trim(),
-      admin_notes: String(body.adminNotes || "").trim(),
-      ticket_type: "free",
-      price_cents: 0
+      admin_notes: String(body.adminNotes || "").trim()
+      // ticket_type / price_cents are intentionally not written here: the
+      // form has no inputs for them, and updates must not reset a value
+      // configured elsewhere. New rows get the column defaults (free / 0).
     }
   };
 }
