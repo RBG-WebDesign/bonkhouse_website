@@ -33,6 +33,13 @@ export function siteUrl() {
   return process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "http://localhost:3000";
 }
 
+// Emails render on the recipient's device — a localhost URL is never reachable there,
+// even when the email itself is sent from a dev server.
+export function emailSiteUrl() {
+  const url = siteUrl();
+  return url.includes("localhost") ? "https://bonkhouse.com" : url;
+}
+
 export function publicAsset(path: string | null | undefined) {
   if (!path) {
     return "";

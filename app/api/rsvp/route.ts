@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { sendTicketEmail } from "@/lib/email";
 import { createClient } from "@/lib/supabase/server";
 import { allocateSeatType, hashTicketToken, makeTicketToken, ticketQrDataUrl, ticketQrUrl } from "@/lib/tickets";
-import { formatEventDate, siteUrl } from "@/lib/utils";
+import { emailSiteUrl, formatEventDate } from "@/lib/utils";
 
 export async function POST(request: Request) {
   const body = await request.json();
@@ -136,13 +136,15 @@ export async function POST(request: Request) {
     guestName: name,
     eventTitle: event.title,
     eventDate: formatEventDate(event.starts_at),
-    cancelUrl: `${siteUrl()}/api/rsvp/cancel?reservation=${reservationId}&token=${encodeURIComponent(cancelToken)}`,
+    cancelUrl: `${emailSiteUrl()}/api/rsvp/cancel?reservation=${reservationId}&token=${encodeURIComponent(cancelToken)}`,
     arrivalInstructions: event.entry_instructions || event.venues?.entry_instructions || "",
     confirmationCode: `BONK-${reservationId.slice(0, 8).toUpperCase()}`,
     tickets: generated.map((ticket, index) => ({
       label: `Ticket ${index + 1}`,
       seatType: ticket.seatType,
-      qrUrl: ticket.qrUrl
+      // The email must embed a real image URL, not the check-in page link —
+      // and it must be publicly reachable, never localhost.
+      qrUrl: `${emailSiteUrl()}/api/ticket-qr?token=${encodeURIComponent(ticket.token)}`
     }))
   });
 

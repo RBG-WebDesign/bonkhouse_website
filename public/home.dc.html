@@ -24,7 +24,7 @@ a:hover{color:#ffd400}
 @keyframes poster-cycle-first{0%,42%,100%{opacity:1}50%,92%{opacity:0}}
 @keyframes poster-cycle-second{0%,42%,100%{opacity:0}50%,92%{opacity:1}}
 @media (prefers-reduced-motion:reduce){.poster-cycle img{animation:none!important}.poster-cycle img:last-child{display:none}}
-body::before{position:fixed;inset:0;z-index:70;pointer-events:none;content:"";opacity:.13;background-image:radial-gradient(circle at 14% 21%,rgba(255,216,120,.32),transparent .08rem),radial-gradient(circle at 72% 18%,rgba(255,216,120,.2),transparent .06rem),radial-gradient(circle at 86% 72%,rgba(0,0,0,.7),transparent .1rem),radial-gradient(circle at 31% 84%,rgba(255,255,255,.24),transparent .07rem),linear-gradient(90deg,transparent 0 3%,rgba(255,218,120,.2) 3.1%,transparent 3.3% 96.4%,rgba(255,218,120,.14) 96.6%,transparent 97%),repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 1px,transparent 1px 9px);background-size:240px 240px,180px 180px,220px 220px,150px 150px,100% 100%,100% 100%;mix-blend-mode:screen}
+
 @media (max-width:1023px){[data-hero-poster]{display:none!important}[data-hero-copy]{grid-column:1 / -1!important}}
 @media (max-width:767px){[data-m="herogrid"]{grid-template-columns:1fr!important;gap:24px!important;padding:0 20px!important}[data-hero-poster]{display:flex!important;grid-column:1 / -1!important;padding:0 0 56px}[data-hero-poster] .poster-cycle{max-width:250px!important;transform:rotate(2deg)!important}}
 body::after{position:fixed;inset:0;z-index:71;pointer-events:none;content:"";opacity:.26;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.92' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.42'/%3E%3C/svg%3E"),radial-gradient(ellipse at center,transparent 48%,rgba(0,0,0,.45) 100%);mix-blend-mode:overlay}
@@ -192,7 +192,7 @@ body::after{position:fixed;inset:0;z-index:71;pointer-events:none;content:"";opa
   </div>
 </section>
 
-<section style="position:relative;z-index:10;background:#000;padding:80px 0;border-top:1px solid rgba(255,255,255,.1)">
+<section id="about" style="position:relative;z-index:10;background:#000;padding:80px 0;border-top:1px solid rgba(255,255,255,.1);scroll-margin-top:80px">
   <div style="max-width:1280px;margin:0 auto;padding:0 32px">
     <div data-m="grid" style="display:grid;grid-template-columns:1fr 1.5fr;gap:48px;align-items:start">
       <div>
@@ -239,9 +239,8 @@ body::after{position:fixed;inset:0;z-index:71;pointer-events:none;content:"";opa
       <p style="margin:0;font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#ffd400">Clubhouse</p>
       <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px;font-size:14px;color:rgba(255,255,255,.72)">
         <a href="/screenings">Upcoming screenings</a>
-        <a href="#">Photos</a>
         <a href="#">Merch</a>
-        <a href="#">About us</a>
+        <a href="/about">About us</a>
       </div>
     </div>
     <div>

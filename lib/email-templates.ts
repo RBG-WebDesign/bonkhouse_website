@@ -32,14 +32,14 @@ const copy = {
     headline: "YOU’RE IN LINE",
     intro: "The room is currently full, but your spot on the waitlist is saved. We’ll email you if seats open up.",
     accent: "#ff5a36",
-    accentInk: "#fff8e8"
+    accentInk: "#14100b"
   },
   cancelled: {
     eyebrow: "RSVP CANCELLED",
     headline: "YOUR SEATS ARE RELEASED",
     intro: "Your reservation has been cancelled and the seats are available to another moviegoer.",
-    accent: "#d8d1c2",
-    accentInk: "#080705"
+    accent: "#cfc6ae",
+    accentInk: "#14100b"
   },
   reminder: {
     eyebrow: "SCREENING REMINDER",
@@ -66,15 +66,15 @@ function escapeHtml(value: string) {
     .replaceAll("'", "&#039;");
 }
 
-function ticketMarkup(ticket: EmailTicket, accent: string) {
+function ticketMarkup(ticket: EmailTicket) {
   return `
-    <table role="presentation" cellpadding="0" cellspacing="0" style="display:inline-table;margin:12px 10px 0 0;vertical-align:top;">
+    <table role="presentation" cellpadding="0" cellspacing="0" style="display:inline-table;margin:14px 14px 0 0;vertical-align:top;">
       <tr>
         <td style="text-align:center;vertical-align:top;">
-          <div style="display:inline-block;background:#fff;padding:5px;line-height:0;">
-            <img src="${escapeHtml(ticket.qrUrl)}" width="68" height="68" alt="Ticket QR code" style="display:block;border:0;width:68px;height:68px;" />
+          <div style="display:inline-block;background:#ffffff;border:2px solid #16130d;padding:6px;line-height:0;">
+            <img src="${escapeHtml(ticket.qrUrl)}" width="116" height="116" alt="Ticket QR code" style="display:block;border:0;width:116px;height:116px;" />
           </div>
-          <div style="padding-top:5px;font-family:'Courier New',monospace;font-size:8px;font-weight:bold;letter-spacing:1px;color:${accent};text-transform:uppercase;">${escapeHtml(ticket.label)} · ${escapeHtml(ticket.seatType)}</div>
+          <div style="padding-top:6px;font-family:'Courier New',monospace;font-size:10px;font-weight:bold;letter-spacing:1px;color:#16130d;text-transform:uppercase;">${escapeHtml(ticket.label)} · ${escapeHtml(ticket.seatType)}</div>
         </td>
       </tr>
     </table>`;
@@ -128,57 +128,55 @@ export function renderNewsletterWelcomeEmail({ guestName, logoUrl, siteUrl }: Pi
 export function renderBonkhouseEmail(input: BonkhouseEmailInput) {
   const theme = copy[input.variant];
   const showTickets = input.variant === "confirmed" || input.variant === "reminder";
-  const ticketList = showTickets ? input.tickets.map((ticket) => ticketMarkup(ticket, theme.accent)).join("") : "";
+  const ticketList = showTickets ? input.tickets.map((ticket) => ticketMarkup(ticket)).join("") : "";
   const action = input.variant === "cancelled"
-    ? `<div style="font-family:'Courier New',monospace;font-size:12px;line-height:1.6;color:#aaa69d;">Changed your mind? Return to the screening page to reserve again if seats remain.</div>`
+    ? `<div style="font-family:'Courier New',monospace;font-size:12px;line-height:1.6;color:#6d6656;">Changed your mind? Return to the screening page to reserve again if seats remain.</div>`
     : input.variant === "waitlisted"
-      ? `<div style="font-family:'Courier New',monospace;font-size:12px;line-height:1.6;color:#aaa69d;">No ticket is needed yet. If a seat opens, we’ll send a fresh confirmation with your QR code.</div>`
-      : `<a href="${escapeHtml(input.cancelUrl)}" style="font-family:'Courier New',monospace;font-size:11px;font-weight:bold;letter-spacing:1px;color:#aaa69d;text-decoration:underline;text-transform:uppercase;">Can’t make it? Release your seats</a>`;
+      ? `<div style="font-family:'Courier New',monospace;font-size:12px;line-height:1.6;color:#6d6656;">No ticket is needed yet. If a seat opens, we’ll send a fresh confirmation with your QR code.</div>`
+      : `<a href="${escapeHtml(input.cancelUrl)}" style="font-family:'Courier New',monospace;font-size:11px;font-weight:bold;letter-spacing:1px;color:#6d6656;text-decoration:underline;text-transform:uppercase;">Can’t make it? Release your seats</a>`;
 
+  // Light "paper flyer" design on purpose: Gmail's dark mode mangles dark emails
+  // into washed-out inversions, and it never recolors image pixels — so the dark
+  // branding lives in the baked masthead PNG and everything else reads as ink on paper.
   return `<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <meta name="supported-color-schemes" content="light" />
     <title>${escapeHtml(emailSubject(input.variant, input.eventTitle))}</title>
   </head>
-  <body style="margin:0;background:#171715;padding:0;color:#f8f3e7;">
+  <body style="margin:0;background:#e7e1d0;padding:0;color:#16130d;">
     <div style="display:none;max-height:0;overflow:hidden;opacity:0;">${escapeHtml(theme.intro)}</div>
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#171715;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#e7e1d0" style="background:#e7e1d0;">
       <tr>
-        <td align="center" style="padding:32px 12px;">
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#0b0b0b;border:1px solid #252525;">
+        <td align="center" style="padding:28px 12px;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#fbf7ec" style="max-width:600px;background:#fbf7ec;border:2px solid #16130d;">
+            <tr>
+              <td style="line-height:0;">
+                <img src="${escapeHtml(input.logoUrl)}" width="600" alt="Sunday Afternoon Bonkhouse" style="display:block;width:100%;max-width:600px;height:auto;border:0;" />
+              </td>
+            </tr>
             <tr>
               <td style="height:7px;background:${theme.accent};font-size:0;line-height:0;">&nbsp;</td>
             </tr>
             <tr>
-              <td style="padding:30px 36px 18px;">
-                <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-                  <tr>
-                    <td style="vertical-align:middle;">
-                      <img src="${escapeHtml(input.logoUrl)}" width="188" alt="Sunday Afternoon Bonkhouse" style="display:block;width:188px;max-width:100%;height:auto;border:0;" />
-                    </td>
-                    <td align="right" style="vertical-align:middle;font-family:'Courier New',monospace;font-size:10px;font-weight:bold;letter-spacing:1.4px;color:${theme.accent};text-transform:uppercase;">Admit one<br />Sunday</td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-            <tr>
-              <td style="padding:24px 36px 30px;">
+              <td style="padding:30px 36px 26px;">
                 <span style="display:inline-block;background:${theme.accent};padding:8px 12px;font-family:'Courier New',monospace;font-size:11px;font-weight:bold;letter-spacing:1.5px;color:${theme.accentInk};text-transform:uppercase;">${theme.eyebrow}</span>
-                <h1 style="margin:22px 0 14px;font-family:'Trebuchet MS',Verdana,sans-serif;font-size:40px;font-weight:700;letter-spacing:.6px;line-height:1.08;color:#f7f3e8;text-transform:uppercase;">${theme.headline}</h1>
-                <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.58;color:#c9c5bc;">Hi ${escapeHtml(input.guestName)}, ${theme.intro}</p>
+                <h1 style="margin:22px 0 14px;font-family:'Trebuchet MS',Verdana,sans-serif;font-size:40px;font-weight:700;letter-spacing:.6px;line-height:1.08;color:#16130d;text-transform:uppercase;">${theme.headline}</h1>
+                <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.58;color:#4b463c;">Hi ${escapeHtml(input.guestName)}, ${theme.intro}</p>
               </td>
             </tr>
             <tr>
               <td style="padding:0 36px;">
-                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #292929;border-bottom:1px solid #292929;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top:2px solid #16130d;border-bottom:2px solid #16130d;">
                   <tr>
                     <td style="padding:24px 0;font-family:Arial,Helvetica,sans-serif;">
-                      <div style="margin-bottom:8px;font-family:'Courier New',monospace;font-size:10px;font-weight:bold;letter-spacing:2px;color:${theme.accent};text-transform:uppercase;">The feature</div>
-                      <div style="margin-bottom:14px;font-family:Impact,'Arial Narrow Bold',sans-serif;font-size:25px;line-height:1.1;color:#f7f3e8;text-transform:uppercase;">${escapeHtml(input.eventTitle)}</div>
-                      <strong style="color:#fffaf0;">${escapeHtml(input.eventDate)}</strong><br />
-                      <span style="font-size:14px;line-height:1.6;color:#aaa69e;">${escapeHtml(input.venue)}</span>
+                      <div style="margin-bottom:8px;font-family:'Courier New',monospace;font-size:10px;font-weight:bold;letter-spacing:2px;color:#6d6656;text-transform:uppercase;">The feature</div>
+                      <div style="margin-bottom:14px;font-family:Impact,'Arial Narrow Bold',sans-serif;font-size:25px;line-height:1.1;color:#16130d;text-transform:uppercase;">${escapeHtml(input.eventTitle)}</div>
+                      <strong style="color:#16130d;">${escapeHtml(input.eventDate)}</strong><br />
+                      <span style="font-size:14px;line-height:1.6;color:#6d6656;">${escapeHtml(input.venue)}</span>
                     </td>
                   </tr>
                 </table>
@@ -186,27 +184,15 @@ export function renderBonkhouseEmail(input: BonkhouseEmailInput) {
             </tr>
             ${showTickets ? `
             <tr>
-              <td style="padding:30px 36px 20px;">
-                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#111;border:1px solid #363636;">
+              <td style="padding:28px 36px 20px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#fbf7ec" style="background:#fbf7ec;border:2px dashed #16130d;">
                   <tr>
                     <td style="padding:22px;">
-                      <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-                        <tr>
-                          <td width="64" style="width:64px;vertical-align:middle;">
-                            <table role="presentation" width="52" height="52" cellpadding="0" cellspacing="0" style="width:52px;height:52px;border:2px solid ${theme.accent};">
-                              <tr><td align="center" style="font-family:'Courier New',monospace;font-size:24px;font-weight:bold;color:${theme.accent};">T</td></tr>
-                            </table>
-                          </td>
-                          <td style="vertical-align:middle;">
-                            <div style="font-family:'Courier New',monospace;font-size:10px;font-weight:bold;letter-spacing:2px;color:${theme.accent};text-transform:uppercase;">Your ticket</div>
-                            <div style="padding-top:5px;font-family:Impact,'Arial Narrow Bold',sans-serif;font-size:24px;line-height:1;color:#f7f3e8;text-transform:uppercase;">${input.tickets.length} ${input.tickets.length === 1 ? "seat" : "seats"}</div>
-                            <div style="padding-top:6px;font-family:'Courier New',monospace;font-size:10px;color:#8f8b84;text-transform:uppercase;">Show this email at the door</div>
-                          </td>
-                        </tr>
-                      </table>
-                      <div style="margin-top:20px;border-top:1px dashed #3b3b3b;padding-top:18px;">
-                        <div style="font-family:'Courier New',monospace;font-size:9px;font-weight:bold;letter-spacing:2px;color:#77736c;text-transform:uppercase;">Confirmation</div>
-                        <div style="padding-top:5px;font-family:'Courier New',monospace;font-size:18px;font-weight:bold;letter-spacing:2px;color:${theme.accent};">${escapeHtml(input.confirmationCode)}</div>
+                      <div style="font-family:'Courier New',monospace;font-size:10px;font-weight:bold;letter-spacing:2px;color:#6d6656;text-transform:uppercase;">Admit ${input.tickets.length === 1 ? "one" : String(input.tickets.length)} · Sunday</div>
+                      <div style="padding-top:6px;font-family:Impact,'Arial Narrow Bold',sans-serif;font-size:24px;line-height:1;color:#16130d;text-transform:uppercase;">${input.tickets.length} ${input.tickets.length === 1 ? "seat" : "seats"} — show this at the door</div>
+                      <div style="margin-top:18px;border-top:1px dashed #9b937e;padding-top:16px;">
+                        <div style="font-family:'Courier New',monospace;font-size:9px;font-weight:bold;letter-spacing:2px;color:#6d6656;text-transform:uppercase;">Confirmation</div>
+                        <div style="margin-top:6px;display:inline-block;background:${theme.accent};padding:6px 10px;font-family:'Courier New',monospace;font-size:18px;font-weight:bold;letter-spacing:2px;color:${theme.accentInk};">${escapeHtml(input.confirmationCode)}</div>
                         <div style="padding-top:4px;">${ticketList}</div>
                       </div>
                     </td>
@@ -216,9 +202,9 @@ export function renderBonkhouseEmail(input: BonkhouseEmailInput) {
             </tr>` : ""}
             <tr>
               <td style="padding:10px 36px 28px;">
-                <div style="border-left:3px solid ${theme.accent};padding:3px 0 3px 15px;">
-                  <div style="font-family:'Courier New',monospace;font-size:10px;font-weight:bold;letter-spacing:1.4px;color:${theme.accent};text-transform:uppercase;">Arrival notes</div>
-                  <div style="padding-top:7px;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.6;color:#aaa69e;">${escapeHtml(input.arrivalInstructions)}</div>
+                <div style="border-left:4px solid ${theme.accent};padding:3px 0 3px 15px;">
+                  <div style="font-family:'Courier New',monospace;font-size:10px;font-weight:bold;letter-spacing:1.4px;color:#16130d;text-transform:uppercase;">Arrival notes</div>
+                  <div style="padding-top:7px;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.6;color:#4b463c;">${escapeHtml(input.arrivalInstructions)}</div>
                 </div>
               </td>
             </tr>
@@ -226,7 +212,7 @@ export function renderBonkhouseEmail(input: BonkhouseEmailInput) {
               <td style="padding:0 36px 26px;">${action}</td>
             </tr>
             <tr>
-              <td style="padding:0 36px 30px;font-family:'Courier New',monospace;font-size:9px;line-height:1.6;letter-spacing:1px;color:#66635d;text-transform:uppercase;">Sunday Afternoon Bonkhouse · RSVP confirmation</td>
+              <td style="padding:14px 36px;background:#16130d;font-family:'Courier New',monospace;font-size:9px;line-height:1.6;letter-spacing:1px;color:#cfc6ae;text-transform:uppercase;">Sunday Afternoon Bonkhouse · RSVP confirmation</td>
             </tr>
           </table>
         </td>

@@ -31,23 +31,7 @@ body {
   font-family: "Trebuchet MS", Verdana, sans-serif;
 }
 
-body::before {
-  position: fixed;
-  inset: 0;
-  z-index: 70;
-  pointer-events: none;
-  content: "";
-  opacity: 0.13;
-  background-image:
-    radial-gradient(circle at 14% 21%, rgba(255, 216, 120, 0.32), transparent 0.08rem),
-    radial-gradient(circle at 72% 18%, rgba(255, 216, 120, 0.2), transparent 0.06rem),
-    radial-gradient(circle at 86% 72%, rgba(0, 0, 0, 0.7), transparent 0.1rem),
-    radial-gradient(circle at 31% 84%, rgba(255, 255, 255, 0.24), transparent 0.07rem),
-    linear-gradient(90deg, transparent 0 3%, rgba(255, 218, 120, 0.2) 3.1%, transparent 3.3% 96.4%, rgba(255, 218, 120, 0.14) 96.6%, transparent 97%),
-    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.06) 0 1px, transparent 1px 9px);
-  background-size: 240px 240px, 180px 180px, 220px 220px, 150px 150px, 100% 100%, 100% 100%;
-  mix-blend-mode: screen;
-}
+
 
 body::after {
   position: fixed;
@@ -115,17 +99,7 @@ textarea {
     0 8px 24px rgba(0, 0, 0, 0.5);
 }
 
-.grindhouse-header::before {
-  position: absolute;
-  inset: 0;
-  content: "";
-  pointer-events: none;
-  background:
-    linear-gradient(90deg, transparent, rgba(255, 212, 0, 0.06), transparent),
-    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.07) 0 1px, transparent 1px 9px);
-  mix-blend-mode: overlay;
-  opacity: 0.48;
-}
+
 
 .grindhouse-header::after {
   position: absolute;
@@ -199,6 +173,18 @@ textarea {
 .site-header-mobile-link:focus-visible {
   border-color: rgba(255, 212, 0, 0.5);
   color: var(--butter);
+}
+
+.site-header-mobile-rsvp {
+  border-color: var(--butter);
+  background: var(--butter);
+  color: #000;
+}
+
+.site-header-mobile-rsvp:hover,
+.site-header-mobile-rsvp:focus-visible {
+  background: #ffe15a;
+  color: #000;
 }
 
 main > div > section {
@@ -363,36 +349,23 @@ main > div > section > .club-container {
   }
 
   .site-header-inner {
-    min-height: 8.5rem;
-    padding-right: 2rem;
-    padding-left: 2rem;
+    min-height: 5rem;
+    padding-right: 0.75rem;
+    padding-left: 1.25rem;
   }
 
   .site-header-logo {
-    width: min(17.5rem, 44vw);
+    width: min(14rem, 48vw);
+    height: auto;
   }
 
   .site-header-actions {
-    gap: 1rem;
-  }
-
-  .site-header-join {
-    height: 4.25rem;
-    min-width: 11.5rem;
-    justify-content: center;
-    padding-right: 1.35rem;
-    padding-left: 1.35rem;
-    font-size: 1.7rem;
-    line-height: 1;
-  }
-
-  .site-header-join svg {
-    display: none;
+    gap: 0.5rem;
   }
 
   .site-header-menu {
-    width: 4rem;
-    height: 4rem;
+    width: 3.5rem;
+    height: 3.5rem;
   }
 
   .home-hero-section {
@@ -552,25 +525,18 @@ main > div > section > .club-container {
 
 @media (max-width: 480px) {
   .site-header-inner {
-    min-height: 6.85rem;
-    padding-right: 1rem;
+    min-height: 4.5rem;
+    padding-right: 0.5rem;
     padding-left: 1rem;
   }
 
   .site-header-logo {
-    width: min(11.2rem, 38vw);
-  }
-
-  .site-header-join {
-    height: 3.35rem;
-    min-width: 7.6rem;
-    padding-right: 0.72rem;
-    padding-left: 0.72rem;
-    font-size: 1.08rem;
+    width: min(11.2rem, 42vw);
+    height: auto;
   }
 
   .site-header-actions {
-    gap: 0.45rem;
+    gap: 0.25rem;
   }
 
   .site-header-menu {

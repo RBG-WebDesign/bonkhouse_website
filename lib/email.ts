@@ -1,4 +1,5 @@
 import { renderBonkhouseEmail } from "@/lib/email-templates";
+import { emailSiteUrl } from "@/lib/utils";
 
 type TicketEmailInput = {
   to: string;
@@ -45,7 +46,7 @@ export async function sendTicketEmail(input: TicketEmailInput) {
         cancelUrl: input.cancelUrl,
         tickets: input.tickets,
         confirmationCode: input.confirmationCode,
-        logoUrl: `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/logo_fixed_transparent.png`
+        logoUrl: `${emailSiteUrl()}/email-masthead.png`
       })
     })
     });

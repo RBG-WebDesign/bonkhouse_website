@@ -21,7 +21,7 @@ export function EmailPreviewStudio({ initialVariant = "confirmed" }: { initialVa
   const html = useMemo(
     () => variant === "newsletter" ? renderNewsletterWelcomeEmail({
       guestName: guestName.trim() || "Guest",
-      logoUrl: "/logo_fixed_transparent.png",
+      logoUrl: "/email-masthead.png",
       siteUrl: "http://localhost:3000"
     }) : renderBonkhouseEmail({
       variant,
@@ -31,7 +31,7 @@ export function EmailPreviewStudio({ initialVariant = "confirmed" }: { initialVa
       venue: "Gloria Kaufman Community Center · Culver City, CA",
       arrivalInstructions: "Enter through the side gate. The gate closes at 1:20 PM. If it is closed, text the host number included in your confirmation.",
       cancelUrl: "#cancel-preview",
-      logoUrl: "/logo_fixed_transparent.png",
+      logoUrl: "/email-masthead.png",
       confirmationCode: "BONK-018-JS",
       tickets: [
         { label: "Ticket 01", seatType: "Standard", qrUrl: "/email-qr-placeholder.svg" },

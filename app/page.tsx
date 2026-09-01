@@ -45,7 +45,7 @@ export default async function Home() {
                 SEE WHAT'S SCREENING
                 <ArrowRight className="ml-2" size={22} />
               </Link>
-              <Link className={buttonVariants({ size: "lg", variant: "secondary" }) + " h-16 border-butter/40 bg-black/40 px-9 font-bebas text-xl tracking-wider text-butter backdrop-blur sm:h-[4.25rem] sm:px-12 sm:text-2xl"} href="/about">
+              <Link className={buttonVariants({ size: "lg", variant: "secondary" }) + " h-16 border-butter/40 bg-black/40 px-9 font-bebas text-xl tracking-wider text-butter backdrop-blur sm:h-[4.25rem] sm:px-12 sm:text-2xl"} href="#about">
                 JOIN THE CLUB
               </Link>
             </div>
@@ -328,7 +328,7 @@ export default async function Home() {
       </section>
 
       {/* SECTION 5: ABOUT US */}
-      <section className="relative z-10 bg-black py-20 border-t border-white/10">
+      <section id="about" className="relative z-10 bg-black py-20 border-t border-white/10 scroll-mt-20">
         <div className="club-container">
           <div className="grid gap-12 lg:grid-cols-[1fr_1.5fr] items-start">
             <div>

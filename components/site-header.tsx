@@ -1,11 +1,9 @@
 import Link from "next/link";
 import { ArrowRight, Menu } from "lucide-react";
-import { buttonVariants } from "@/components/ui/button";
 import { publicAsset } from "@/lib/utils";
 
 const links = [
   { href: "/screenings", label: "Screenings" },
-  { href: "/photos", label: "Photos" },
   { href: "/about", label: "About" }
 ];
 
@@ -16,7 +14,7 @@ export function SiteHeader() {
         <Link className="group block min-w-max" href="/">
           <img
             alt="Sunday Afternoon Bonk House"
-            className="site-header-logo grindhouse-logo h-auto w-44 transition duration-200 group-hover:brightness-125 sm:w-56"
+            className="site-header-logo grindhouse-logo h-[52px] w-auto transition duration-200 group-hover:brightness-125"
             src={publicAsset("/bonkhouse-title.webp")}
           />
         </Link>
@@ -32,9 +30,12 @@ export function SiteHeader() {
               </Link>
             ))}
           </nav>
-          <Link className={buttonVariants({ className: "site-header-join h-12 px-6 font-bebas text-2xl tracking-wider leading-none", variant: "default" })} href="/screenings">
-            JOIN THE CLUB
-            <ArrowRight className="ml-1.5" size={16} />
+          <Link
+            className="site-header-join relative hidden h-12 items-center justify-center gap-2 rounded-[3px] lg:inline-flex border border-butter bg-butter px-6 font-bebas text-2xl uppercase tracking-wider leading-none text-black shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-8px_18px_rgba(83,51,0,0.14),0_8px_22px_rgba(0,0,0,0.32),0_0_26px_rgba(255,212,0,0.18)] transition hover:-translate-y-0.5 hover:bg-[#ffe15a]"
+            href="/events/society-videodrome-double-feature"
+          >
+            RSVP
+            <ArrowRight size={16} strokeWidth={2.5} />
           </Link>
           <details className="site-header-mobile-menu lg:hidden">
             <summary aria-label="Open menu" className="site-header-menu">
@@ -46,6 +47,9 @@ export function SiteHeader() {
                   {link.label}
                 </Link>
               ))}
+              <Link className="site-header-mobile-link site-header-mobile-rsvp" href="/events/society-videodrome-double-feature">
+                RSVP
+              </Link>
             </div>
           </details>
         </div>

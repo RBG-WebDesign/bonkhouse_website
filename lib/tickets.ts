@@ -27,6 +27,17 @@ export function ticketQrUrl(token: string) {
   return `${siteUrl()}/admin/check-in?token=${encodeURIComponent(token)}`;
 }
 
+export async function ticketQrPngBuffer(token: string) {
+  return QRCode.toBuffer(ticketQrUrl(token), {
+    margin: 1,
+    width: 420,
+    color: {
+      dark: "#20160f",
+      light: "#fff4df"
+    }
+  });
+}
+
 export function allocateSeatType(index: number, standardCapacity = 100, overflowCapacity = 20) {
   if (index < standardCapacity) {
     return "standard";
