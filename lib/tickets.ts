@@ -13,7 +13,7 @@ export async function hashTicketToken(token: string) {
 }
 
 export async function ticketQrDataUrl(token: string) {
-  return QRCode.toDataURL(`${siteUrl()}/admin/check-in?token=${encodeURIComponent(token)}`, {
+  return QRCode.toDataURL(ticketQrUrl(token), {
     margin: 1,
     width: 420,
     color: {
