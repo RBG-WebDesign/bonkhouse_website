@@ -23,7 +23,9 @@ export async function sendTicketEmail(input: TicketEmailInput) {
     return { ok: true, mode: "logged" as const };
   }
 
-  const response = await fetch("https://api.resend.com/emails", {
+  let response: Response;
+  try {
+    response = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${apiKey}`,
@@ -46,10 +48,17 @@ export async function sendTicketEmail(input: TicketEmailInput) {
         logoUrl: `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/logo_fixed_transparent.png`
       })
     })
-  });
+    });
+  } catch (error) {
+    console.error("Resend request failed:", error);
+    return { ok: false, mode: "failed" as const };
+  }
 
   if (!response.ok) {
-    throw new Error(`Resend failed with ${response.status}`);
+    // Never let a failed email sink the reservation — the guest already has
+    // their tickets on screen. Log it so it shows in the function logs.
+    console.error(`Resend failed with ${response.status}: ${await response.text().catch(() => "")}`);
+    return { ok: false, mode: "failed" as const };
   }
 
   return { ok: true, mode: "sent" as const };
