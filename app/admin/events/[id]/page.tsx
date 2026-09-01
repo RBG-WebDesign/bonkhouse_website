@@ -1,5 +1,6 @@
 import { Download } from "lucide-react";
 import { InviteCodeForm } from "@/components/invite-code-form";
+import { RemoveReservationButton } from "@/components/remove-reservation-button";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { requireAdmin } from "@/lib/admin";
@@ -76,6 +77,7 @@ export default async function AdminEventPage({
                   <th className="p-3">Email</th>
                   <th className="p-3">Tickets</th>
                   <th className="p-3">Status</th>
+                  <th className="p-3"></th>
                 </tr>
               </thead>
               <tbody>
@@ -91,6 +93,9 @@ export default async function AdminEventPage({
                       </div>
                     </td>
                     <td className="p-3">{reservation.status}</td>
+                    <td className="p-3">
+                      <RemoveReservationButton guestName={reservation.guest_name} reservationId={reservation.id} />
+                    </td>
                   </tr>
                 ))}
               </tbody>
