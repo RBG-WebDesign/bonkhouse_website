@@ -50,10 +50,12 @@ export default async function AdminPage({
     .order("starts_at", { ascending: false })
     .limit(30);
 
-  const { data: ticketRows } = await supabase
-    .from("tickets")
-    .select("event_id,status")
-    .in("event_id", (events || []).map((event) => event.id));
+  const { data: ticketRows } = events?.length
+    ? await supabase
+        .from("tickets")
+        .select("event_id,status")
+        .in("event_id", events.map((event) => event.id))
+    : { data: [] };
 
   const claimed = new Map<string, number>();
   (ticketRows || []).forEach((ticket) => {
