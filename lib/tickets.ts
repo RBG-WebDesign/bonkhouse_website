@@ -23,8 +23,10 @@ export async function ticketQrDataUrl(token: string) {
   });
 }
 
+// Guests scan their own QR codes — send them to the public verification page,
+// which links hosts onward to /admin/check-in.
 export function ticketQrUrl(token: string) {
-  return `${siteUrl()}/admin/check-in?token=${encodeURIComponent(token)}`;
+  return `${siteUrl()}/ticket?token=${encodeURIComponent(token)}`;
 }
 
 export async function ticketQrPngBuffer(token: string) {
