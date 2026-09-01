@@ -106,8 +106,8 @@ export default function AboutPage() {
 
       const size = isBonk ? 72 + Math.random() * 72 : 38 + Math.random() * 58;
       const maxFrames = isBonk
-        ? 7 + Math.floor(Math.random() * 8)
-        : 10 + Math.floor(Math.random() * 15);
+        ? 18 + Math.floor(Math.random() * 14)
+        : 35 + Math.floor(Math.random() * 35);
 
       return {
         text,
@@ -133,16 +133,16 @@ export default function AboutPage() {
 
       if (text === "BONK") {
         burst = Math.max(burst, 7);
-        nextWordAt = performance.now() + 80 + Math.random() * 140;
+        nextWordAt = performance.now() + 900 + Math.random() * 700;
       } else {
         // irregular timing stops the sentence from feeling like subtitles
         const r = Math.random();
         if (r < 0.12) {
-          nextWordAt = performance.now() + 500 + Math.random() * 500;
+          nextWordAt = performance.now() + 3200 + Math.random() * 1500;
         } else if (r < 0.38) {
-          nextWordAt = performance.now() + 80 + Math.random() * 100;
+          nextWordAt = performance.now() + 1400 + Math.random() * 600;
         } else {
-          nextWordAt = performance.now() + 180 + Math.random() * 260;
+          nextWordAt = performance.now() + 2000 + Math.random() * 1200;
         }
       }
     };
