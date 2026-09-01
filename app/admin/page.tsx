@@ -48,7 +48,31 @@ export default async function AdminPage({
     .from("events")
     .select("id,title,starts_at,status,capacity_standard,capacity_overflow")
     .order("starts_at", { ascending: false })
-    .limit(12);
+    .limit(30);
+
+  const { data: ticketRows } = await supabase
+    .from("tickets")
+    .select("event_id,status")
+    .in("event_id", (events || []).map((event) => event.id));
+
+  const claimed = new Map<string, number>();
+  (ticketRows || []).forEach((ticket) => {
+    if (ticket.status === "valid") {
+      claimed.set(ticket.event_id, (claimed.get(ticket.event_id) || 0) + 1);
+    }
+  });
+
+  const now = Date.now();
+  const groups: Array<[string, typeof events]> = [
+    ["Upcoming & live", (events || []).filter((e) => e.status === "published" && new Date(e.starts_at).getTime() >= now)],
+    ["Drafts", (events || []).filter((e) => e.status === "draft")],
+    [
+      "Past & other",
+      (events || []).filter(
+        (e) => e.status === "archived" || e.status === "cancelled" || (e.status === "published" && new Date(e.starts_at).getTime() < now)
+      )
+    ]
+  ];
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
@@ -66,24 +90,37 @@ export default async function AdminPage({
       <div className="mt-10 grid gap-8 lg:grid-cols-[1fr_0.9fr]">
         <section>
           <h2 className="font-display text-4xl">Screenings</h2>
-          <div className="mt-5 grid gap-4">
-            {(events || []).map((event) => (
-              <Link
-                className="rounded-[1.2rem] border-2 border-ink bg-white/70 p-4 shadow-[4px_4px_0_#20160f] transition hover:-translate-y-0.5"
-                href={`/admin/events/${event.id}`}
-                key={event.id}
-              >
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <h3 className="font-display text-3xl">{event.title}</h3>
-                  <Badge>{event.status}</Badge>
+          {groups.map(([label, groupEvents]) =>
+            groupEvents?.length ? (
+              <div className="mt-6" key={label}>
+                <p className="text-xs font-black uppercase">{label}</p>
+                <div className="mt-3 grid gap-4">
+                  {groupEvents.map((event) => {
+                    const capacity = (event.capacity_standard || 0) + (event.capacity_overflow || 0);
+                    const taken = claimed.get(event.id) || 0;
+                    return (
+                      <Link
+                        className="rounded-[1.2rem] border-2 border-ink bg-white/70 p-4 shadow-[4px_4px_0_#20160f] transition hover:-translate-y-0.5"
+                        href={`/admin/events/${event.id}`}
+                        key={event.id}
+                      >
+                        <div className="flex flex-wrap items-center justify-between gap-3">
+                          <h3 className="font-display text-3xl">{event.title}</h3>
+                          <Badge>{event.status}</Badge>
+                        </div>
+                        <p className="mt-2 text-sm font-bold">
+                          {new Date(event.starts_at).toLocaleString("en-US", { timeZone: "America/Los_Angeles", dateStyle: "medium", timeStyle: "short" })}
+                          {" · "}
+                          {taken} of {capacity} tickets claimed · {Math.max(0, capacity - taken)} left
+                        </p>
+                      </Link>
+                    );
+                  })}
                 </div>
-                <p className="mt-2 text-sm font-bold">
-                  {new Date(event.starts_at).toLocaleString()} · {event.capacity_standard} + {event.capacity_overflow}
-                </p>
-              </Link>
-            ))}
-            {!events?.length ? <p>No Supabase events yet. Create the first one.</p> : null}
-          </div>
+              </div>
+            ) : null
+          )}
+          {!events?.length ? <p className="mt-5">No events yet. Create the first one.</p> : null}
         </section>
         <AdminEventForm />
       </div>

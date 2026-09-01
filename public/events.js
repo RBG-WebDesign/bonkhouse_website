@@ -1,15 +1,14 @@
 // ============================================================
-// BONKHOUSE SCREENINGS — single source of truth for the site.
+// BONKHOUSE SCREENINGS
 //
-// TO ADD A NEW SCREENING:
-// 1. Copy the top event object and paste the copy ABOVE it.
-// 2. Set startsAt + the date/label fields, and the two graphics:
-//    poster (required) and logo (required — set null only until the
-//    artwork exists; cards then fall back to the title text).
-//    logoW / logoM crop the logo's transparent padding (width %, margins).
-// 3. Done. The soonest upcoming screening automatically becomes
-//    "Now Screening" on every page; anything whose date has passed
-//    is archived into Past Screenings automatically.
+// Events now live in Supabase and are managed at /admin — create or edit a
+// screening there and this page updates with no deploy. The list below is
+// two things at once:
+//   1. FALLBACK: shown if the database can't be reached.
+//   2. PRESENTATION OVERRIDES: when a database event has the same slug as an
+//      entry here, hand-tuned art fields (logo crop, badges, shortTitle,
+//      heroBadge) are taken from this list; dates/times/venue/details come
+//      from the database.
 // ============================================================
 
 export const events = [
@@ -115,11 +114,92 @@ export const events = [
   }
 ];
 
+// ---- Live data from Supabase (public read-only view) ---------------------
+// The view exposes only published/archived events and only guest-safe columns.
+const SUPABASE_URL = "https://nwnxoqrmqsjyznegykfc.supabase.co";
+const SUPABASE_KEY = "sb_publishable_FJGSI523nOCGZ6JuZSjBsg_1wnLTCma";
+const LA = "America/Los_Angeles";
+
+function fmtLA(iso, opts) {
+  return new Intl.DateTimeFormat("en-US", { timeZone: LA, ...opts }).format(new Date(iso));
+}
+
+function timeLA(iso) {
+  return fmtLA(iso, { hour: "numeric", minute: "2-digit" });
+}
+
+function mapRow(row, index, p) {
+  p = p || {};
+  const startT = timeLA(row.starts_at);
+  const endT = row.ends_at ? timeLA(row.ends_at) : "";
+  const doorsT = row.doors_at ? timeLA(row.doors_at) : startT;
+  const gateT = row.gate_closes_at ? timeLA(row.gate_closes_at) : "";
+  const venueName = row.venue_name || "";
+
+  return {
+    slug: row.slug,
+    title: row.title,
+    shortTitle: p.shortTitle || row.subtitle || row.title,
+    kicker: row.kicker || "",
+    desc: row.description || "",
+    poster: row.poster_url || p.poster || "",
+    logo: row.logo_url || p.logo || null,
+    logoW: p.logoW || "100%",
+    logoM: p.logoM || "0",
+    startsAt: row.starts_at,
+    mon: fmtLA(row.starts_at, { month: "short" }).toUpperCase(),
+    day: fmtLA(row.starts_at, { day: "numeric" }),
+    year: fmtLA(row.starts_at, { year: "numeric" }),
+    no: p.no || String(index + 1).padStart(3, "0"),
+    timeLabel: endT ? startT + " to " + endT : startT,
+    doorsLabel: gateT ? doorsT + " · gate closes " + gateT : doorsT,
+    dateLong: fmtLA(row.starts_at, { weekday: "long", month: "long", day: "numeric", year: "numeric" }),
+    dateLine: fmtLA(row.starts_at, { weekday: "long", month: "long", day: "numeric" }) + " · Doors at " + doorsT + " · Free with RSVP.",
+    barLabel: "RSVP · Free · " + fmtLA(row.starts_at, { weekday: "short", month: "short", day: "numeric" }),
+    venueShort: venueName,
+    venueLine: [venueName, row.venue_address].filter(Boolean).join(", "),
+    capacityLabel: row.capacity_standard + " seats + " + row.capacity_overflow + " overflow",
+    lateNote: p.lateNote || "If the gate is closed, text the host number in your ticket email.",
+    entryNote: row.entry_instructions || "",
+    hostNote: p.hostNote || "",
+    accessNote: row.accessibility_note || "",
+    heroBadge: p.heroBadge || (row.subtitle || "").toUpperCase(),
+    program: row.program || [],
+    cardBadge: p.cardBadge || { label: "SCREENING", bg: "#9d251a" },
+    archiveBadge: p.archiveBadge || null,
+    meta: startT + (venueName ? " · " + venueName : "")
+  };
+}
+
+let liveEventsPromise = null;
+
+export function loadEvents() {
+  if (!liveEventsPromise) {
+    liveEventsPromise = fetch(
+      SUPABASE_URL + "/rest/v1/public_events?select=*&order=starts_at.desc",
+      { headers: { apikey: SUPABASE_KEY, Authorization: "Bearer " + SUPABASE_KEY } }
+    )
+      .then((res) => (res.ok ? res.json() : Promise.reject(new Error("events fetch failed"))))
+      .then((rows) => {
+        if (!Array.isArray(rows) || !rows.length) return events;
+        const overrides = new Map(events.map((e) => [e.slug, e]));
+        const dbSlugs = new Set(rows.map((r) => r.slug));
+        const mapped = rows.map((row, i) => mapRow(row, i, overrides.get(row.slug)));
+        // Keep hand-written events the database doesn't know about (old history).
+        return mapped.concat(events.filter((e) => !dbSlugs.has(e.slug)));
+      })
+      .catch(() => events);
+  }
+  return liveEventsPromise;
+}
+
 // Soonest upcoming screening = current; everything already played = past.
-export function splitEvents(now = Date.now()) {
+// Async now: resolves from the database, falling back to the list above.
+export async function splitEvents(now = Date.now()) {
+  const all = await loadEvents();
   const t = (e) => new Date(e.startsAt).getTime();
   const grace = 6 * 3600 * 1000; // stays "current" until 6h after showtime
-  const future = events.filter((e) => t(e) + grace >= now).sort((a, b) => t(a) - t(b));
-  const past = events.filter((e) => t(e) + grace < now).sort((a, b) => t(b) - t(a));
+  const future = all.filter((e) => t(e) + grace >= now).sort((a, b) => t(a) - t(b));
+  const past = all.filter((e) => t(e) + grace < now).sort((a, b) => t(b) - t(a));
   return { current: future[0] || null, upcoming: future, past };
 }

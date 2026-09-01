@@ -1,4 +1,6 @@
 import { Download } from "lucide-react";
+import { AdminEventForm } from "@/components/admin-event-form";
+import { DuplicateEventButton } from "@/components/duplicate-event-button";
 import { InviteCodeForm } from "@/components/invite-code-form";
 import { RemoveReservationButton } from "@/components/remove-reservation-button";
 import { Badge } from "@/components/ui/badge";
@@ -45,10 +47,13 @@ export default async function AdminEventPage({
           <p className="text-sm font-black uppercase">Admin screening</p>
           <h1 className="font-display text-6xl leading-none">{event.title}</h1>
         </div>
-        <a className={buttonVariants({ variant: "secondary" })} href={`/api/admin/events/${id}/attendees`}>
-          <Download size={18} />
-          Export CSV
-        </a>
+        <div className="flex flex-wrap gap-3">
+          <DuplicateEventButton eventId={id} />
+          <a className={buttonVariants({ variant: "secondary" })} href={`/api/admin/events/${id}/attendees`}>
+            <Download size={18} />
+            Export CSV
+          </a>
+        </div>
       </div>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-5">
@@ -102,7 +107,10 @@ export default async function AdminEventPage({
             </table>
           </div>
         </section>
-        <InviteCodeForm eventId={id} />
+        <div className="grid gap-8">
+          <AdminEventForm event={event} />
+          <InviteCodeForm eventId={id} />
+        </div>
       </div>
     </div>
   );

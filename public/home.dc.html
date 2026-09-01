@@ -267,8 +267,7 @@ body::after{position:fixed;inset:0;z-index:71;pointer-events:none;content:"";opa
 class Component extends DCLogic {
   state = { cur: null, past: [], subscribeState: "idle", subscribeError: "" };
   componentDidMount() {
-    import("./events.js").then((m) => {
-      const { current, past } = m.splitEvents();
+    import("./events.js").then((m) => m.splitEvents()).then(({ current, past }) => {
       this.setState({
         cur: current,
         past: past.slice(0, 3).map((e, i) => ({

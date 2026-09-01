@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { sendTicketEmail } from "@/lib/email";
 import { createClient } from "@/lib/supabase/server";
-import { allocateSeatType, hashTicketToken, makeTicketToken, ticketQrDataUrl, ticketQrUrl } from "@/lib/tickets";
+import { hashTicketToken, makeTicketToken, ticketQrDataUrl, ticketQrUrl } from "@/lib/tickets";
 import { emailSiteUrl, formatEventDate } from "@/lib/utils";
 
 export async function POST(request: Request) {
@@ -10,7 +10,7 @@ export async function POST(request: Request) {
   const eventSlug = String(body.eventSlug || "").trim();
   const name = String(body.name || "").trim();
   const email = String(body.email || "").trim().toLowerCase();
-  const quantity = Math.max(1, Math.min(4, Number(body.quantity || 1)));
+  const quantity = Math.max(1, Math.min(10, Number(body.quantity || 1)));
   const inviteCode = String(body.inviteCode || "").trim();
 
   if ((!eventId && !eventSlug) || !name || !email) {
@@ -54,17 +54,47 @@ export async function POST(request: Request) {
     }
   }
 
-  const { data: counts } = await supabase.rpc("get_event_ticket_counts", { event_uuid: resolvedEventId });
-  const taken = Number(counts?.[0]?.confirmed_count || 0);
-  const standardCapacity = Number(event.capacity_standard || 100);
-  const overflowCapacity = Number(event.capacity_overflow || 20);
+  const now = Date.now();
+  if (event.rsvp_opens_at && now < new Date(event.rsvp_opens_at).getTime()) {
+    return NextResponse.json({ error: "RSVPs have not opened yet for this screening." }, { status: 403 });
+  }
+  if (event.rsvp_closes_at && now > new Date(event.rsvp_closes_at).getTime()) {
+    return NextResponse.json({ error: "RSVPs have closed for this screening." }, { status: 403 });
+  }
+
+  const maxPerRsvp = Math.max(1, Math.min(10, Number(event.max_tickets_per_rsvp || 4)));
+  if (quantity > maxPerRsvp) {
+    return NextResponse.json({ error: `This screening allows up to ${maxPerRsvp} tickets per RSVP.` }, { status: 400 });
+  }
+
+  const tokens = Array.from({ length: quantity }, () => makeTicketToken());
+  const tokenHashes = await Promise.all(tokens.map((token) => hashTicketToken(token)));
+  const cancelToken = makeTicketToken();
+
+  // Seat allocation happens inside the database with the event row locked, so
+  // simultaneous RSVPs cannot oversell the last seats.
+  const { data: created, error: reservationError } = await supabase.rpc("create_reservation_atomic", {
+    event_uuid: resolvedEventId,
+    p_guest_name: name,
+    p_guest_email: email,
+    p_quantity: quantity,
+    p_invite_code: inviteCode || "",
+    p_cancel_token_hash: await hashTicketToken(cancelToken),
+    p_token_hashes: tokenHashes
+  });
+
+  const reservationId = created?.[0]?.reservation_id as string | undefined;
+  const seatTypes = (created?.[0]?.seat_types as string[] | undefined) || [];
+
+  if (reservationError || !reservationId) {
+    return NextResponse.json({ error: "Could not create the reservation." }, { status: 500 });
+  }
+
   const generated = await Promise.all(
-    Array.from({ length: quantity }).map(async (_, index) => {
-      const seatType = allocateSeatType(taken + index, standardCapacity, overflowCapacity);
-      const token = makeTicketToken();
+    tokens.map(async (token, index) => {
+      const seatType = seatTypes[index] || "waitlist";
       return {
         token,
-        tokenHash: await hashTicketToken(token),
         seatType,
         qrDataUrl: seatType === "waitlist" ? "" : await ticketQrDataUrl(token),
         qrUrl: ticketQrUrl(token)
@@ -74,55 +104,6 @@ export async function POST(request: Request) {
   const reservationStatus = generated.every((ticket) => ticket.seatType === "waitlist")
     ? "waitlisted"
     : "confirmed";
-  const reservationId = crypto.randomUUID();
-  const cancelToken = makeTicketToken();
-
-  const { error: reservationError } = await supabase
-    .from("reservations")
-    .insert({
-      id: reservationId,
-      event_id: resolvedEventId,
-      guest_name: name,
-      guest_email: email,
-      quantity,
-      status: reservationStatus,
-      invite_code: inviteCode || null,
-      cancel_token_hash: await hashTicketToken(cancelToken)
-    });
-
-  if (reservationError) {
-    return NextResponse.json({ error: "Could not create the reservation." }, { status: 500 });
-  }
-
-  const ticketRows = generated.map((ticket) => ({
-    event_id: resolvedEventId,
-    reservation_id: reservationId,
-    token_hash: ticket.tokenHash,
-    seat_type: ticket.seatType,
-    status: ticket.seatType === "waitlist" ? "waitlisted" : "valid"
-  }));
-
-  const { error: ticketError } = await supabase.from("tickets").insert(ticketRows);
-
-  if (ticketError) {
-    return NextResponse.json({ error: "Could not create tickets." }, { status: 500 });
-  }
-
-  const waitlistRows = generated
-    .map((ticket, index) => ({ ticket, index }))
-    .filter(({ ticket }) => ticket.seatType === "waitlist")
-    .map(({ index }) => ({
-      event_id: resolvedEventId,
-      reservation_id: reservationId,
-      guest_name: name,
-      guest_email: email,
-      party_size: quantity,
-      position_hint: taken + index + 1
-    }));
-
-  if (waitlistRows.length) {
-    await supabase.from("waitlist_entries").insert(waitlistRows);
-  }
 
   if (inviteCode) {
     await supabase.rpc("increment_invite_code_use", {
