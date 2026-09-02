@@ -11,3 +11,4 @@ tmp-dev*.log
 public/logos past/
 public/uploads/pasted-*
 ._*
+output/
