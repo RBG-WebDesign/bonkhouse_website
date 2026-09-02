@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { sendTicketEmail } from "@/lib/email";
 import { createClient } from "@/lib/supabase/server";
 import { hashTicketToken, makeTicketToken, ticketQrDataUrl, ticketQrUrl } from "@/lib/tickets";
-import { emailSiteUrl, formatEventDate } from "@/lib/utils";
+import { emailSiteUrl, formatEventDate, formatEventTime } from "@/lib/utils";
 
 export async function POST(request: Request) {
   const body = await request.json();
@@ -62,7 +62,10 @@ export async function POST(request: Request) {
   if (event.rsvp_opens_at && now < new Date(event.rsvp_opens_at).getTime()) {
     return NextResponse.json({ error: "RSVPs have not opened yet for this screening." }, { status: 403 });
   }
-  if (event.rsvp_closes_at && now > new Date(event.rsvp_closes_at).getTime()) {
+  // No explicit close time means RSVPs close when the gate does (the database
+  // function enforces the same rule).
+  const closesAt = event.rsvp_closes_at || event.gate_closes_at;
+  if (closesAt && now > new Date(closesAt).getTime()) {
     return NextResponse.json({ error: "RSVPs have closed for this screening." }, { status: 403 });
   }
 
@@ -120,7 +123,8 @@ export async function POST(request: Request) {
     to: email,
     guestName: name,
     eventTitle: event.title,
-    eventDate: formatEventDate(event.starts_at),
+    eventDate: `${formatEventDate(event.starts_at)} · Doors ${formatEventTime(event.doors_at || event.starts_at)}`,
+    venue: [event.venues?.name, event.venues?.address].filter(Boolean).join(" · ") || "Sunday Afternoon Bonkhouse",
     cancelUrl: `${emailSiteUrl()}/api/rsvp/cancel?reservation=${reservationId}&token=${encodeURIComponent(cancelToken)}`,
     arrivalInstructions: event.entry_instructions || event.venues?.entry_instructions || "",
     confirmationCode: `BONK-${reservationId.slice(0, 8).toUpperCase()}`,

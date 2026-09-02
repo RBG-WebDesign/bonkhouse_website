@@ -1,40 +1,5 @@
-export type SeatType = "standard" | "overflow" | "waitlist";
-export type EventStatus = "draft" | "published" | "archived" | "cancelled";
-
-export type Venue = {
-  id: string;
-  name: string;
-  address: string;
-  neighborhood: string;
-  entryInstructions: string;
-};
-
-export type BonkhouseEvent = {
-  id: string;
-  slug: string;
-  title: string;
-  kicker: string;
-  description: string;
-  posterUrl: string | null;
-  startsAt: string;
-  endsAt?: string;
-  doorsAt: string;
-  gateClosesAt: string;
-  venue: Venue;
-  capacityStandard: number;
-  capacityOverflow: number;
-  maxTicketsPerRsvp: number;
-  rsvpOpensAt: string | null;
-  rsvpClosesAt: string | null;
-  subtitle: string;
-  logoUrl: string | null;
-  status: EventStatus;
-  isInviteOnly: boolean;
-  program: string[];
-  hostNote: string;
-  accessibilityNote: string;
-  textForEntry: string;
-};
+// Screening records live in Supabase (events table / public_events view);
+// see public/events.js for the shape the public site renders.
 
 export type Photo = {
   id: string;

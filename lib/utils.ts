@@ -1,12 +1,16 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
+// Screenings happen in Los Angeles; the server (Netlify) runs in UTC.
+const LA = "America/Los_Angeles";
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
 export function formatEventDate(value: string) {
   return new Intl.DateTimeFormat("en-US", {
+    timeZone: LA,
     weekday: "long",
     month: "long",
     day: "numeric",
@@ -16,17 +20,10 @@ export function formatEventDate(value: string) {
 
 export function formatEventTime(value: string) {
   return new Intl.DateTimeFormat("en-US", {
+    timeZone: LA,
     hour: "numeric",
     minute: "2-digit"
   }).format(new Date(value));
-}
-
-export function formatEventTimeRange(start: string, end?: string) {
-  if (!end) {
-    return formatEventTime(start);
-  }
-
-  return `${formatEventTime(start)} to ${formatEventTime(end)}`;
 }
 
 export function siteUrl() {

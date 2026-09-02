@@ -15,7 +15,7 @@ export default async function AdminEventPage({
   const { id } = await params;
   const { supabase } = await requireAdmin();
 
-  const { data: event } = await supabase.from("events").select("*").eq("id", id).single();
+  const { data: event } = await supabase.from("events").select("*, venues(name,address)").eq("id", id).single();
   const { data: attendees } = await supabase
     .from("reservations")
     .select("id,guest_name,guest_email,status,quantity,created_at,tickets(id,seat_type,status,checked_in_at)")

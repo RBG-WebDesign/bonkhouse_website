@@ -14,6 +14,8 @@
 
 # Serve the static design-canvas pages at the CDN edge; the Next server
 # function can't resolve public/ files through next.config rewrites.
+# Every screening, past or present, is rendered by the one event page from
+# its /events/<slug> URL — no per-movie rules needed.
 [[redirects]]
   from = "/"
   to = "/home.dc.html"
@@ -27,7 +29,7 @@
   force = true
 
 [[redirects]]
-  from = "/events/society-videodrome-double-feature"
-  to = "/society-videodrome-screening.dc.html"
+  from = "/events/*"
+  to = "/event.dc.html"
   status = 200
   force = true

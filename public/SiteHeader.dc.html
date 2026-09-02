@@ -34,16 +34,24 @@
   </div>
 </header>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:96},&quot;active&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;none&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;none&quot;,&quot;screenings&quot;,&quot;about&quot;],&quot;section&quot;:&quot;Header&quot;},&quot;ctaHref&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;/events/society-videodrome-double-feature&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Header&quot;},&quot;ctaLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;RSVP&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Header&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:96},&quot;active&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;none&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;none&quot;,&quot;screenings&quot;,&quot;about&quot;],&quot;section&quot;:&quot;Header&quot;},&quot;ctaHref&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Header&quot;},&quot;ctaLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Header&quot;}}">
+// The RSVP button follows the current screening. A page can still pin it
+// with cta-href / cta-label (the event page points it at its own form).
 class Component extends DCLogic {
+  state = { loaded: false, cur: null };
+  componentDidMount() {
+    import("/events.js").then((m) => m.splitEvents()).then(({ current }) => this.setState({ loaded: true, cur: current }));
+  }
   renderVals() {
     const active = this.props.active ?? "none";
     const c = (name) => (active === name ? "#ffd400" : "#fff");
+    const { cur, loaded } = this.state;
+    // Stay on "RSVP" until the data is in, so the button never flashes.
     return {
       screeningsColor: c("screenings"),
       aboutColor: c("about"),
-      ctaHref: this.props.ctaHref ?? "/events/society-videodrome-double-feature",
-      ctaLabel: this.props.ctaLabel ?? "RSVP"
+      ctaHref: this.props.ctaHref || (cur ? cur.href : loaded ? "/#list" : "/screenings"),
+      ctaLabel: this.props.ctaLabel || (cur || !loaded ? "RSVP" : "JOIN THE LIST")
     };
   }
 }

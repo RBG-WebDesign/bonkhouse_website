@@ -2,6 +2,8 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   allowedDevOrigins: ["127.0.0.1"],
+  // Mirrors the netlify.toml redirects so `npm run dev` serves the same
+  // static design-canvas pages. One event page handles every screening slug.
   async rewrites() {
     return {
       beforeFiles: [
@@ -14,8 +16,8 @@ const nextConfig: NextConfig = {
           destination: "/screenings.dc.html"
         },
         {
-          source: "/events/society-videodrome-double-feature",
-          destination: "/society-videodrome-screening.dc.html"
+          source: "/events/:slug",
+          destination: "/event.dc.html"
         }
       ],
       afterFiles: [],

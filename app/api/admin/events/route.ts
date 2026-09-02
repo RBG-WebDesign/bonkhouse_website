@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { isAdminRequest } from "@/lib/admin";
-import { eventPayloadToRow } from "@/lib/event-fields";
+import { eventPayloadToRow, resolveVenueId } from "@/lib/event-fields";
 
 export async function POST(request: Request) {
   const { ok, supabase } = await isAdminRequest();
@@ -16,15 +16,15 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: fieldError }, { status: 400 });
   }
 
-  const { data: venue } = await supabase
-    .from("venues")
-    .select("id")
-    .eq("name", String(body.venueName || "Gloria Kaufman Community Center"))
-    .maybeSingle();
+  const venueId = await resolveVenueId(
+    supabase,
+    body.venueName || "Glorya Kaufman Community Center",
+    body.venueAddress
+  );
 
   const { data, error } = await supabase
     .from("events")
-    .insert({ ...row, venue_id: venue?.id || null })
+    .insert({ ...row, venue_id: venueId })
     .select("id,title,status")
     .single();
 

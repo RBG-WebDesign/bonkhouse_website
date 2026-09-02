@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, Menu } from "lucide-react";
+import { getCurrentScreening } from "@/lib/data";
 import { publicAsset } from "@/lib/utils";
 
 const links = [
@@ -7,7 +8,12 @@ const links = [
   { href: "/about", label: "About" }
 ];
 
-export function SiteHeader() {
+// Header for the React pages (about, photos, merch, ticket, admin). The RSVP
+// button follows the current screening, exactly like the static pages' header.
+export async function SiteHeader() {
+  const current = await getCurrentScreening();
+  const rsvpHref = current ? `/events/${current.slug}` : "/screenings";
+
   return (
     <header className="grindhouse-header sticky top-0 z-50 border-b border-white/15 bg-black/90 backdrop-blur-xl">
       <div className="site-header-inner club-container flex min-h-20 items-center justify-between gap-4">
@@ -32,7 +38,7 @@ export function SiteHeader() {
           </nav>
           <Link
             className="site-header-join relative hidden h-12 items-center justify-center gap-2 rounded-[3px] lg:inline-flex border border-butter bg-butter px-6 font-bebas text-2xl uppercase tracking-wider leading-none text-black shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-8px_18px_rgba(83,51,0,0.14),0_8px_22px_rgba(0,0,0,0.32),0_0_26px_rgba(255,212,0,0.18)] transition hover:-translate-y-0.5 hover:bg-[#ffe15a]"
-            href="/events/society-videodrome-double-feature"
+            href={rsvpHref}
           >
             RSVP
             <ArrowRight size={16} strokeWidth={2.5} />
@@ -47,7 +53,7 @@ export function SiteHeader() {
                   {link.label}
                 </Link>
               ))}
-              <Link className="site-header-mobile-link site-header-mobile-rsvp" href="/events/society-videodrome-double-feature">
+              <Link className="site-header-mobile-link site-header-mobile-rsvp" href={rsvpHref}>
                 RSVP
               </Link>
             </div>

@@ -6,6 +6,7 @@ type TicketEmailInput = {
   guestName: string;
   eventTitle: string;
   eventDate: string;
+  venue: string;
   cancelUrl: string;
   tickets: Array<{
     label: string;
@@ -41,7 +42,7 @@ export async function sendTicketEmail(input: TicketEmailInput) {
         guestName: input.guestName,
         eventTitle: input.eventTitle,
         eventDate: input.eventDate,
-        venue: "Gloria Kaufman Community Center · Culver City, CA",
+        venue: input.venue,
         arrivalInstructions: input.arrivalInstructions,
         cancelUrl: input.cancelUrl,
         tickets: input.tickets,

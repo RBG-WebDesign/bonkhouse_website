@@ -28,7 +28,7 @@ export function EmailPreviewStudio({ initialVariant = "confirmed" }: { initialVa
       guestName: guestName.trim() || "Guest",
       eventTitle: sampleTitle,
       eventDate: "Sunday, October 18, 2026 · 1:00 PM",
-      venue: "Gloria Kaufman Community Center · Culver City, CA",
+      venue: "Glorya Kaufman Community Center · 10858 Culver Blvd, Culver City, CA",
       arrivalInstructions: "Enter through the side gate. The gate closes at 1:20 PM. If it is closed, text the host number included in your confirmation.",
       cancelUrl: "#cancel-preview",
       logoUrl: "/email-masthead.png",

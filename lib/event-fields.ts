@@ -1,6 +1,8 @@
 // Shared validation/mapping between the admin event form payload and the
 // events table row. Used by both the create and update API routes.
 
+import type { SupabaseClient } from "@supabase/supabase-js";
+
 const STATUSES = ["draft", "published", "archived", "cancelled"];
 
 export function eventPayloadToRow(body: any): { row?: Record<string, unknown>; error?: string } {
@@ -33,9 +35,11 @@ export function eventPayloadToRow(body: any): { row?: Record<string, unknown>; e
       title,
       slug,
       subtitle: String(body.subtitle || "").trim(),
+      badge: String(body.badge || "").trim(),
       kicker: String(body.kicker || "").trim(),
       description: String(body.description || "").trim(),
       poster_url: body.posterUrl || null,
+      poster_alt_url: body.posterAltUrl || null,
       logo_url: body.logoUrl || null,
       starts_at: isoOrNull(body.startsAt),
       ends_at: isoOrNull(body.endsAt),
@@ -57,6 +61,26 @@ export function eventPayloadToRow(body: any): { row?: Record<string, unknown>; e
       // configured elsewhere. New rows get the column defaults (free / 0).
     }
   };
+}
+
+// Venues are keyed by name. An unknown name creates the venue; an address,
+// when given, updates the stored one. Returns null when no name was supplied.
+export async function resolveVenueId(
+  supabase: Pick<SupabaseClient, "from">,
+  name: unknown,
+  address: unknown
+): Promise<string | null> {
+  const venueName = String(name || "").trim();
+  if (!venueName) return null;
+
+  const venueAddress = String(address || "").trim();
+  const { data } = await supabase
+    .from("venues")
+    .upsert({ name: venueName, ...(venueAddress ? { address: venueAddress } : {}) }, { onConflict: "name" })
+    .select("id")
+    .single();
+
+  return data?.id ?? null;
 }
 
 function clampInt(value: unknown, min: number, max: number, fallback: number) {

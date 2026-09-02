@@ -9,10 +9,13 @@ type EventRecord = {
   slug: string;
   title: string;
   subtitle?: string | null;
+  badge?: string | null;
   kicker?: string | null;
   description?: string | null;
   poster_url?: string | null;
+  poster_alt_url?: string | null;
   logo_url?: string | null;
+  venues?: { name?: string | null; address?: string | null } | null;
   starts_at?: string | null;
   ends_at?: string | null;
   doors_at?: string | null;
@@ -228,10 +231,14 @@ export function AdminEventForm({ event }: { event?: EventRecord }) {
       title: value("title"),
       slug: value("slug"),
       subtitle: value("subtitle"),
+      badge: value("badge"),
       kicker: value("kicker"),
       description: value("description"),
       posterUrl: value("posterUrl"),
+      posterAltUrl: value("posterAltUrl"),
       logoUrl: value("logoUrl"),
+      venueName: value("venueName"),
+      venueAddress: value("venueAddress"),
       startsAt: dt("starts"),
       endsAt: dt("ends"),
       doorsAt: dt("doors"),
@@ -285,7 +292,8 @@ export function AdminEventForm({ event }: { event?: EventRecord }) {
           placeholder="Title"
           required
         />
-        <input className={field} defaultValue={event?.subtitle || ""} name="subtitle" placeholder="Subtitle (optional)" />
+        <input className={field} defaultValue={event?.subtitle || ""} name="subtitle" placeholder="Short title for the ticket, e.g. SOCIETY + VIDEODROME (optional)" />
+        <input className={field} defaultValue={event?.badge || ""} name="badge" placeholder="Ticket tag, e.g. BODY HORROR DOUBLE FEATURE (optional)" />
         <label className="grid gap-1 text-xs font-black uppercase">
           Web address (bonkhouse.com/events/…)
           <input
@@ -301,9 +309,28 @@ export function AdminEventForm({ event }: { event?: EventRecord }) {
         <input className={field} defaultValue={event?.kicker || ""} name="kicker" placeholder="One-line teaser shown under the title" />
         <textarea className={`${area} min-h-24`} defaultValue={event?.description || ""} name="description" placeholder="Description" />
 
-        <div className="grid gap-3 sm:grid-cols-2">
+        <SectionHeading hint="Poster fills the homepage hero and event page; the second poster, if set, alternates with it. The logo sits on the ticket above the short title — upload a trimmed transparent PNG." title="Artwork" />
+        <div className="grid gap-3 sm:grid-cols-3">
           <ImageField initialUrl={event?.poster_url} label="Poster" name="posterUrl" />
+          <ImageField initialUrl={event?.poster_alt_url} label="Second poster (optional)" name="posterAltUrl" />
           <ImageField initialUrl={event?.logo_url} label="Event logo (optional)" name="logoUrl" />
+        </div>
+
+        <SectionHeading hint="Shown on the site and in ticket emails. A new name creates a new venue." title="Venue" />
+        <div className="grid gap-3 sm:grid-cols-2">
+          <input
+            className={field}
+            defaultValue={event ? event.venues?.name || "" : "Glorya Kaufman Community Center"}
+            name="venueName"
+            placeholder="Venue name"
+            required
+          />
+          <input
+            className={field}
+            defaultValue={event ? event.venues?.address || "" : "10858 Culver Blvd, Culver City, CA"}
+            name="venueAddress"
+            placeholder="Address"
+          />
         </div>
 
         <SectionHeading hint="All times are Los Angeles time." title="Schedule" />
@@ -314,7 +341,7 @@ export function AdminEventForm({ event }: { event?: EventRecord }) {
           <DateTimeField initialIso={event?.gate_closes_at} label="Gate closes" namePrefix="gateCloses" />
         </div>
 
-        <SectionHeading hint="Leave blank to keep RSVPs open until showtime." title="RSVP window" />
+        <SectionHeading hint="Leave blank to keep RSVPs open until the gate closes." title="RSVP window" />
         <div className="grid gap-3 sm:grid-cols-2">
           <DateTimeField initialIso={event?.rsvp_opens_at} label="RSVPs open" namePrefix="rsvpOpens" />
           <DateTimeField initialIso={event?.rsvp_closes_at} label="RSVPs close" namePrefix="rsvpCloses" />
@@ -357,13 +384,16 @@ export function AdminEventForm({ event }: { event?: EventRecord }) {
         <textarea className={`${area} min-h-16`} defaultValue={event?.accessibility_note || ""} name="accessibilityNote" placeholder="Accessibility note (optional)" />
         <textarea className={`${area} min-h-16`} defaultValue={event?.admin_notes || ""} name="adminNotes" placeholder="Private team notes (never shown to guests)" />
 
-        <SectionHeading hint="Only published screenings appear on the site and take RSVPs." title="Visibility" />
+        <SectionHeading
+          hint="The soonest published screening is the current one everywhere on the site. Six hours after showtime it moves to Past Screenings on its own."
+          title="Visibility"
+        />
         <label className="grid gap-1 text-xs font-black uppercase">
           Status
           <select className={`${field} normal-case`} defaultValue={event?.status || "draft"} name="status">
             <option value="draft">Draft — hidden from the public site</option>
-            <option value="published">Published — live and taking RSVPs</option>
-            <option value="cancelled">Cancelled — visible to admins only, RSVPs closed</option>
+            <option value="published">Published — live on the site, taking RSVPs during the RSVP window</option>
+            <option value="cancelled">Cancelled — hidden from the public site, RSVPs closed</option>
             <option value="archived">Archived — shown as a past screening</option>
           </select>
         </label>

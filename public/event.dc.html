@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<base href="/">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Covered+By+Your+Grace&amp;family=Special+Elite&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;min-height:100vh;overflow-x:hidden;color:#f7f4ea;font-family:"Trebuchet MS",Verdana,sans-serif;background:radial-gradient(circle at 65% 12%,rgba(255,212,0,.075),transparent 24rem),radial-gradient(circle at 18% 20%,rgba(129,39,24,.11),transparent 18rem),linear-gradient(180deg,#050403 0%,#090705 48%,#000 100%)}
+*{box-sizing:border-box}
+a{color:inherit;text-decoration:none}
+a:hover{color:#ffd400}
+.poster-cycle{position:relative;display:block;width:100%;aspect-ratio:2/3;overflow:hidden;background:#050505}
+.poster-cycle img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;user-select:none}
+.poster-cycle img:first-child:not(:last-child){animation:poster-cycle-first 10s ease-in-out infinite}
+.poster-cycle img:last-child:not(:first-child){opacity:0;animation:poster-cycle-second 10s ease-in-out infinite}
+@keyframes poster-cycle-first{0%,42%,100%{opacity:1}50%,92%{opacity:0}}
+@keyframes poster-cycle-second{0%,42%,100%{opacity:0}50%,92%{opacity:1}}
+@media (prefers-reduced-motion:reduce){.poster-cycle img{animation:none!important}.poster-cycle img:last-child:not(:first-child){display:none}}
+body::after{position:fixed;inset:0;z-index:71;pointer-events:none;content:"";opacity:.26;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.92' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.42'/%3E%3C/svg%3E"),radial-gradient(ellipse at center,transparent 48%,rgba(0,0,0,.45) 100%);mix-blend-mode:overlay}
+@media (max-width:899px){[data-m="nav"]{display:none!important}}
+@media (max-width:767px){[data-m="hpad"]{padding:0 16px!important}[data-m="grid"]{grid-template-columns:minmax(0,1fr)!important}[data-m="stack"]{flex-direction:column!important}[data-m="stack"] > *{width:100%}[data-m="fullbtn"] > a{flex:1 1 100%}[data-m="ticketmeta"]{flex-direction:column!important;align-items:flex-start!important;gap:6px!important}[data-m="ticketmeta"] > span[aria-hidden]{display:none!important}[data-m="secpad"]{padding-left:16px!important;padding-right:16px!important}[data-m="secpad"] h1{font-size:46px!important}[data-gap="1"]{gap:40px!important}[data-m="posterbox"]{position:static!important}[data-m="posterbox"] .poster-cycle,[data-m="posterbox"] .poster-blank{max-width:260px!important}[data-m="secpad"]{padding-top:28px!important;padding-bottom:150px!important}[data-m="rsvpbar"]{display:flex!important}}
+</style>
+</helmet>
+
+<div style="background:#000;color:#f7f4ea">
+
+<dc-import name="SiteHeader" active="screenings" cta-href="{{ headerHref }}" cta-label="{{ headerLabel }}" style="position:sticky;top:0;z-index:50;display:block" hint-size="100%,81px"></dc-import>
+
+<main data-m="secpad" style="max-width:1280px;margin:0 auto;padding:56px 32px 96px">
+
+  <sc-if value="{{ notFound }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width:40rem">
+      <h1 style="margin:0;font-family:'Bebas Neue',Impact,sans-serif;font-size:64px;font-weight:400;line-height:.95;text-transform:uppercase;color:#fff">Screening not found</h1>
+      <p style="margin:16px 0 0;font-size:18px;line-height:1.75;color:rgba(255,255,255,.7)">That link does not match any Bonkhouse screening. It may not be announced yet, or the address changed.</p>
+      <a href="/screenings" style="display:inline-flex;align-items:center;gap:8px;margin-top:24px;height:56px;padding:0 32px;border:1px solid #ffd400;border-radius:3px;background:#ffd400;color:#000;font-family:'Bebas Neue',Impact,sans-serif;font-size:24px;letter-spacing:.05em;text-transform:uppercase" style-hover="background:#ffe15a">SEE WHAT'S SCREENING</a>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ found }}" hint-placeholder-val="{{ true }}">
+  <div data-m="grid" data-gap="1" style="display:grid;grid-template-columns:.92fr 1.08fr;gap:56px;align-items:start">
+    <div data-m="posterbox" style="position:sticky;top:112px;min-width:0">
+      <sc-if value="{{ hasPoster }}" hint-placeholder-val="{{ true }}">
+        <div class="poster-cycle" style="max-width:460px;margin:0 auto;transform:rotate(-1.5deg);box-shadow:0 25px 50px -12px rgba(0,0,0,.75)">
+          <img alt="{{ title }} poster" src="{{ poster }}">
+          <sc-if value="{{ hasPosterAlt }}" hint-placeholder-val="{{ true }}">
+            <img alt="{{ title }} poster" src="{{ posterAlt }}">
+          </sc-if>
+        </div>
+      </sc-if>
+      <sc-if value="{{ noPoster }}" hint-placeholder-val="{{ false }}">
+        <div class="poster-blank" style="display:grid;place-items:center;max-width:460px;margin:0 auto;aspect-ratio:2/3;padding:32px;border:1px dashed rgba(255,212,0,.5);background:#050505;transform:rotate(-1.5deg);text-align:center;font-family:'Bebas Neue',Impact,sans-serif;font-size:40px;line-height:.95;letter-spacing:.03em;text-transform:uppercase;color:rgba(247,244,234,.5)">{{ title }}</div>
+      </sc-if>
+    </div>
+
+    <div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">
+        <span style="display:inline-flex;align-items:center;padding:4px 12px;border:1px solid rgba(255,212,0,.6);border-radius:2px;font-family:'Special Elite',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#ffd400">{{ rsvpLabel }}</span>
+        <span style="display:inline-flex;align-items:center;padding:4px 12px;border:1px solid rgba(255,255,255,.25);border-radius:2px;font-family:'Special Elite',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7)">{{ capacityLabel }}</span>
+        <span style="display:inline-flex;align-items:center;padding:4px 12px;border:1px solid rgba(255,255,255,.25);border-radius:2px;font-family:'Special Elite',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7)">Free</span>
+      </div>
+      <h1 style="margin:20px 0 0;font-family:'Bebas Neue',Impact,sans-serif;font-size:64px;font-weight:400;line-height:.95;letter-spacing:.01em;text-transform:uppercase;color:#fff;text-wrap:balance">{{ title }}</h1>
+      <sc-if value="{{ hasKicker }}" hint-placeholder-val="{{ true }}">
+        <p style="margin:16px 0 0;font-family:'Special Elite',monospace;font-size:16px;line-height:1.6;color:#ffd400">{{ kicker }}</p>
+      </sc-if>
+      <sc-if value="{{ hasDesc }}" hint-placeholder-val="{{ true }}">
+        <p style="margin:16px 0 0;font-size:18px;line-height:1.75;color:rgba(255,255,255,.7)">{{ desc }}</p>
+      </sc-if>
+
+      <div style="display:grid;gap:12px;margin-top:32px;padding:24px;border:1px solid rgba(255,255,255,.15);border-radius:3px;background:rgba(255,255,255,.03)">
+        <div data-m="grid" style="display:grid;grid-template-columns:144px 1fr;gap:8px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.12)"><span style="font-size:13px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#ffd400">Date</span><span style="font-weight:700;color:rgba(255,255,255,.78)">{{ dateLong }}</span></div>
+        <div data-m="grid" style="display:grid;grid-template-columns:144px 1fr;gap:8px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.12)"><span style="font-size:13px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#ffd400">Doors</span><span style="font-weight:700;color:rgba(255,255,255,.78)">{{ doorsLabel }}</span></div>
+        <div data-m="grid" style="display:grid;grid-template-columns:144px 1fr;gap:8px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.12)"><span style="font-size:13px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#ffd400">Screening</span><span style="font-weight:700;color:rgba(255,255,255,.78)">{{ timeLabel }}</span></div>
+        <div data-m="grid" style="display:grid;grid-template-columns:144px 1fr;gap:8px"><span style="font-size:13px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#ffd400">Venue</span><span style="font-weight:700;color:rgba(255,255,255,.78)">{{ venueLine }}</span></div>
+        <sc-if value="{{ isUpcoming }}" hint-placeholder-val="{{ true }}">
+          <div data-m="grid" style="display:grid;grid-template-columns:144px 1fr;gap:8px;padding-top:12px;border-top:1px solid rgba(255,255,255,.12)"><span style="font-size:13px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#ffd400">Late arrival</span><span style="font-weight:700;color:rgba(255,255,255,.78)">If the gate is closed, text the host number in your ticket email.</span></div>
+        </sc-if>
+      </div>
+
+      <sc-if value="{{ hasProgram }}" hint-placeholder-val="{{ true }}">
+        <section style="margin-top:32px;padding:24px;border:1px solid rgba(255,212,0,.6);background:#000">
+          <h2 style="margin:0;font-family:'Bebas Neue',Impact,sans-serif;font-size:36px;font-weight:400;letter-spacing:.03em;text-transform:uppercase;color:#fff">Program</h2>
+          <ol style="display:grid;gap:10px;margin:16px 0 0;padding:0;list-style:none">
+            <sc-for list="{{ program }}" as="item" hint-placeholder-count="4">
+              <li style="padding:12px 16px;border:1px solid rgba(255,255,255,.18);border-radius:3px;background:rgba(255,255,255,.04);font-weight:700;color:rgba(255,255,255,.78)">{{ item.n }}. {{ item.name }}</li>
+            </sc-for>
+          </ol>
+        </section>
+      </sc-if>
+
+      <section id="rsvp" style="position:relative;margin-top:32px;padding:24px;border:1px solid rgba(255,212,0,.8);background:#000;box-shadow:0 0 30px rgba(255,212,0,.08)">
+        <div style="position:absolute;left:-1px;top:12px;height:80px;border-left:2px dashed rgba(255,212,0,.8)"></div>
+        <div style="position:absolute;right:-1px;bottom:12px;height:80px;border-right:2px dashed rgba(255,212,0,.8)"></div>
+
+        <sc-if value="{{ showForm }}" hint-placeholder-val="{{ true }}">
+          <form onSubmit="{{ submit }}">
+            <h2 style="margin:0;font-family:'Bebas Neue',Impact,sans-serif;font-size:40px;font-weight:400;letter-spacing:.03em;text-transform:uppercase;color:#fff">{{ formTitle }}</h2>
+            <p style="margin:8px 0 0;font-size:14px;line-height:1.7;color:rgba(255,255,255,.66)">{{ rsvpIntro }}</p>
+            <div style="display:grid;gap:12px;margin-top:20px">
+              <input name="attendee" placeholder="Name" required="" style="border:1px solid rgba(255,255,255,.2);border-radius:6px;background:#000;padding:12px 16px;font-size:16px;color:#fff">
+              <input name="email" placeholder="Email" required="" type="email" style="border:1px solid rgba(255,255,255,.2);border-radius:6px;background:#000;padding:12px 16px;font-size:16px;color:#fff">
+              <div data-m="grid" style="display:grid;grid-template-columns:128px 1fr;gap:12px">
+                <select name="quantity" style="border:1px solid rgba(255,255,255,.2);border-radius:6px;background:#000;padding:12px 16px;font-size:16px;color:#fff">{{ qtyOptions }}</select>
+                <input name="invite" placeholder="{{ invitePlaceholder }}" style="min-width:0;border:1px solid rgba(255,255,255,.2);border-radius:6px;background:#000;padding:12px 16px;font-size:16px;color:#fff">
+              </div>
+            </div>
+            <sc-if value="{{ hasError }}" hint-placeholder-val="{{ false }}">
+              <p role="alert" style="margin:16px 0 0;padding:10px 12px;border:1px solid rgba(255,106,77,.55);border-radius:3px;background:rgba(157,37,26,.2);font-size:14px;font-weight:700;color:#ff9c88">{{ error }}</p>
+            </sc-if>
+            <button type="submit" disabled="{{ submitting }}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:56px;margin-top:20px;padding:0 40px;border:1px solid #ffd400;border-radius:3px;background:#ffd400;color:#000;font-family:'Bebas Neue',Impact,sans-serif;font-size:24px;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 8px 22px rgba(0,0,0,.32),0 0 26px rgba(255,212,0,.18)" style-hover="background:#ffe15a;transform:translateY(-2px)">{{ submitLabel }}
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+            </button>
+          </form>
+        </sc-if>
+
+        <sc-if value="{{ showClosed }}" hint-placeholder-val="{{ false }}">
+          <div>
+            <h2 style="margin:0;font-family:'Bebas Neue',Impact,sans-serif;font-size:40px;font-weight:400;letter-spacing:.03em;text-transform:uppercase;color:#fff">{{ rsvpLabel }}</h2>
+            <p style="margin:8px 0 0;font-size:14px;line-height:1.7;color:rgba(255,255,255,.66)">{{ rsvpNote }}</p>
+            <sc-if value="{{ hasNext }}" hint-placeholder-val="{{ false }}">
+              <a href="{{ nextHref }}" style="display:inline-flex;align-items:center;gap:8px;margin-top:16px;font-family:'Special Elite',monospace;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd400;text-decoration:underline">See the next screening: {{ nextTitle }}</a>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ confirmed }}" hint-placeholder-val="{{ false }}">
+          <div>
+            <div style="display:flex;align-items:center;gap:12px">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ffd400" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9V7a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v2a2 2 0 0 0 0 6v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-6z"></path><path d="M9 9l2 2 4-4" transform="translate(1,2)"></path></svg>
+              <div>
+                <p style="margin:0;font-family:'Bebas Neue',Impact,sans-serif;font-size:36px;line-height:1;text-transform:uppercase;color:#fff">{{ resultTitle }}</p>
+                <p style="margin:4px 0 0;font-family:'Special Elite',monospace;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#ffd400">Reservation {{ resId }}</p>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px">
+              <sc-for list="{{ tickets }}" as="t" hint-placeholder-count="1">
+                <div style="display:flex;gap:14px;align-items:center;padding:16px;border:1px solid rgba(255,255,255,.2);border-radius:6px;background:#000">
+                  <sc-if value="{{ t.hasQr }}" hint-placeholder-val="{{ true }}">
+                    <img alt="{{ t.label }} QR code" src="{{ t.qr }}" style="display:block;flex:none;width:88px;height:88px;border:4px solid #fff;background:#fff">
+                  </sc-if>
+                  <sc-if value="{{ t.noQr }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:grid;place-items:center;flex:none;width:88px;height:88px;border:1px dashed rgba(255,212,0,.7);font-family:'Special Elite',monospace;font-size:10px;font-weight:700;color:#ffd400">WAITLIST</div>
+                  </sc-if>
+                  <div>
+                    <p style="margin:0;font-weight:900;color:#fff">{{ t.label }}</p>
+                    <p style="margin:4px 0 0;font-family:'Special Elite',monospace;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd400">{{ t.seat }}</p>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+            <p style="margin:16px 0 0;font-size:14px;line-height:1.7;color:rgba(255,255,255,.62)">{{ resultNote }}</p>
+            <button onClick="{{ reset }}" style="margin-top:12px;padding:0;border:0;background:none;font-family:'Special Elite',monospace;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.5);cursor:pointer;text-decoration:underline">RSVP for someone else</button>
+          </div>
+        </sc-if>
+      </section>
+
+      <sc-if value="{{ showArrival }}" hint-placeholder-val="{{ true }}">
+        <div style="margin-top:32px;padding:24px;border:1px solid rgba(255,255,255,.15);border-radius:3px;background:rgba(255,255,255,.03)">
+          <h2 style="margin:0;font-family:'Bebas Neue',Impact,sans-serif;font-size:30px;font-weight:400;letter-spacing:.03em;text-transform:uppercase;color:#fff">Arrival notes</h2>
+          <p style="margin:12px 0 0;font-size:15px;line-height:1.75;color:rgba(255,255,255,.7)">{{ entryNote }}</p>
+          <sc-if value="{{ hasAccessNote }}" hint-placeholder-val="{{ true }}">
+            <p style="margin:12px 0 0;font-size:14px;font-weight:700;color:#ffd400">{{ accessNote }}</p>
+          </sc-if>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+  </sc-if>
+</main>
+
+<sc-if value="{{ showBar }}" hint-placeholder-val="{{ true }}">
+  <a data-m="rsvpbar" href="#rsvp" style="position:fixed;left:12px;right:12px;bottom:12px;z-index:60;display:none;align-items:center;justify-content:center;gap:10px;height:60px;border:1px solid #ffd400;border-radius:3px;background:#ffd400;color:#000;font-family:'Bebas Neue',Impact,sans-serif;font-size:24px;letter-spacing:.05em;text-transform:uppercase;box-shadow:0 8px 22px rgba(0,0,0,.5),0 0 26px rgba(255,212,0,.25)">{{ barLabel }}
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+  </a>
+</sc-if>
+
+<footer style="border-top:1px solid rgba(255,255,255,.15);background:#000">
+  <div style="max-width:1280px;margin:0 auto;padding:16px 32px;text-align:center;font-size:12px;color:rgba(255,255,255,.4)">(c) 2026 Sunday Afternoon Bonkhouse. All rights reserved. &middot; <a href="/" style="color:rgba(255,255,255,.6)">Back to the clubhouse</a></div>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+// One page for every screening, past or present. The slug comes from the
+// URL (/events/<slug>) and the record from /events.js (Supabase).
+class Component extends DCLogic {
+  state = { loaded: false, ev: null, next: null, result: null, submitting: false, error: "" };
+  componentDidMount() {
+    const slug = decodeURIComponent(location.pathname.replace(/\/+$/, "").split("/").pop() || "");
+    import("/events.js").then((m) => Promise.all([m.getEvent(slug), m.splitEvents()])).then(([ev, { current }]) => {
+      if (ev) document.title = ev.title + " · Sunday Afternoon Bonkhouse";
+      this.setState({ loaded: true, ev, next: current && (!ev || current.slug !== ev.slug) ? current : null });
+    });
+  }
+  renderVals() {
+    const ev = this.state.ev;
+    const e = ev || {};
+    const rsvp = e.rsvp || { open: false, label: "", note: "" };
+    const r = this.state.result;
+    const upcomingButClosed = !!ev && ev.isUpcoming && !rsvp.open;
+    const intro = ev
+      ? "First " + e.capacityStandard + " RSVPs get standard seats. The next " + e.capacityOverflow + " are confirmed overflow, then the waitlist starts." + (e.soldOut ? " " + rsvp.note : "")
+      : "";
+    return {
+      found: !!ev,
+      notFound: this.state.loaded && !ev,
+      headerHref: ev && ev.isUpcoming ? "#rsvp" : "",
+      headerLabel: ev && ev.isUpcoming ? (rsvp.open ? "RSVP" : rsvp.label) : "",
+      title: e.title ?? "",
+      hasPoster: !!e.poster,
+      poster: e.poster ?? "",
+      hasPosterAlt: !!e.posterAlt,
+      posterAlt: e.posterAlt ?? "",
+      noPoster: !!ev && !e.poster,
+      hasKicker: !!e.kicker,
+      kicker: e.kicker ?? "",
+      hasDesc: !!e.desc,
+      desc: e.desc ?? "",
+      rsvpLabel: rsvp.label,
+      rsvpNote: rsvp.note,
+      capacityLabel: e.capacityLabel ?? "",
+      dateLong: e.dateLong ?? "",
+      doorsLabel: e.doorsLabel ?? "",
+      timeLabel: e.timeLabel ?? "",
+      venueLine: e.venueLine ?? "",
+      isUpcoming: !!e.isUpcoming,
+      hasProgram: !!e.hasProgram,
+      program: e.program ?? [],
+      showForm: !!ev && rsvp.open && !r,
+      showClosed: !!ev && !rsvp.open,
+      showArrival: !!ev && ev.isUpcoming && !!e.entryNote,
+      entryNote: e.entryNote ?? "",
+      hasAccessNote: !!e.accessNote,
+      accessNote: e.accessNote ?? "",
+      showBar: !!ev && rsvp.open && !r,
+      barLabel: e.barLabel ?? "",
+      hasNext: !!this.state.next,
+      nextHref: this.state.next ? this.state.next.href : "",
+      nextTitle: this.state.next ? this.state.next.title : "",
+      formTitle: e.soldOut ? "Join the waitlist" : "Free RSVP",
+      rsvpIntro: intro,
+      invitePlaceholder: e.inviteOnly ? "Invite code (required)" : "Invite code, optional",
+      qtyOptions: Array.from({ length: e.maxTickets || 4 }, (_, i) =>
+        React.createElement("option", { key: i + 1, value: i + 1 }, (i + 1) + (i ? " seats" : " seat"))
+      ),
+      confirmed: !!r,
+      resultTitle: r && r.waitlisted ? "You're on the waitlist" : "Tickets confirmed",
+      resultNote: r && r.waitlisted
+        ? "No seat yet. If one opens up, we email you a fresh confirmation with a real ticket."
+        : "Your reservation is saved. Save your QR tickets and show them at the gate.",
+      resId: r ? r.id : "",
+      tickets: r ? r.tickets : [],
+      submitting: this.state.submitting,
+      submitLabel: this.state.submitting ? "Saving RSVP..." : e.soldOut ? "Join the waitlist" : "Reserve tickets",
+      error: this.state.error,
+      hasError: !!this.state.error,
+      submit: async (ev2) => {
+        ev2.preventDefault();
+        if (this.state.submitting || !ev) return;
+        const f = ev2.target;
+        const name = f.elements.namedItem("attendee").value.trim();
+        const email = f.elements.namedItem("email").value.trim();
+        if (!name || !email) return;
+        const qty = Number(f.elements.namedItem("quantity").value || 1);
+        const inviteCode = f.elements.namedItem("invite").value.trim();
+        this.setState({ submitting: true, error: "" });
+        try {
+          const response = await fetch("/api/rsvp", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ eventSlug: ev.slug, name, email, quantity: qty, inviteCode })
+          });
+          const payload = await response.json();
+          if (!response.ok) throw new Error(payload.error || "Could not save your RSVP.");
+          const tickets = (payload.tickets || []).map((ticket, index) => ({
+            label: qty > 1 ? name + " — Ticket " + (index + 1) : name,
+            seat: String(ticket.seatType || payload.status || "confirmed").replace(/^./, (c) => c.toUpperCase()) + " seat",
+            qr: ticket.qrDataUrl || "",
+            hasQr: !!ticket.qrDataUrl,
+            noQr: !ticket.qrDataUrl
+          }));
+          this.setState({ result: { id: payload.reservationId, tickets, waitlisted: payload.status === "waitlisted" }, submitting: false, error: "" });
+        } catch (error) {
+          this.setState({ submitting: false, error: error.message || "Could not save your RSVP." });
+        }
+      },
+      reset: () => this.setState({ result: null, submitting: false, error: "" })
+    };
+  }
+}
+</script>
+</body>
+</html>

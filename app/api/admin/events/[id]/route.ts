@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { isAdminRequest } from "@/lib/admin";
-import { eventPayloadToRow } from "@/lib/event-fields";
+import { eventPayloadToRow, resolveVenueId } from "@/lib/event-fields";
 
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const { ok, supabase } = await isAdminRequest();
@@ -17,9 +17,12 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     return NextResponse.json({ error: fieldError }, { status: 400 });
   }
 
+  // Only touch the venue when the form sent one, so older clients can't blank it.
+  const venue = body.venueName ? { venue_id: await resolveVenueId(supabase, body.venueName, body.venueAddress) } : {};
+
   const { data, error } = await supabase
     .from("events")
-    .update({ ...row, updated_at: new Date().toISOString() })
+    .update({ ...row, ...venue, updated_at: new Date().toISOString() })
     .eq("id", id)
     .select("id,title,status")
     .single();

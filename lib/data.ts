@@ -1,28 +1,26 @@
-import { sampleEvents, sampleMerch, samplePhotos } from "@/lib/sample-data";
-import type { BonkhouseEvent, MerchProduct, Photo } from "@/types/bonkhouse";
+import { sampleMerch, samplePhotos } from "@/lib/sample-data";
+import type { MerchProduct, Photo } from "@/types/bonkhouse";
 
-export async function getEvents() {
+// Screening data for the public site lives in Supabase (events table, read
+// through the public_events view). The static pages read it client-side via
+// public/events.js; the one server-side consumer is the React header's RSVP
+// button, which asks the view for the current screening.
+export async function getCurrentScreening(): Promise<{ slug: string; title: string } | null> {
+  const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+  if (!base || !key) return null;
+
   try {
-    const { createClient } = await import("@/lib/supabase/server");
-    const supabase = await createClient();
-    const { data, error } = await supabase
-      .from("events")
-      .select("*, venues(*)")
-      .order("starts_at", { ascending: true });
-
-    if (error || !data?.length) {
-      return sampleEvents;
-    }
-
-    return data.map(mapEvent);
+    const response = await fetch(
+      `${base}/rest/v1/public_events?select=slug,title&is_upcoming=eq.true&order=starts_at.asc&limit=1`,
+      { headers: { apikey: key, Authorization: `Bearer ${key}` }, next: { revalidate: 60 } }
+    );
+    if (!response.ok) return null;
+    const rows = (await response.json()) as Array<{ slug: string; title: string }>;
+    return rows[0] || null;
   } catch {
-    return sampleEvents;
+    return null;
   }
-}
-
-export async function getEventBySlug(slug: string) {
-  const events = await getEvents();
-  return events.find((event) => event.slug === slug) || null;
 }
 
 export async function getPhotos(): Promise<Photo[]> {
@@ -101,41 +99,4 @@ function sortPhotos(photos: Photo[]) {
 
       return new Date(b.shotAt).getTime() - new Date(a.shotAt).getTime();
     });
-}
-
-function mapEvent(row: any): BonkhouseEvent {
-  const venue = row.venues || {};
-
-  return {
-    id: row.id,
-    slug: row.slug,
-    title: row.title,
-    kicker: row.kicker || "",
-    description: row.description || "",
-    posterUrl: row.poster_url,
-    startsAt: row.starts_at,
-    endsAt: row.ends_at || undefined,
-    doorsAt: row.doors_at,
-    gateClosesAt: row.gate_closes_at,
-    venue: {
-      id: venue.id || "",
-      name: venue.name || "Gloria Kaufman Community Center",
-      address: venue.address || "Culver City, CA",
-      neighborhood: venue.neighborhood || "Culver City",
-      entryInstructions: venue.entry_instructions || row.entry_instructions || ""
-    },
-    capacityStandard: row.capacity_standard || 100,
-    capacityOverflow: row.capacity_overflow || 20,
-    maxTicketsPerRsvp: row.max_tickets_per_rsvp || 4,
-    rsvpOpensAt: row.rsvp_opens_at || null,
-    rsvpClosesAt: row.rsvp_closes_at || null,
-    subtitle: row.subtitle || "",
-    logoUrl: row.logo_url || null,
-    status: row.status,
-    isInviteOnly: row.is_invite_only || false,
-    program: row.program || [],
-    hostNote: row.host_note || "",
-    accessibilityNote: row.accessibility_note || "",
-    textForEntry: row.text_for_entry || ""
-  };
 }
