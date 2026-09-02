@@ -47,6 +47,8 @@ Nothing. The site reads Supabase live; changes appear on the next page load.
 ## What happens on its own
 
 - **Sold out:** when every seat and overflow seat is claimed, the form becomes "Join the waitlist" and RSVPs go to the waitlist.
+- **Cancellations:** the "release your seats" link in the ticket email opens a confirmation page; only pressing the button cancels. The guest gets a cancellation email, and freed seats go to the oldest waitlisted party that fits, who get a fresh ticket email. Removing someone from the admin guestlist promotes the waitlist the same way.
+- **One reservation per email** per screening. A guest who wants different seats releases the old ones first.
 - **RSVPs close** at the gate-close time unless you set an explicit close time.
 - **Two published screenings:** the soonest is current; the other appears under "Coming Up" on the Screenings page.
 - **Nothing published:** the homepage and Screenings page show a "nothing on the calendar yet" note with the mailing-list link. Nothing breaks.
@@ -65,7 +67,7 @@ Nothing. The site reads Supabase live; changes appear on the next page load.
 
 ## One-time setup (already done unless the database was reset)
 
-Apply `supabase/migrations/202609020001_screening_source_of_truth.sql` in the Supabase SQL editor. It adds the ticket-art columns, the `is_upcoming` flag, the seat counter, and the RSVP close rule the site relies on, and corrects the venue name to Glorya Kaufman Community Center.
+Apply the migrations in `supabase/migrations/` in file order in the Supabase SQL editor. The two newest matter most: `202609020001` adds the ticket-art columns, the `is_upcoming` flag, and the seat counter; `202609030001` locks direct writes, enforces one reservation per email, and adds waitlist promotion on cancellation. Test data for the admin counters lives in `scripts/sql/`.
 
 ## For developers
 

@@ -2,6 +2,14 @@
 // Run: npx tsx scripts/check-event-fields.ts
 import assert from "node:assert";
 import { eventPayloadToRow, resolveVenueId } from "../lib/event-fields";
+import { rsvpErrorResponse } from "../lib/rsvp-errors";
+
+// RSVP error mapping: known database messages become guest-facing text.
+assert.equal(rsvpErrorResponse("already reserved").status, 409);
+assert.match(rsvpErrorResponse("P0001: already reserved").error, /already have seats/);
+assert.equal(rsvpErrorResponse("rsvp closed").status, 403);
+assert.equal(rsvpErrorResponse("something exploded").status, 500, "unknown errors stay generic");
+assert.equal(rsvpErrorResponse(undefined).status, 500);
 
 const ok = eventPayloadToRow({
   title: "Test",

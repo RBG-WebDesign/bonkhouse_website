@@ -29,6 +29,8 @@ export default async function AdminEventPage({
   const counts = (attendees || []).reduce(
     (acc, reservation: any) => {
       reservation.tickets?.forEach((ticket: any) => {
+        // Cancelled tickets stay on file for the guestlist but hold no seat.
+        if (ticket.status === "cancelled") return;
         acc.total += 1;
         acc[ticket.seat_type as "standard" | "overflow" | "waitlist"] += 1;
         if (ticket.checked_in_at) {

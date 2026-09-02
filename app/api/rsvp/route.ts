@@ -1,8 +1,15 @@
 import { NextResponse } from "next/server";
-import { sendTicketEmail } from "@/lib/email";
+import {
+  cancelUrl,
+  confirmationCode,
+  EVENT_FOR_EMAIL_SELECT,
+  eventEmailFields,
+  sendTicketEmail,
+  ticketQrImageUrl
+} from "@/lib/email";
+import { rsvpErrorResponse } from "@/lib/rsvp-errors";
 import { createClient } from "@/lib/supabase/server";
 import { hashTicketToken, makeTicketToken, ticketQrDataUrl, ticketQrUrl } from "@/lib/tickets";
-import { emailSiteUrl, formatEventDate, formatEventTime } from "@/lib/utils";
 
 export async function POST(request: Request) {
   const body = await request.json();
@@ -22,12 +29,8 @@ export async function POST(request: Request) {
   }
 
   const supabase = await createClient();
-  let eventQuery = supabase
-    .from("events")
-    .select("*, venues(*)");
-
+  let eventQuery = supabase.from("events").select(`${EVENT_FOR_EMAIL_SELECT},status,is_invite_only,rsvp_opens_at,rsvp_closes_at,gate_closes_at,max_tickets_per_rsvp`);
   eventQuery = eventId ? eventQuery.eq("id", eventId) : eventQuery.eq("slug", eventSlug);
-
   const { data: event, error: eventError } = await eventQuery.single();
 
   if (eventError || !event) {
@@ -38,8 +41,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "RSVPs are not open for this event." }, { status: 403 });
   }
 
-  const resolvedEventId = event.id;
-
   if (event.is_invite_only && !inviteCode) {
     return NextResponse.json({ error: "This event requires an invite code." }, { status: 403 });
   }
@@ -48,7 +49,7 @@ export async function POST(request: Request) {
     const { data: code } = await supabase
       .from("invite_codes")
       .select("*")
-      .eq("event_id", resolvedEventId)
+      .eq("event_id", event.id)
       .eq("code", inviteCode.toUpperCase())
       .eq("is_active", true)
       .maybeSingle();
@@ -58,17 +59,16 @@ export async function POST(request: Request) {
     }
   }
 
+  // The database function enforces all of these too; checking here just gives
+  // a clearer message without a round trip.
   const now = Date.now();
   if (event.rsvp_opens_at && now < new Date(event.rsvp_opens_at).getTime()) {
     return NextResponse.json({ error: "RSVPs have not opened yet for this screening." }, { status: 403 });
   }
-  // No explicit close time means RSVPs close when the gate does (the database
-  // function enforces the same rule).
   const closesAt = event.rsvp_closes_at || event.gate_closes_at;
   if (closesAt && now > new Date(closesAt).getTime()) {
     return NextResponse.json({ error: "RSVPs have closed for this screening." }, { status: 403 });
   }
-
   const maxPerRsvp = Math.max(1, Math.min(10, Number(event.max_tickets_per_rsvp || 4)));
   if (quantity > maxPerRsvp) {
     return NextResponse.json({ error: `This screening allows up to ${maxPerRsvp} tickets per RSVP.` }, { status: 400 });
@@ -81,7 +81,7 @@ export async function POST(request: Request) {
   // Seat allocation happens inside the database with the event row locked, so
   // simultaneous RSVPs cannot oversell the last seats.
   const { data: created, error: reservationError } = await supabase.rpc("create_reservation_atomic", {
-    event_uuid: resolvedEventId,
+    event_uuid: event.id,
     p_guest_name: name,
     p_guest_email: email,
     p_quantity: quantity,
@@ -94,7 +94,8 @@ export async function POST(request: Request) {
   const seatTypes = (created?.[0]?.seat_types as string[] | undefined) || [];
 
   if (reservationError || !reservationId) {
-    return NextResponse.json({ error: "Could not create the reservation." }, { status: 500 });
+    const { status, error } = rsvpErrorResponse(reservationError?.message);
+    return NextResponse.json({ error }, { status });
   }
 
   const generated = await Promise.all(
@@ -114,7 +115,7 @@ export async function POST(request: Request) {
 
   if (inviteCode) {
     await supabase.rpc("increment_invite_code_use", {
-      event_uuid: resolvedEventId,
+      event_uuid: event.id,
       invite_code: inviteCode.toUpperCase()
     });
   }
@@ -122,18 +123,13 @@ export async function POST(request: Request) {
   await sendTicketEmail({
     to: email,
     guestName: name,
-    eventTitle: event.title,
-    eventDate: `${formatEventDate(event.starts_at)} · Doors ${formatEventTime(event.doors_at || event.starts_at)}`,
-    venue: [event.venues?.name, event.venues?.address].filter(Boolean).join(" · ") || "Sunday Afternoon Bonkhouse",
-    cancelUrl: `${emailSiteUrl()}/api/rsvp/cancel?reservation=${reservationId}&token=${encodeURIComponent(cancelToken)}`,
-    arrivalInstructions: event.entry_instructions || event.venues?.entry_instructions || "",
-    confirmationCode: `BONK-${reservationId.slice(0, 8).toUpperCase()}`,
+    ...eventEmailFields(event),
+    cancelUrl: cancelUrl(reservationId, cancelToken),
+    confirmationCode: confirmationCode(reservationId),
     tickets: generated.map((ticket, index) => ({
       label: `Ticket ${index + 1}`,
       seatType: ticket.seatType,
-      // The email must embed a real image URL, not the check-in page link —
-      // and it must be publicly reachable, never localhost.
-      qrUrl: `${emailSiteUrl()}/api/ticket-qr?token=${encodeURIComponent(ticket.token)}`
+      qrUrl: ticketQrImageUrl(ticket.token)
     }))
   });
 

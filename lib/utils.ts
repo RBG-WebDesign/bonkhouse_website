@@ -37,6 +37,15 @@ export function emailSiteUrl() {
   return url.includes("localhost") ? "https://bonkhouse.com" : url;
 }
 
+// The public origin the browser used. Behind Netlify's proxy request.url can
+// carry an internal host, so prefer the forwarded headers when present.
+export function requestOrigin(request: Request) {
+  const url = new URL(request.url);
+  const host = request.headers.get("x-forwarded-host") || request.headers.get("host") || url.host;
+  const proto = request.headers.get("x-forwarded-proto") || (host.startsWith("localhost") ? "http" : "https");
+  return `${proto.split(",")[0].trim()}://${host.split(",")[0].trim()}`;
+}
+
 export function publicAsset(path: string | null | undefined) {
   if (!path) {
     return "";

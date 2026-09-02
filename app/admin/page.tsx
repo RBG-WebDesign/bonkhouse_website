@@ -107,8 +107,9 @@ export default async function AdminPage({
                         </div>
                         <p className="mt-2 text-sm font-bold">
                           {new Date(event.starts_at).toLocaleString("en-US", { timeZone: "America/Los_Angeles", dateStyle: "medium", timeStyle: "short" })}
-                          {" · "}
-                          {taken} of {capacity} tickets claimed · {Math.max(0, capacity - taken)} left
+                          {event.status === "archived" && taken === 0
+                            ? null
+                            : ` · ${taken} of ${capacity} tickets claimed · ${Math.max(0, capacity - taken)} left`}
                         </p>
                       </Link>
                     );

@@ -21,7 +21,6 @@ export function SiteFooter() {
           <p className="eyebrow">Clubhouse</p>
           <div className="mt-3 flex flex-col gap-2 text-sm text-white/72">
             <Link href="/screenings">Upcoming screenings</Link>
-            <Link href="/merch">Merch</Link>
             <Link href="/about">About us</Link>
           </div>
         </div>
