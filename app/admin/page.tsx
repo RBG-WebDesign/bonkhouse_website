@@ -80,9 +80,14 @@ export default async function AdminPage({
           <h1 className="font-display text-6xl leading-none">Dashboard</h1>
           <p className="mt-3 font-bold">Signed in as {user.email}</p>
         </div>
-        <Link className={buttonVariants({ variant: "secondary" })} href="/admin/check-in">
-          Door check-in
-        </Link>
+        <div className="flex flex-wrap gap-3">
+          <Link className={buttonVariants({ variant: "secondary" })} href="/admin/password">
+            Set password
+          </Link>
+          <Link className={buttonVariants({ variant: "secondary" })} href="/admin/check-in">
+            Door check-in
+          </Link>
+        </div>
       </div>
 
       <div className="mt-10 grid gap-8 lg:grid-cols-[1fr_0.9fr]">
