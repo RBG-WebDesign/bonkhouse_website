@@ -16,13 +16,14 @@ export default async function AdminPage({
     data: { user }
   } = await supabase.auth.getUser();
 
-  if (!user?.email || params.signin || params.forbidden) {
+  if (!user?.email || params.forbidden) {
     return (
       <div className="mx-auto grid max-w-5xl gap-6 px-4 py-10 sm:px-6 lg:px-8">
         <div>
           <p className="text-sm font-black uppercase">Admin</p>
           <h1 className="font-display text-6xl leading-none">Back room entrance</h1>
           {params.forbidden ? <p className="mt-4 font-bold text-cherry">This email is not on the admin allowlist.</p> : null}
+          {params.expired ? <p className="mt-4 font-bold text-cherry">That sign-in link has expired or was already used. Request a fresh one below and open the newest email.</p> : null}
         </div>
         <AdminSignIn />
       </div>
