@@ -231,7 +231,7 @@ class Component extends DCLogic {
       timeLabel: e.timeLabel ?? "",
       venueLine: e.venueLine ?? "",
       isUpcoming: !!e.isUpcoming,
-      hasProgram: !!e.hasProgram,
+      hasProgram: !!e.hasProgram && !!e.isUpcoming, // archived screenings keep their description, not the running order
       program: e.program ?? [],
       showForm: !!ev && rsvp.open && !r,
       showClosed: !!ev && !rsvp.open,
