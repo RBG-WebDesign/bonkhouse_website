@@ -51,7 +51,33 @@ export default function AboutPage() {
     buffer.width = W;
     buffer.height = H;
     const bctx = buffer.getContext("2d")!;
-    const noise = bctx.createImageData(W, H);
+
+    // Performance: the static runs at 30fps (looks identical to 60 for noise)
+    // and the noise itself is pre-rendered once into a few oversized frames
+    // that get shuffled and offset each tick, instead of half a million
+    // Math.random() calls per frame.
+    const FPS = 30;
+    const FRAME_MS = 1000 / FPS;
+    const frameScale = FPS / 60; // word lifetimes were tuned in 60fps ticks
+    const NOISE_FRAMES = 6;
+    const PAD = 64;
+    const noiseFrames = Array.from({ length: NOISE_FRAMES }, () => {
+      const c = document.createElement("canvas");
+      c.width = W + PAD;
+      c.height = H + PAD;
+      const nctx = c.getContext("2d")!;
+      const img = nctx.createImageData(c.width, c.height);
+      const d = img.data;
+      for (let i = 0; i < d.length; i += 4) {
+        const v = 20 + Math.random() * 160;
+        d[i] = v;
+        d[i + 1] = v * 0.96;
+        d[i + 2] = v;
+        d[i + 3] = 255;
+      }
+      nctx.putImageData(img, 0, 0);
+      return c;
+    });
 
     const photos = PHOTOS.map((src) => {
       const img = new Image();
@@ -106,9 +132,10 @@ export default function AboutPage() {
       }
 
       const size = isBonk ? 72 + Math.random() * 72 : 38 + Math.random() * 58;
-      const maxFrames = isBonk
-        ? 18 + Math.floor(Math.random() * 14)
-        : 35 + Math.floor(Math.random() * 35);
+      const maxFrames = Math.max(
+        2,
+        Math.round((isBonk ? 18 + Math.random() * 14 : 35 + Math.random() * 35) * frameScale)
+      );
 
       return {
         text,
@@ -210,21 +237,28 @@ export default function AboutPage() {
     window.addEventListener("pointermove", onMove);
     window.addEventListener("pointerdown", onDown);
 
-    const tick = () => {
+    let lastTick = 0;
+    const tick = (now: number) => {
+      raf = requestAnimationFrame(tick);
+      if (now - lastTick < FRAME_MS) return;
+      lastTick = now;
       frame++;
 
-      // static, dimmed to keep the flicker moody instead of strobing
-      const d = noise.data;
-      const redPhase = frame % 240 < 8;
-      const greenPhase = frame % 620 < 6;
-      for (let i = 0; i < d.length; i += 4) {
-        const v = 20 + Math.random() * 160;
-        d[i] = redPhase ? v * 1.4 : v;
-        d[i + 1] = greenPhase ? v * 1.4 : v * 0.96;
-        d[i + 2] = redPhase || greenPhase ? v * 0.3 : v;
-        d[i + 3] = 255;
+      // static, dimmed to keep the flicker moody instead of strobing: a
+      // pre-rendered noise frame drawn at a random offset reads as fresh noise
+      const redPhase = frame % 120 < 4;
+      const greenPhase = frame % 310 < 3;
+      bctx.drawImage(
+        noiseFrames[(frame * 7 + Math.floor(Math.random() * NOISE_FRAMES)) % NOISE_FRAMES],
+        -Math.floor(Math.random() * PAD),
+        -Math.floor(Math.random() * PAD)
+      );
+      if (redPhase || greenPhase) {
+        bctx.globalCompositeOperation = "multiply";
+        bctx.fillStyle = redPhase ? "rgb(255,150,70)" : "rgb(170,255,80)";
+        bctx.fillRect(0, 0, W, H);
+        bctx.globalCompositeOperation = "source-over";
       }
-      bctx.putImageData(noise, 0, 0);
 
       // subliminal photo splice, a few frames at a time
       if (flashFrames <= 0 && Math.random() < 0.006) {
@@ -278,31 +312,24 @@ export default function AboutPage() {
         );
       }
 
-      // horizontal slice tearing, worse when agitated
-      const slices = 2 + Math.floor(burst);
+      // horizontal slice tearing, worse when agitated. Slices come from the
+      // small buffer, not the screen canvas: copying a full-screen canvas onto
+      // itself forces a readback each time and was the other big cost.
+      const scaleY = H / canvas.height;
+      const slices = Math.min(12, 2 + Math.floor(burst));
       for (let s = 0; s < slices; s++) {
         const sy = Math.random() * canvas.height;
         const sh = 4 + Math.random() * 42;
         const dx = (Math.random() - 0.5) * (30 + burst * 22);
-        ctx.drawImage(canvas, 0, sy, canvas.width, sh, dx, sy, canvas.width, sh);
+        ctx.drawImage(buffer, 0, sy * scaleY, W, sh * scaleY, dx, sy, canvas.width, sh);
       }
 
       // the cursor drags the signal sideways
       const cy = mouseY * canvas.height;
-      ctx.drawImage(
-        canvas,
-        0,
-        cy - 22,
-        canvas.width,
-        44,
-        (mouseX - 0.5) * 140,
-        cy - 22,
-        canvas.width,
-        44
-      );
+      ctx.drawImage(buffer, 0, (cy - 22) * scaleY, W, 44 * scaleY, (mouseX - 0.5) * 140, cy - 22, canvas.width, 44);
 
       // occasional chroma ghost
-      if (burst > 8 || frame % 200 < 3) {
+      if (burst > 8 || frame % 100 < 2) {
         ctx.globalCompositeOperation = "lighter";
         ctx.globalAlpha = 0.3;
         ctx.drawImage(canvas, 7, 0);
@@ -310,8 +337,7 @@ export default function AboutPage() {
         ctx.globalCompositeOperation = "source-over";
       }
 
-      burst = Math.max(0, burst - 0.8);
-      raf = requestAnimationFrame(tick);
+      burst = Math.max(0, burst - 1.6);
     };
     raf = requestAnimationFrame(tick);
 
