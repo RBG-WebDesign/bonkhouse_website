@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { CircleEllipsis, MessageCircle, Play, Ticket } from "lucide-react";
+import { CircleEllipsis, MessageCircle, Play } from "lucide-react";
 import { publicAsset } from "@/lib/utils";
 
 export function SiteFooter() {
   return (
     <footer className="border-t border-white/15 bg-black text-ink">
-      <div className="club-container grid gap-8 py-10 md:grid-cols-[1.2fr_0.8fr_0.8fr_0.9fr]">
+      <div className="club-container grid gap-8 py-10 md:grid-cols-[1.2fr_0.8fr_0.8fr]">
         <div>
           <img
             alt="Sunday Afternoon Bonk House"
@@ -34,12 +34,6 @@ export function SiteFooter() {
               </span>
             ))}
           </div>
-        </div>
-        <div className="relative min-h-24 border border-butter/70 p-4 text-butter">
-          <Ticket className="absolute right-4 top-4" size={28} />
-          <p className="font-display text-2xl uppercase leading-none">Every Sunday</p>
-          <p className="font-display text-2xl uppercase leading-none">Every Bonk</p>
-          <p className="mt-3 text-xs uppercase tracking-[0.2em]">Admit one Sunday</p>
         </div>
       </div>
       <div className="club-container border-t border-white/10 py-4 text-center text-xs text-white/40">

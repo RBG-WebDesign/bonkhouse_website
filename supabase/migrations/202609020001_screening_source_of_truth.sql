@@ -188,10 +188,31 @@ update public.venues set
   address = '10858 Culver Blvd, Culver City, CA'
 where name = 'Gloria Kaufman Community Center';
 
+-- Archive copy: name the actual films instead of placeholder text.
 update public.events set
   kicker = 'The dead return with pre-show and a room full of the living.',
+  description = 'Return of the Living Dead, with a pre-show, at Lumiere Music Hall.',
+  program = array['Pre-show', 'Return of the Living Dead'],
   updated_at = now()
 where slug = 'return-of-the-sunday-afternoon-bonkhouse-of-the-dead';
+
+update public.events set
+  description = 'Bonkhouse and House Pardee presented a Halloween double feature: House (1977) and House (1985), with a pre-show, at Lumiere Music Hall.',
+  program = array['Pre-show', 'House (1977)', 'Intermission', 'House (1985)'],
+  updated_at = now()
+where slug = 'house-house-halloween-double-feature';
+
+update public.events set
+  description = 'A creature double feature: Ticks and Demons, with a pre-show and intermission, at LOOK Dine-In Cinemas Glendale.',
+  program = array['Pre-show', 'Ticks', 'Intermission', 'Demons'],
+  updated_at = now()
+where slug = 'infested-creature-double-feature';
+
+update public.events set
+  description = 'An 80''s B-movie double feature: Chopping Mall and Hello Mary Lou: Prom Night II, with a special pre-show and intermission.',
+  program = array['Special pre-show', 'Chopping Mall', 'Intermission', 'Hello Mary Lou: Prom Night II'],
+  updated_at = now()
+where slug = 'retail-rampage-prom-dance-bloodbath';
 
 -- 6. The two earliest screenings only existed in the JS fallback list.
 insert into public.events (
