@@ -3,9 +3,23 @@ import { AdminEventForm } from "@/components/admin-event-form";
 import { DuplicateEventButton } from "@/components/duplicate-event-button";
 import { InviteCodeForm } from "@/components/invite-code-form";
 import { RemoveReservationButton } from "@/components/remove-reservation-button";
-import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { requireAdmin } from "@/lib/admin";
+
+// "Standard ticket × 2 · 1 checked in" beats one chip per ticket.
+function summarizeTickets(tickets: any[] | null | undefined) {
+  const labels: Record<string, string> = { standard: "Standard ticket", overflow: "Overflow ticket", waitlist: "Waitlist" };
+  const groups = new Map<string, { label: string; count: number; checkedIn: number; cancelled: number }>();
+  for (const ticket of tickets || []) {
+    const label = labels[ticket.seat_type] || ticket.seat_type;
+    const group = groups.get(label) || { label, count: 0, checkedIn: 0, cancelled: 0 };
+    if (ticket.status === "cancelled") group.cancelled += 1;
+    else group.count += 1;
+    if (ticket.checked_in_at) group.checkedIn += 1;
+    groups.set(label, group);
+  }
+  return [...groups.values()].filter((g) => g.count || g.cancelled);
+}
 
 export default async function AdminEventPage({
   params
@@ -93,9 +107,13 @@ export default async function AdminEventPage({
                     <td className="p-3 font-bold">{reservation.guest_name}</td>
                     <td className="p-3">{reservation.guest_email}</td>
                     <td className="p-3">
-                      <div className="flex flex-wrap gap-2">
-                        {reservation.tickets?.map((ticket: any) => (
-                          <Badge key={ticket.id}>{ticket.seat_type}{ticket.checked_in_at ? " checked" : ""}</Badge>
+                      <div className="grid gap-1">
+                        {summarizeTickets(reservation.tickets).map((line) => (
+                          <p className="whitespace-nowrap" key={line.label}>
+                            <span className="font-bold">{line.label}</span> × {line.count}
+                            {line.checkedIn ? <span className="text-sm opacity-70"> · {line.checkedIn} checked in</span> : null}
+                            {line.cancelled ? <span className="text-sm opacity-70"> · {line.cancelled} cancelled</span> : null}
+                          </p>
                         ))}
                       </div>
                     </td>
