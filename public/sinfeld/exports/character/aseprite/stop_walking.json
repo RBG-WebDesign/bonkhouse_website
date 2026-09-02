@@ -1,0 +1,141 @@
+{
+  "frames": [
+    {
+      "filename": "stop_walking_000",
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 160,
+        "h": 226
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 160,
+        "h": 226
+      },
+      "sourceSize": {
+        "w": 160,
+        "h": 226
+      },
+      "duration": 100
+    },
+    {
+      "filename": "stop_walking_001",
+      "frame": {
+        "x": 160,
+        "y": 0,
+        "w": 160,
+        "h": 226
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 160,
+        "h": 226
+      },
+      "sourceSize": {
+        "w": 160,
+        "h": 226
+      },
+      "duration": 100
+    },
+    {
+      "filename": "stop_walking_002",
+      "frame": {
+        "x": 320,
+        "y": 0,
+        "w": 160,
+        "h": 226
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 160,
+        "h": 226
+      },
+      "sourceSize": {
+        "w": 160,
+        "h": 226
+      },
+      "duration": 100
+    },
+    {
+      "filename": "stop_walking_003",
+      "frame": {
+        "x": 480,
+        "y": 0,
+        "w": 160,
+        "h": 226
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 160,
+        "h": 226
+      },
+      "sourceSize": {
+        "w": 160,
+        "h": 226
+      },
+      "duration": 100
+    },
+    {
+      "filename": "stop_walking_004",
+      "frame": {
+        "x": 640,
+        "y": 0,
+        "w": 160,
+        "h": 226
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 160,
+        "h": 226
+      },
+      "sourceSize": {
+        "w": 160,
+        "h": 226
+      },
+      "duration": 100
+    }
+  ],
+  "meta": {
+    "app": "Aseprite",
+    "version": "1.3",
+    "image": "stop_walking.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 800,
+      "h": 226
+    },
+    "scale": "1",
+    "frameTags": [
+      {
+        "name": "stop_walking",
+        "from": 0,
+        "to": 4,
+        "direction": "forward"
+      }
+    ],
+    "layers": [
+      {
+        "name": "Layer 1",
+        "opacity": 255,
+        "blendMode": "normal"
+      }
+    ],
+    "slices": []
+  }
+}

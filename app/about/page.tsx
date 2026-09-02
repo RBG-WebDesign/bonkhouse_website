@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { SinfeldTv } from "@/components/sinfeld-tv";
 
 const PHOTOS = [
   "img-0901.jpg",
@@ -323,6 +324,9 @@ export default function AboutPage() {
   }, []);
 
   return (
+    <>
+    {/* Pixel font for the game's canvas text. */}
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
     <div aria-hidden className="about-void">
       <canvas ref={canvasRef} />
       <div className="about-scanlines" />
@@ -377,5 +381,8 @@ export default function AboutPage() {
         }
       `}</style>
     </div>
+    {/* The game's CRT floats over the static; the static is its backdrop. */}
+    <SinfeldTv />
+    </>
   );
 }

@@ -19,7 +19,8 @@
     "qrcode": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "tailwind-merge": "latest"
+    "tailwind-merge": "latest",
+    "three": "^0.180.0"
   },
   "devDependencies": {
     "@netlify/plugin-nextjs": "^5.15.11",

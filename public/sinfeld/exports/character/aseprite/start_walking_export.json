@@ -1,0 +1,119 @@
+{
+  "frames": [
+    {
+      "filename": "start_walking_export_000",
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 160,
+        "h": 226
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 160,
+        "h": 226
+      },
+      "sourceSize": {
+        "w": 160,
+        "h": 226
+      },
+      "duration": 100
+    },
+    {
+      "filename": "start_walking_export_001",
+      "frame": {
+        "x": 160,
+        "y": 0,
+        "w": 160,
+        "h": 226
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 160,
+        "h": 226
+      },
+      "sourceSize": {
+        "w": 160,
+        "h": 226
+      },
+      "duration": 100
+    },
+    {
+      "filename": "start_walking_export_002",
+      "frame": {
+        "x": 320,
+        "y": 0,
+        "w": 160,
+        "h": 226
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 160,
+        "h": 226
+      },
+      "sourceSize": {
+        "w": 160,
+        "h": 226
+      },
+      "duration": 100
+    },
+    {
+      "filename": "start_walking_export_003",
+      "frame": {
+        "x": 480,
+        "y": 0,
+        "w": 160,
+        "h": 226
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 160,
+        "h": 226
+      },
+      "sourceSize": {
+        "w": 160,
+        "h": 226
+      },
+      "duration": 100
+    }
+  ],
+  "meta": {
+    "app": "Aseprite",
+    "version": "1.3",
+    "image": "start_walking_export.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 640,
+      "h": 226
+    },
+    "scale": "1",
+    "frameTags": [
+      {
+        "name": "start_walking_export",
+        "from": 0,
+        "to": 3,
+        "direction": "forward"
+      }
+    ],
+    "layers": [
+      {
+        "name": "Layer 1",
+        "opacity": 255,
+        "blendMode": "normal"
+      }
+    ],
+    "slices": []
+  }
+}
