@@ -17,8 +17,8 @@ export function DuplicateEventButton({ eventId }: { eventId: string }) {
       const payload = await response.json();
       if (!response.ok) throw new Error(payload.error || "Could not duplicate.");
       router.push(`/admin/events/${payload.id}`);
-    } catch (error: any) {
-      alert(error.message || "Could not duplicate.");
+    } catch (error) {
+      alert(error instanceof Error && error.message ? error.message : "Could not duplicate.");
       setBusy(false);
     }
   }

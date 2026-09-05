@@ -68,7 +68,7 @@ assert(garbage.error, "garbage dates rejected");
         return { select: () => ({ single: async () => ({ data: { id: "venue-1" } }) }) };
       }
     })
-  } as any;
+  } as unknown as Parameters<typeof resolveVenueId>[0];
 
   assert.equal(await resolveVenueId(fakeSupabase, "  ", "x"), null, "blank name resolves to null");
   assert.equal(calls.length, 0, "blank name must not touch the database");

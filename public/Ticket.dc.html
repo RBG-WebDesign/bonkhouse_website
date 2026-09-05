@@ -1,78 +1,116 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="./support.js"></script>
 </head>
-<body>
+<body class="bh-site">
 <x-dc>
-<!-- The current-screening ticket. Used by the homepage and the Screenings
-     page; reads the current event itself from /events.js so both pages
-     always show the same thing. Pages hide it when nothing is scheduled. -->
-<a data-m="ticket" href="{{ href }}" style="position:relative;display:flex;min-height:320px;padding:24px;background:radial-gradient(circle at 62% 40%,rgba(90,60,20,.28),transparent 22rem),linear-gradient(180deg,#1b1610,#0d0b08);border:1px solid #4a3d2c;border-radius:3px;color:#f7f4ea;overflow:visible;user-select:none;isolation:isolate;box-shadow:0 0 0 1px rgba(255,212,0,.16),0 18px 48px rgba(0,0,0,.6),inset 0 0 34px rgba(0,0,0,.6);transition:transform .3s" style-hover="transform:translateY(-4px)">
-  <div style="position:absolute;left:-13px;top:50%;transform:translateY(-50%);width:24px;height:24px;border-radius:50%;background:#000;border-right:1.5px solid #4a3d2c;z-index:15"></div>
-  <div style="position:absolute;right:-13px;top:50%;transform:translateY(-50%);width:24px;height:24px;border-radius:50%;background:#000;border-left:1.5px solid #4a3d2c;z-index:15"></div>
-  <div style="position:absolute;top:-8px;left:-32px;width:90px;height:28px;transform:rotate(-35deg);background:rgba(218,195,140,.35);border-left:1px dashed rgba(0,0,0,.12);border-right:1px dashed rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.08),inset 0 0 6px rgba(255,255,255,.15);z-index:20"></div>
-  <div style="position:absolute;top:-8px;right:-32px;width:90px;height:28px;transform:rotate(35deg);background:rgba(218,195,140,.35);border-left:1px dashed rgba(0,0,0,.12);border-right:1px dashed rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.08),inset 0 0 6px rgba(255,255,255,.15);z-index:20"></div>
-  <div style="position:absolute;bottom:-8px;left:-32px;width:90px;height:28px;transform:rotate(35deg);background:rgba(218,195,140,.35);border-left:1px dashed rgba(0,0,0,.12);border-right:1px dashed rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.08),inset 0 0 6px rgba(255,255,255,.15);z-index:20"></div>
-  <div style="position:absolute;bottom:-8px;right:-32px;width:90px;height:28px;transform:rotate(-35deg);background:rgba(218,195,140,.35);border-left:1px dashed rgba(0,0,0,.12);border-right:1px dashed rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.08),inset 0 0 6px rgba(255,255,255,.15);z-index:20"></div>
-  <div style="position:absolute;inset:0;opacity:.14;pointer-events:none;border-radius:3px;overflow:hidden;background-image:radial-gradient(rgba(255,255,255,.55) 1px,transparent 1px);background-size:14px 14px"></div>
-  <div style="position:absolute;inset:8px;pointer-events:none;border:1px dashed rgba(247,244,234,.16);border-radius:2px"></div>
+<helmet>
+<link rel="stylesheet" href="/bonkhouse.css">
+<link rel="stylesheet" href="/site-header.css">
+<link rel="stylesheet" href="/archive.css">
+</helmet>
+<!-- Shared current-screening ticket for the homepage and screening index. -->
+<a class="bh-ticket" data-m="ticket" href="{{ href }}" aria-label="{{ ticketLabel }}" aria-busy="{{ loading }}">
+  <div class="bh-ticket-punch bh-ticket-punch--left" aria-hidden="true"></div>
+  <div class="bh-ticket-punch bh-ticket-punch--right" aria-hidden="true"></div>
+  <div class="bh-ticket-tape bh-ticket-tape--top-left" aria-hidden="true"></div>
+  <div class="bh-ticket-tape bh-ticket-tape--top-right" aria-hidden="true"></div>
+  <div class="bh-ticket-tape bh-ticket-tape--bottom-left" aria-hidden="true"></div>
+  <div class="bh-ticket-tape bh-ticket-tape--bottom-right" aria-hidden="true"></div>
+  <div class="bh-ticket-grain" aria-hidden="true"></div>
+  <div class="bh-ticket-border" aria-hidden="true"></div>
 
-  <div data-m="ticketstub" style="position:relative;z-index:10;display:flex;align-items:center;gap:16px;padding-right:22px">
-    <span data-m="tickettext" style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'Special Elite',monospace;font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:rgba(255,212,0,.7)">Admit one · Sunday</span>
-    <div style="display:flex;flex-direction:column;align-items:center">
-      <span style="font-size:12px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#ff6a4d">{{ mon }}</span>
-      <span style="margin-top:4px;font-family:'Special Elite',monospace;font-size:60px;font-weight:700;letter-spacing:-.02em;line-height:1;color:#f7f4ea">{{ day }}</span>
-      <span style="margin-top:8px;font-family:'Special Elite',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(247,244,234,.45)">No. {{ no }}</span>
+  <sc-if value="{{ loading }}" hint-placeholder-val="{{ false }}">
+    <p class="bh-ticket-status" role="status">Loading the next screening...</p>
+  </sc-if>
+  <sc-if value="{{ unavailable }}" hint-placeholder-val="{{ false }}">
+    <div class="bh-ticket-status">
+      <p>{{ unavailableLabel }}</p>
+      <span>See all screenings</span>
     </div>
-    <div data-m="ticketdiv" style="position:absolute;right:0;top:-24px;bottom:-24px;width:1px;background:repeating-linear-gradient(180deg,rgba(247,244,234,.4) 0 5px,transparent 5px 11px)"></div>
-  </div>
-
-  <div data-m="ticketbody" style="position:relative;z-index:10;flex:1;padding-left:24px;display:flex;flex-direction:column;justify-content:space-between">
-    <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;height:100%;padding:12px 0">
-      <p style="margin:0;font-size:9.92px;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:rgba(247,244,234,.65)">{{ eyebrow }}</p>
-      <sc-if value="{{ hasLogo }}" hint-placeholder-val="{{ true }}">
-        <div style="width:100%;max-width:min(100%,27rem);overflow:hidden;line-height:0;margin:8px 0 4px">
-          <img alt="{{ title }}" src="{{ logo }}" style="display:block;width:{{ logoW }};height:auto;margin:{{ logoM }};user-select:none;filter:drop-shadow(0 4px 16px rgba(0,0,0,.55))">
-        </div>
-      </sc-if>
-      <h3 style="margin:2px 0 0;font-family:'Bebas Neue',Impact,sans-serif;font-size:clamp(20px,2.2vw,30px);font-weight:400;letter-spacing:.08em;line-height:.95;text-align:center;color:#f7f4ea;text-wrap:balance">{{ shortTitle }}</h3>
-      <sc-if value="{{ hasBadge }}" hint-placeholder-val="{{ true }}">
-        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;width:100%;margin-top:12px">
-          <span style="display:inline-block;padding:3px 8px;border:1px solid rgba(0,0,0,.08);border-radius:1.5px;background:#ffd400;color:#000;font-family:'Special Elite',monospace;font-size:9.6px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;transform:rotate(-1deg);text-shadow:0 .5px 0 rgba(255,255,255,.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 1.5px 3px rgba(0,0,0,.3);white-space:nowrap;line-height:1.4">{{ badge }}</span>
-        </div>
-      </sc-if>
+  </sc-if>
+  <sc-if value="{{ hasCurrent }}" hint-placeholder-val="{{ true }}">
+    <div class="bh-ticket-stub" data-m="ticketstub">
+      <span class="bh-ticket-admit" data-m="tickettext">Admit one · Sunday</span>
+      <div class="bh-ticket-date" aria-label="{{ dateLong }}">
+        <span class="bh-ticket-month">{{ mon }}</span>
+        <span class="bh-ticket-day">{{ day }}</span>
+        <span class="bh-ticket-number">No. {{ no }}</span>
+      </div>
+      <div class="bh-ticket-divider" data-m="ticketdiv" aria-hidden="true"></div>
     </div>
 
-    <div data-m="ticketmeta" style="display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid #4a3d2c;font-size:9.92px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:rgba(247,244,234,.6)">
-      <span>TIME: {{ timeLabel }}</span>
-      <span aria-hidden="true" style="flex:none;width:88px;height:16px;background:repeating-linear-gradient(90deg,rgba(247,244,234,.6) 0 2px,transparent 2px 4px,rgba(247,244,234,.6) 4px 5px,transparent 5px 8px);opacity:.5"></span>
-      <span>VENUE: {{ venueShort }}</span>
+    <div class="bh-ticket-body" data-m="ticketbody">
+      <div class="bh-ticket-program">
+        <p class="bh-ticket-eyebrow">{{ eyebrow }}</p>
+        <sc-if value="{{ hasLogo }}" hint-placeholder-val="{{ true }}">
+          <div class="bh-ticket-logo">
+            <img alt="{{ title }}" src="{{ logo }}" onError="{{ logoFailed }}" style="width:{{ logoW }};margin:{{ logoM }}">
+          </div>
+        </sc-if>
+        <sc-if value="{{ noLogo }}" hint-placeholder-val="{{ false }}">
+          <h3 class="bh-ticket-title bh-ticket-title--main">{{ title }}</h3>
+        </sc-if>
+        <sc-if value="{{ showShortTitle }}" hint-placeholder-val="{{ true }}">
+          <h3 class="bh-ticket-title">{{ shortTitle }}</h3>
+        </sc-if>
+        <sc-if value="{{ hasBadge }}" hint-placeholder-val="{{ true }}">
+          <div class="bh-ticket-badge-wrap">
+            <span class="bh-ticket-badge">{{ badge }}</span>
+          </div>
+        </sc-if>
+      </div>
+      <div class="bh-ticket-meta" data-m="ticketmeta">
+        <span>TIME: {{ timeLabel }}</span>
+        <span class="bh-ticket-barcode" aria-hidden="true"></span>
+        <span>VENUE: {{ venueShort }}</span>
+      </div>
     </div>
-  </div>
+  </sc-if>
 </a>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:760,&quot;height&quot;:360}}">
 class Component extends DCLogic {
-  state = { cur: null };
-  componentDidMount() {
-    import("/events.js").then((m) => m.splitEvents()).then(({ current }) => this.setState({ cur: current }));
+  state = { loaded: false, ok: true, cur: null, logoBroken: false };
+  async componentDidMount() {
+    this.mounted = true;
+    try {
+      const m = await import("/events.js");
+      const { ok, current } = await m.splitEvents();
+      if (this.mounted) this.setState({ loaded: true, ok, cur: current });
+    } catch {
+      if (this.mounted) this.setState({ loaded: true, ok: false });
+    }
+  }
+  componentWillUnmount() {
+    this.mounted = false;
   }
   renderVals() {
     const c = this.state.cur || {};
+    const hasLogo = !!c.logo && !this.state.logoBroken;
     return {
+      loading: !this.state.loaded,
+      unavailable: this.state.loaded && !this.state.cur,
+      unavailableLabel: this.state.ok ? "The next screening is on its way." : "The screening could not load.",
+      hasCurrent: !!this.state.cur,
+      ticketLabel: c.title ? c.title + (c.dateLong ? ", " + c.dateLong : "") + ". View screening details." : "See all screenings",
       href: c.href ?? "/screenings",
       title: c.title ?? "",
       eyebrow: c.eyebrow ?? "",
-      hasLogo: !!c.logo,
+      hasLogo,
+      noLogo: !hasLogo,
       logo: c.logo ?? "",
       logoW: c.logoW ?? "100%",
       logoM: c.logoM ?? "0",
+      logoFailed: () => this.setState({ logoBroken: true }),
       shortTitle: c.shortTitle ?? "",
+      showShortTitle: !!c.shortTitle && (hasLogo || c.shortTitle !== c.title),
       hasBadge: !!c.badge,
       badge: c.badge ?? "",
+      dateLong: c.dateLong ?? "",
       mon: c.mon ?? "",
       day: c.day ?? "",
       no: c.no ?? "",

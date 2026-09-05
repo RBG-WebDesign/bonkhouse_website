@@ -1,14 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <base href="/">
 <script src="./support.js"></script>
 </head>
-<body>
+<body class="bh-site">
 <x-dc>
 <helmet>
+<title>Sunday Afternoon Bonkhouse</title>
+<link rel="icon" href="/icon.svg">
+<link rel="stylesheet" href="/bonkhouse.css">
+<link rel="stylesheet" href="/site-header.css">
+<link rel="stylesheet" href="/archive.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Covered+By+Your+Grace&amp;family=Special+Elite&amp;display=swap" rel="stylesheet">
@@ -23,7 +28,7 @@ a:hover{color:#ffd400}
 .poster-cycle img:last-child:not(:first-child){opacity:0;animation:poster-cycle-second 10s ease-in-out infinite}
 @keyframes poster-cycle-first{0%,42%,100%{opacity:1}50%,92%{opacity:0}}
 @keyframes poster-cycle-second{0%,42%,100%{opacity:0}50%,92%{opacity:1}}
-@media (prefers-reduced-motion:reduce){.poster-cycle img{animation:none!important}.poster-cycle img:last-child:not(:first-child){display:none}}
+@media (prefers-reduced-motion:reduce){.poster-cycle img{animation:none!important}.poster-cycle img:last-child:not(:first-child){display:none}[data-photo-cycle]{transition:none!important}}
 
 @media (max-width:1023px){[data-hero-poster]{display:none!important}[data-hero-copy]{grid-column:1 / -1!important}}
 @media (max-width:767px){[data-m="herogrid"]{grid-template-columns:1fr!important;gap:24px!important;padding:0 20px!important}[data-hero-poster]{display:flex!important;grid-column:1 / -1!important;padding:0 0 56px}[data-hero-poster] .poster-cycle{max-width:250px!important;transform:rotate(2deg)!important}}
@@ -31,25 +36,28 @@ body::after{position:fixed;inset:0;z-index:71;pointer-events:none;content:"";opa
 @media (max-width:899px){[data-m="nav"]{display:none!important}}
 @media (max-width:767px){[data-m="hpad"]{padding:0 16px!important}[data-m="grid"]{grid-template-columns:1fr!important}[data-m="stack"]{flex-direction:column!important}[data-m="stack"] > *{width:100%}[data-m="fullbtn"] > a{flex:1 1 100%}[data-m="ticketmeta"]{flex-direction:column!important;align-items:flex-start!important;gap:6px!important}[data-m="ticketmeta"] > span[aria-hidden]{display:none!important}[data-m="ticket"]{flex-direction:column!important;gap:16px}[data-m="ticketstub"]{padding-right:0!important;padding-bottom:12px;justify-content:center;border-bottom:1px dashed rgba(247,244,234,.3)}[data-m="tickettext"]{writing-mode:horizontal-tb!important;transform:none!important}[data-m="ticketdiv"]{display:none!important}[data-m="ticketbody"]{padding-left:0!important}}
 </style>
+<link rel="stylesheet" href="/home.css">
 </helmet>
 
-<div style="background:#000;color:#f7f4ea">
+<div class="home-page" style="background:#000;color:#f7f4ea">
 
+<a class="bh-skip-link" href="#main-content">Skip to content</a>
 <dc-import name="SiteHeader" active="home" style="position:sticky;top:0;z-index:50;display:block" hint-size="100%,81px"></dc-import>
+<main id="main-content" tabindex="-1">
 
-<section style="position:relative;display:flex;min-height:704px;align-items:center;overflow:hidden;background:#000;isolation:isolate">
-  <div style="position:absolute;inset:0;overflow:hidden;pointer-events:none;background:#050505 url('public/hero/background-bonkhouse.png') center / cover no-repeat"></div>
+<section class="home-hero" style="position:relative;display:flex;min-height:704px;align-items:center;overflow:hidden;background:#000;isolation:isolate">
+  <div data-hero-background style="position:absolute;inset:0;overflow:hidden;pointer-events:none;background:#050505 url('/hero/background-bonkhouse.png') center / cover no-repeat"></div>
   <div style="position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(circle at 62% 50%,rgba(255,188,0,.08),transparent 15rem),linear-gradient(90deg,rgba(0,0,0,.72),rgba(0,0,0,.34) 48%,rgba(0,0,0,.6)),linear-gradient(180deg,rgba(61,22,10,.16),rgba(0,0,0,.62))"></div>
   <div style="position:absolute;inset:0;z-index:2;pointer-events:none;opacity:.34;background-image:radial-gradient(circle,rgba(255,232,164,.28) 0 1px,transparent 1.2px),url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.92' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='96' height='96' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E&quot;);background-size:5px 5px,96px 96px;mix-blend-mode:overlay"></div>
 
-  <div data-m="herogrid" style="position:relative;z-index:10;display:grid;grid-template-columns:repeat(12,1fr);gap:32px;width:100%;max-width:1280px;margin:0 auto;padding:0 32px">
+  <div class="home-hero-grid" data-m="herogrid" style="position:relative;z-index:10;display:grid;grid-template-columns:repeat(12,1fr);gap:32px;width:100%;max-width:1280px;margin:0 auto;padding:0 32px">
     <div data-hero-copy="" style="position:relative;z-index:10;grid-column:span 8;display:flex;flex-direction:column;justify-content:center;padding:40px 0">
-
-      <img alt="Sunday Afternoon Bonk House" src="public/bonkhouse-title.webp" style="width: 712px; max-width: 100%; height: auto; align-self: flex-start; user-select: none"><div data-m="fullbtn" style="display:flex;flex-wrap:wrap;gap:16px;margin-top:32px">
-        <a href="{{ ctaHref }}" style="position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:68px;padding:0 48px;border:1px solid #ffd400;border-radius:3px;background:#ffd400;color:#000;font-family:'Bebas Neue',Impact,sans-serif;font-size:24px;letter-spacing:.05em;text-transform:uppercase;box-shadow:inset 0 1px 0 rgba(255,255,255,.18),inset 0 -8px 18px rgba(83,51,0,.14),0 8px 22px rgba(0,0,0,.32),0 0 26px rgba(255,212,0,.18)" style-hover="background:#ffe15a;transform:translateY(-2px)">{{ ctaLabel }}
+      <h1 class="bh-visually-hidden">Sunday Afternoon Bonkhouse</h1>
+      <img alt="Sunday Afternoon Bonk House" src="public/bonkhouse-title.webp" style="width: 712px; max-width: 100%; height: auto; align-self: flex-start; user-select: none"><div class="home-hero-actions" data-m="fullbtn" style="display:flex;flex-wrap:wrap;gap:16px;margin-top:32px">
+        <a href="{{ ctaHref }}" class="bh-button">{{ ctaLabel }}
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
         </a>
-        <a href="/screenings" style="position:relative;display:inline-flex;align-items:center;justify-content:center;height:68px;padding:0 48px;border:1px solid rgba(255,212,0,.4);border-radius:3px;background:rgba(0,0,0,.4);backdrop-filter:blur(8px);color:#ffd400;font-family:'Bebas Neue',Impact,sans-serif;font-size:24px;letter-spacing:.05em;text-transform:uppercase;box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 8px 22px rgba(0,0,0,.32)" style-hover="background:#ffd400;color:#000;transform:translateY(-2px)">SEE WHAT'S SCREENING</a>
+        <a href="/screenings" class="bh-button bh-button--secondary">SEE WHAT'S SCREENING</a>
       </div>
     </div>
     <div data-hero-poster="" style="position:relative;grid-column:span 4;display:flex;align-items:center;justify-content:center">
@@ -71,14 +79,25 @@ body::after{position:fixed;inset:0;z-index:71;pointer-events:none;content:"";opa
   </div>
 </section>
 
-<section style="position:relative;z-index:10;background:#000;padding:80px 0">
+<section class="home-upcoming" style="position:relative;z-index:10;background:#000;padding:80px 0">
+  <sc-if value="{{ loading }}" hint-placeholder-val="{{ false }}">
+    <div class="bh-container"><div class="bh-state" role="status"><p class="bh-eyebrow">Screenings</p><p>Checking the calendar...</p></div></div>
+  </sc-if>
+  <sc-if value="{{ loadFailed }}" hint-placeholder-val="{{ false }}">
+    <div class="bh-container"><div role="alert" class="bh-state home-load-state">
+      <h2 class="bh-section-title home-section-heading">Screenings could not load</h2>
+      <p style="margin:24px 0 0;max-width:40rem;font-size:24px;line-height:1.625;color:rgba(255,255,255,.9)">We could not check the calendar. Try again to see what is screening.</p>
+      <button type="button" onClick="{{ retry }}" class="bh-button">TRY AGAIN</button>
+    </div></div>
+  </sc-if>
+
   <sc-if value="{{ hasCurrent }}" hint-placeholder-val="{{ true }}">
-    <div data-m="grid" style="display:grid;grid-template-columns:1.1fr 1.9fr;gap:48px;align-items:center;max-width:1280px;margin:0 auto;padding:0 32px">
+    <div class="home-upcoming-grid" data-m="grid" style="display:grid;grid-template-columns:1.1fr 1.9fr;gap:48px;align-items:center;max-width:1280px;margin:0 auto;padding:0 32px">
       <div>
-        <h2 style="display:inline-block;margin:0;padding-bottom:8px;border-bottom:1px solid rgba(255,212,0,.25);font-family:'Bebas Neue',Impact,sans-serif;font-size:48px;font-weight:400;line-height:1;letter-spacing:.05em;text-transform:uppercase;color:#ffd400;text-shadow:1px 1px 0 rgba(135,25,12,.7),0 0 18px rgba(255,212,0,.12)">Upcoming Screening</h2>
+        <h2 class="bh-section-title home-section-heading">Upcoming Screening</h2>
         <p style="margin:24px 0 0;font-size:24px;line-height:1.625;color:rgba(255,255,255,.9)">The next thing we have chosen to inflict upon you, lovingly.</p>
         <div style="margin-top:32px">
-          <a href="{{ curHref }}" style="position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:68px;padding:0 48px;border:1px solid #ffd400;border-radius:3px;background:#ffd400;color:#000;font-family:'Bebas Neue',Impact,sans-serif;font-size:24px;letter-spacing:.05em;text-transform:uppercase;box-shadow:inset 0 1px 0 rgba(255,255,255,.18),inset 0 -8px 18px rgba(83,51,0,.14),0 8px 22px rgba(0,0,0,.32),0 0 26px rgba(255,212,0,.18)" style-hover="background:#ffe15a;transform:translateY(-2px)">{{ curCta }}
+          <a href="{{ curHref }}" class="bh-button">{{ curCta }}
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
           </a>
         </div>
@@ -89,11 +108,11 @@ body::after{position:fixed;inset:0;z-index:71;pointer-events:none;content:"";opa
   </sc-if>
 
   <sc-if value="{{ noCurrent }}" hint-placeholder-val="{{ false }}">
-    <div style="max-width:1280px;margin:0 auto;padding:0 32px">
-      <h2 style="display:inline-block;margin:0;padding-bottom:8px;border-bottom:1px solid rgba(255,212,0,.25);font-family:'Bebas Neue',Impact,sans-serif;font-size:48px;font-weight:400;line-height:1;letter-spacing:.05em;text-transform:uppercase;color:#ffd400;text-shadow:1px 1px 0 rgba(135,25,12,.7),0 0 18px rgba(255,212,0,.12)">Upcoming Screening</h2>
+    <div class="bh-container">
+      <h2 class="bh-section-title home-section-heading">Upcoming Screening</h2>
       <p style="margin:24px 0 0;max-width:40rem;font-size:24px;line-height:1.625;color:rgba(255,255,255,.9)">Nothing on the calendar yet. Join the list and you will hear about the next one first.</p>
       <div style="margin-top:32px">
-        <a href="#list" style="position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:68px;padding:0 48px;border:1px solid #ffd400;border-radius:3px;background:#ffd400;color:#000;font-family:'Bebas Neue',Impact,sans-serif;font-size:24px;letter-spacing:.05em;text-transform:uppercase;box-shadow:inset 0 1px 0 rgba(255,255,255,.18),inset 0 -8px 18px rgba(83,51,0,.14),0 8px 22px rgba(0,0,0,.32),0 0 26px rgba(255,212,0,.18)" style-hover="background:#ffe15a;transform:translateY(-2px)">JOIN THE LIST
+        <a href="#list" class="bh-button">JOIN THE LIST
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
         </a>
       </div>
@@ -101,13 +120,14 @@ body::after{position:fixed;inset:0;z-index:71;pointer-events:none;content:"";opa
   </sc-if>
 </section>
 
-<section style="position:relative;z-index:10;background:#000;padding:80px 0;border-top:1px solid rgba(255,255,255,.1)">
-  <div style="max-width:1280px;margin:0 auto;padding:0 32px">
-    <h2 style="display:inline-block;margin:0;padding-bottom:8px;border-bottom:1px solid rgba(255,212,0,.25);font-family:'Bebas Neue',Impact,sans-serif;font-size:48px;font-weight:400;line-height:1;letter-spacing:.05em;text-transform:uppercase;color:#ffd400;text-shadow:1px 1px 0 rgba(135,25,12,.7),0 0 18px rgba(255,212,0,.12)">Past Screenings</h2>
+<sc-if value="{{ hasPast }}" hint-placeholder-val="{{ true }}">
+<section class="home-archive" style="position:relative;z-index:10;background:#000;padding:80px 0;border-top:1px solid rgba(255,255,255,.1)">
+  <div class="bh-container">
+    <h2 class="bh-section-title home-section-heading">Past Screenings</h2>
 
     <div data-m="grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:48px">
       <sc-for list="{{ past }}" as="p" hint-placeholder-count="3">
-        <a href="{{ p.href }}" style="position:relative;display:flex;flex-direction:column;justify-content:space-between;min-height:248px;padding:20px;background:linear-gradient(180deg,#3a332a,#1d1813);border:1px solid #4a3d2c;border-radius:3px;color:#f7f4ea;user-select:none;isolation:isolate;box-shadow:0 0 0 1px rgba(255,212,0,.12),0 18px 48px rgba(0,0,0,.6),inset 0 0 34px rgba(0,0,0,.55);transform:rotate({{ p.rot }});transition:transform .3s">
+        <a class="home-archive-card" href="{{ p.href }}" style="position:relative;display:flex;flex-direction:column;justify-content:space-between;min-height:248px;padding:20px;background:linear-gradient(180deg,#3a332a,#1d1813);border:1px solid #4a3d2c;border-radius:3px;color:#f7f4ea;user-select:none;isolation:isolate;box-shadow:0 0 0 1px rgba(255,212,0,.12),0 18px 48px rgba(0,0,0,.6),inset 0 0 34px rgba(0,0,0,.55);transform:rotate({{ p.rot }});transition:transform .3s">
           <div style="position:absolute;left:-13px;top:50%;transform:translateY(-50%);width:24px;height:24px;border-radius:50%;background:#000;border-right:1.5px solid #4a3d2c;z-index:15"></div>
           <div style="position:absolute;right:-13px;top:50%;transform:translateY(-50%);width:24px;height:24px;border-radius:50%;background:#000;border-left:1.5px solid #4a3d2c;z-index:15"></div>
           <div style="position:absolute;top:12px;left:12px;z-index:10;padding:2px 8px;text-align:center;background:#f2ede0;border:1px solid rgba(0,0,0,.1);border-radius:2px;box-shadow:0 1px 2px rgba(0,0,0,.05)">
@@ -123,7 +143,7 @@ body::after{position:fixed;inset:0;z-index:71;pointer-events:none;content:"";opa
               <div style="display:flex;justify-content:center;align-items:center;overflow:hidden;width:100%"><img alt="{{ p.title }}" src="{{ p.logo }}" style="width:{{ p.logoW }};max-width:none;height:auto;margin:{{ p.logoM }};flex:none"></div>
             </sc-if>
             <sc-if value="{{ p.noLogo }}" hint-placeholder-val="{{ false }}">
-              <h4 style="margin:0;font-family:'Bebas Neue',Impact,sans-serif;font-size:clamp(20px,1.9vw,30px);font-weight:400;letter-spacing:.025em;line-height:.98;text-transform:uppercase;color:#f7f4ea;text-wrap:balance">{{ p.title }}</h4>
+              <h3 style="margin:0;font-family:'Bebas Neue',Impact,sans-serif;font-size:clamp(20px,1.9vw,30px);font-weight:400;letter-spacing:.025em;line-height:.98;text-transform:uppercase;color:#f7f4ea;text-wrap:balance">{{ p.title }}</h3>
             </sc-if>
           </div>
           <sc-if value="{{ p.hasBadge }}" hint-placeholder-val="{{ false }}">
@@ -136,21 +156,22 @@ body::after{position:fixed;inset:0;z-index:71;pointer-events:none;content:"";opa
     </div>
 
     <div style="display:flex;justify-content:center;margin-top:48px">
-      <a href="/screenings" style="position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:68px;padding:0 48px;border:1px solid #ffd400;border-radius:3px;background:#ffd400;color:#000;font-family:'Bebas Neue',Impact,sans-serif;font-size:24px;letter-spacing:.05em;text-transform:uppercase;box-shadow:inset 0 1px 0 rgba(255,255,255,.18),inset 0 -8px 18px rgba(83,51,0,.14),0 8px 22px rgba(0,0,0,.32),0 0 26px rgba(255,212,0,.18)" style-hover="background:#ffe15a;transform:translateY(-2px)">SEE ALL PAST SCREENINGS
+      <a href="/screenings" class="bh-button">SEE ALL PAST SCREENINGS
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
       </a>
     </div>
   </div>
 </section>
+</sc-if>
 
-<section style="position:relative;z-index:10;background:#000;padding:80px 0;border-top:1px solid rgba(255,255,255,.1)">
-  <div style="max-width:1280px;margin:0 auto;padding:0 32px">
-    <h2 style="display:inline-block;margin:0;padding-bottom:8px;border-bottom:1px solid rgba(255,212,0,.25);font-family:'Bebas Neue',Impact,sans-serif;font-size:48px;font-weight:400;line-height:1;letter-spacing:.05em;text-transform:uppercase;color:#ffd400;text-shadow:1px 1px 0 rgba(135,25,12,.7),0 0 18px rgba(255,212,0,.12)">Photos</h2>
+<section class="home-photos" style="position:relative;z-index:10;background:#000;padding:80px 0;border-top:1px solid rgba(255,255,255,.1)">
+  <div class="bh-container">
+    <h2 class="bh-section-title home-section-heading">Photos</h2>
     <div data-m="grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:48px">
       <div style="position:relative;overflow:hidden;padding:10px 10px 28px;background:#f7f4ea;color:#1a1a1a;border:1px solid rgba(255,255,255,.05);box-shadow:0 10px 30px rgba(0,0,0,.5),inset 0 0 22px rgba(88,64,24,.12);transform:rotate(1.5deg);transition:all .3s;user-select:none">
           <div style="position:absolute;inset:0;z-index:3;pointer-events:none;mix-blend-mode:multiply;background:radial-gradient(circle at 18% 22%,rgba(52,33,0,.15),transparent .12rem),radial-gradient(circle at 79% 73%,rgba(52,33,0,.12),transparent .14rem),repeating-linear-gradient(103deg,rgba(0,0,0,.035) 0 1px,transparent 1px 8px)"></div>
           <div style="position:relative;aspect-ratio:1;overflow:hidden;background:#101010;border:1px solid rgba(0,0,0,.05)">
-            <img data-photo-cycle alt="The room filling up before the lights went down." src="public/photos/house-house-2024/mg-1639.jpg" style="width:100%;height:100%;object-fit:cover;filter:grayscale(1);transition:filter .3s,opacity .35s" style-hover="filter:grayscale(0)">
+            <img data-photo-cycle loading="lazy" decoding="async" alt="The room filling up before the lights went down." src="/photos/house-house-2024/mg-1639.jpg" style="width:100%;height:100%;object-fit:cover;filter:grayscale(1);transition:filter .3s,opacity .35s" style-hover="filter:grayscale(0)">
           </div>
         </div>
 
@@ -158,7 +179,7 @@ body::after{position:fixed;inset:0;z-index:71;pointer-events:none;content:"";opa
         <div style="position:relative;overflow:hidden;padding:10px 10px 28px;background:#f7f4ea;color:#1a1a1a;border:1px solid rgba(255,255,255,.05);box-shadow:0 10px 30px rgba(0,0,0,.5),inset 0 0 22px rgba(88,64,24,.12);transform:rotate(-3deg);transition:all .3s;user-select:none">
           <div style="position:absolute;inset:0;z-index:3;pointer-events:none;mix-blend-mode:multiply;background:radial-gradient(circle at 18% 22%,rgba(52,33,0,.15),transparent .12rem),radial-gradient(circle at 79% 73%,rgba(52,33,0,.12),transparent .14rem),repeating-linear-gradient(103deg,rgba(0,0,0,.035) 0 1px,transparent 1px 8px)"></div>
           <div style="position:relative;aspect-ratio:1;overflow:hidden;background:#101010;border:1px solid rgba(0,0,0,.05)">
-            <img data-photo-cycle alt="Lobby chatter under the poster wall." src="public/photos/house-house-2024/mg-1633.jpg" style="width:100%;height:100%;object-fit:cover;filter:grayscale(1);transition:filter .3s,opacity .35s" style-hover="filter:grayscale(0)">
+            <img data-photo-cycle loading="lazy" decoding="async" alt="Lobby chatter under the poster wall." src="/photos/house-house-2024/mg-1633.jpg" style="width:100%;height:100%;object-fit:cover;filter:grayscale(1);transition:filter .3s,opacity .35s" style-hover="filter:grayscale(0)">
           </div>
         </div>
 
@@ -166,18 +187,18 @@ body::after{position:fixed;inset:0;z-index:71;pointer-events:none;content:"";opa
         <div style="position:relative;overflow:hidden;padding:10px 10px 28px;background:#f7f4ea;color:#1a1a1a;border:1px solid rgba(255,255,255,.05);box-shadow:0 10px 30px rgba(0,0,0,.5),inset 0 0 22px rgba(88,64,24,.12);transform:rotate(4.5deg);transition:all .3s;user-select:none">
           <div style="position:absolute;inset:0;z-index:3;pointer-events:none;mix-blend-mode:multiply;background:radial-gradient(circle at 18% 22%,rgba(52,33,0,.15),transparent .12rem),radial-gradient(circle at 79% 73%,rgba(52,33,0,.12),transparent .14rem),repeating-linear-gradient(103deg,rgba(0,0,0,.035) 0 1px,transparent 1px 8px)"></div>
           <div style="position:relative;aspect-ratio:1;overflow:hidden;background:#101010;border:1px solid rgba(0,0,0,.05)">
-            <img data-photo-cycle alt="Audience laughter between reels." src="public/photos/house-house-2024/img-0937.jpg" style="width:100%;height:100%;object-fit:cover;filter:grayscale(1);transition:filter .3s,opacity .35s" style-hover="filter:grayscale(0)">
+            <img data-photo-cycle loading="lazy" decoding="async" alt="Audience laughter between reels." src="/photos/house-house-2024/img-0937.jpg" style="width:100%;height:100%;object-fit:cover;filter:grayscale(1);transition:filter .3s,opacity .35s" style-hover="filter:grayscale(0)">
           </div>
         </div>
     </div>
   </div>
 </section>
 
-<section id="about" style="position:relative;z-index:10;background:#000;padding:80px 0;border-top:1px solid rgba(255,255,255,.1);scroll-margin-top:80px">
-  <div style="max-width:1280px;margin:0 auto;padding:0 32px">
+<section class="home-about" id="about" style="position:relative;z-index:10;background:#000;padding:80px 0;border-top:1px solid rgba(255,255,255,.1);scroll-margin-top:80px">
+  <div class="bh-container">
     <div data-m="grid" style="display:grid;grid-template-columns:1fr 1.5fr;gap:48px;align-items:start">
       <div>
-        <h2 style="display:inline-block;margin:0;padding-bottom:8px;border-bottom:1px solid rgba(255,212,0,.25);font-family:'Bebas Neue',Impact,sans-serif;font-size:48px;font-weight:400;line-height:1;letter-spacing:.05em;text-transform:uppercase;color:#ffd400;text-shadow:1px 1px 0 rgba(135,25,12,.7),0 0 18px rgba(255,212,0,.12)">About Us</h2>
+        <h2 class="bh-section-title home-section-heading">About Us</h2>
         <div style="box-sizing: border-box; display: flex; flex-direction: column; gap: 12px"></div>
       </div>
       <div style="display:flex;flex-direction:column;gap:24px;font-size:16px;line-height:2;color:rgba(255,255,255,.7)">
@@ -189,19 +210,19 @@ body::after{position:fixed;inset:0;z-index:71;pointer-events:none;content:"";opa
   </div>
 </section>
 
-<section id="list" style="position:relative;z-index:10;background:rgba(9,9,11,.4);padding:64px 0;border-top:1px solid rgba(255,255,255,.1);scroll-margin-top:80px">
-  <div style="max-width:576px;margin:0 auto;padding:0 32px;text-align:center">
-    <form onSubmit="{{ subscribe }}" style="position:relative;border:1px solid rgba(255,212,0,.8);background:#000;padding:32px;box-shadow:0 0 30px rgba(255,212,0,.08);text-align:left">
+<section class="home-newsletter" id="list" style="position:relative;z-index:10;background:rgba(9,9,11,.4);padding:64px 0;border-top:1px solid rgba(255,255,255,.1);scroll-margin-top:80px">
+  <div class="home-newsletter-inner">
+    <form class="home-subscribe" onSubmit="{{ subscribe }}" style="position:relative;border:1px solid rgba(255,212,0,.8);background:#000;padding:32px;box-shadow:0 0 30px rgba(255,212,0,.08);text-align:left">
       <div style="position:absolute;left:-1px;top:12px;height:80px;border-left:2px dashed rgba(255,212,0,.8)"></div>
       <div style="position:absolute;right:-1px;bottom:12px;height:80px;border-right:2px dashed rgba(255,212,0,.8)"></div>
       <p style="margin:0;font-family:'Bebas Neue',Impact,sans-serif;font-size:36px;line-height:1;letter-spacing:.03em;text-transform:uppercase;color:#fff">Stay in the loop.</p>
       <p style="margin:8px 0 0;font-size:14px;line-height:1.7;color:rgba(255,255,255,.62)">Get the next screening in your inbox.</p>
-      <div data-m="stack" style="display:flex;gap:12px;margin-top:20px">
-        <input name="email" placeholder="Email" required="" type="email" style="flex:1;min-width:0;border:1px solid rgba(255,255,255,.2);border-radius:6px;background:#000;padding:12px 16px;font-size:16px;color:#fff">
-        <button type="submit" disabled="{{ subscribing }}" style="display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 24px;border:1px solid #ffd400;border-radius:6px;background:#ffd400;color:#000;font-family:'Bebas Neue',Impact,sans-serif;font-size:20px;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;box-shadow:0 0 26px rgba(255,212,0,.18)" style-hover="background:#ffe15a">{{ subscribeLabel }}</button>
+      <div class="home-subscribe-fields">
+        <label class="bh-field"><span class="bh-field-label">Email address</span><input class="bh-input" name="email" aria-label="Email" autocomplete="email" placeholder="you@example.com" required type="email"></label>
+        <button class="bh-button" type="submit" disabled="{{ subscribing }}">{{ subscribeLabel }}</button>
       </div>
       <sc-if value="{{ subscribed }}" hint-placeholder-val="{{ false }}">
-        <p style="margin:14px 0 0;font-family:'Special Elite',monospace;font-size:13px;font-weight:700;color:#ffd400">You are on the list.</p>
+        <p role="status" style="margin:14px 0 0;font-family:'Special Elite',monospace;font-size:13px;font-weight:700;color:#ffd400">You are on the list.</p>
       </sc-if>
       <sc-if value="{{ subscribeFailed }}" hint-placeholder-val="{{ false }}">
         <p role="alert" style="margin:14px 0 0;font-size:13px;font-weight:700;color:#ff9c88">{{ subscribeError }}</p>
@@ -210,7 +231,8 @@ body::after{position:fixed;inset:0;z-index:71;pointer-events:none;content:"";opa
   </div>
 </section>
 
-<footer style="border-top:1px solid rgba(255,255,255,.15);background:#000;color:#f7f4ea">
+</main>
+<footer class="home-footer" style="border-top:1px solid rgba(255,255,255,.15);background:#000;color:#f7f4ea">
   <div data-m="grid" style="display:grid;grid-template-columns:1.2fr .8fr .8fr;gap:32px;max-width:1280px;margin:0 auto;padding:40px 32px">
     <div>
       <img alt="Sunday Afternoon Bonk House" src="public/bonkhouse-title.webp" style="display:block;width:224px;height:auto">
@@ -240,21 +262,30 @@ body::after{position:fixed;inset:0;z-index:71;pointer-events:none;content:"";opa
 <script type="text/x-dc" data-dc-script>
 // Everything about the current screening comes from /events.js (Supabase).
 class Component extends DCLogic {
-  state = { loaded: false, cur: null, past: [], subscribeState: "idle", subscribeError: "" };
-  componentDidMount() {
-    import("/events.js").then((m) => m.splitEvents().then(({ current, past }) => {
+  state = { loaded: false, ok: true, cur: null, past: [], subscribeState: "idle", subscribeError: "" };
+  async componentDidMount() {
+    try {
+      const m = await import("/events.js");
+      const { ok, current, past } = await m.splitEvents();
       this.setState({
         loaded: true,
+        ok,
         cur: current,
         past: past.slice(0, 3).map((e, i) => ({ ...e, rot: i % 2 ? "0.64deg" : "-0.96deg", badgeBg: m.badgeColor(i) }))
       });
-    }));
+    } catch {
+      this.setState({ loaded: true, ok: false });
+    }
   }
   renderVals() {
     const c = this.state.cur;
     return {
+      loading: !this.state.loaded,
       hasCurrent: !!c,
-      noCurrent: this.state.loaded && !c,
+      hasPast: this.state.past.length > 0,
+      noCurrent: this.state.loaded && this.state.ok && !c,
+      loadFailed: this.state.loaded && !this.state.ok,
+      retry: () => location.reload(),
       curTitle: c ? c.title : "",
       hasPoster: !!(c && c.poster),
       heroPoster: c ? c.poster : "",
@@ -262,8 +293,8 @@ class Component extends DCLogic {
       heroPosterAlt: c ? c.posterAlt : "",
       curHref: c ? c.href : "/screenings",
       curCta: c && !c.rsvp.open ? c.rsvp.label : "RSVP NOW",
-      ctaHref: c ? c.href : this.state.loaded ? "#list" : "/screenings",
-      ctaLabel: c || !this.state.loaded ? "RSVP" : "JOIN THE LIST",
+      ctaHref: c ? c.href : this.state.loaded && this.state.ok ? "#list" : "/screenings",
+      ctaLabel: c || !this.state.loaded ? "RSVP" : this.state.ok ? "JOIN THE LIST" : "SEE SCREENINGS",
       past: this.state.past,
       subscribing: this.state.subscribeState === "saving",
       subscribed: this.state.subscribeState === "success",
@@ -295,158 +326,6 @@ class Component extends DCLogic {
   }
 }
 </script>
-<script>
-(function () {
-  var VS = "attribute vec2 a_position;varying vec2 v_uv;void main(){v_uv=a_position*0.5+0.5;gl_Position=vec4(a_position,0.0,1.0);}";
-  var FS = [
-    "precision mediump float;",
-    "uniform float u_time;uniform vec2 u_mouse;uniform vec2 u_resolution;uniform vec2 u_image_resolution;uniform sampler2D u_texture;varying vec2 v_uv;",
-    "float noise(vec2 st){return fract(sin(dot(st.xy,vec2(12.9898,78.233)))*43758.5453123);}",
-    "float smoothNoise(vec2 st){vec2 i=floor(st);vec2 f=fract(st);f=f*f*(3.0-2.0*f);float bl=noise(i);float br=noise(i+vec2(1.0,0.0));float tl=noise(i+vec2(0.0,1.0));float tr=noise(i+vec2(1.0,1.0));return mix(mix(bl,br,f.x),mix(tl,tr,f.x),f.y);}",
-    "vec2 coverUv(vec2 uv){float sa=u_resolution.x/u_resolution.y;float ia=u_image_resolution.x/u_image_resolution.y;vec2 s=vec2(1.0);if(sa>ia){s.y=ia/sa;}else{s.x=sa/ia;}return (uv-0.5)*s+0.5;}",
-    "vec2 rippleFromCenter(vec2 uv,vec2 nuv,float aspect){vec2 dir=nuv;float dist=max(length(dir),0.001);vec2 rd=dir/dist;vec2 ud=vec2(rd.x/aspect,rd.y);float outerFade=smoothstep(1.05,0.05,dist);float innerFade=smoothstep(0.0,0.16,dist);float wave=sin(dist*42.0-u_time*2.35);float wideWave=sin(dist*18.0-u_time*1.35+smoothNoise(nuv*4.0)*1.8);float shimmer=smoothNoise(nuv*10.0+u_time*0.18)-0.5;float disp=(wave*0.024+wideWave*0.012+shimmer*0.004)*outerFade*innerFade;return uv+ud*disp;}",
-    "vec3 chromaticAberration(sampler2D tex,vec2 uv,float strength){float edge=length(vec2(0.5)-uv)*2.0;strength*=edge*1.5;vec2 off=vec2(strength,0.0);float r=texture2D(tex,coverUv(uv-off)).r;float g=texture2D(tex,coverUv(uv)).g;float b=texture2D(tex,coverUv(uv+off)).b;return vec3(r,g,b);}",
-    "void main(){vec2 uv=v_uv;float aspect=u_resolution.x/u_resolution.y;vec2 nuv=vec2((uv.x-0.5)*aspect,uv.y-0.5);vec2 nm=vec2((u_mouse.x-0.5)*aspect,u_mouse.y-0.5);",
-    "vec2 duv=rippleFromCenter(uv,nuv,aspect);",
-    "float md=max(length(nuv-nm),0.001);float mi=1.0-smoothstep(0.0,0.34,md);vec2 mdel=nuv-nm;vec2 mdir=mdel/max(length(mdel),0.001);vec2 mud=vec2(mdir.x/aspect,mdir.y);float mw=sin(md*38.0-u_time*2.8)*0.008*mi;",
-    "float nv=smoothNoise(nuv*3.0+u_time*0.1)*0.006;duv+=mud*(mw+nv*mi);",
-    "float cd=length(nuv);float rg=0.5+0.5*sin(cd*32.0-u_time*2.35);vec3 color=chromaticAberration(u_texture,duv,0.008+rg*0.006+mi*0.008);",
-    "color*=smoothstep(1.2,0.5,length(v_uv-vec2(0.5)));",
-    "float pulse=0.5+0.5*sin(u_time*2.0);float glow=smoothstep(0.3+0.1*pulse,0.0,length(nuv-nm));color+=vec3(0.1,0.05,0.2)*glow;",
-    "gl_FragColor=vec4(color,1.0);}"
-  ].join("\n");
-
-  function findHost() {
-    var divs = document.querySelectorAll("section > div");
-    for (var i = 0; i < divs.length; i++) {
-      var s = divs[i].getAttribute("style") || "";
-      if (s.indexOf("background-bonkhouse") !== -1) return divs[i];
-    }
-    return null;
-  }
-
-  var canvas = document.createElement("canvas");
-  canvas.setAttribute("aria-hidden", "true");
-  canvas.style.cssText = "position:absolute;inset:0;width:100%;height:100%";
-  var gl = canvas.getContext("webgl", { alpha: true, antialias: false, depth: false, stencil: false });
-  if (!gl) return;
-
-  function makeShader(type, src) {
-    var sh = gl.createShader(type);
-    gl.shaderSource(sh, src);
-    gl.compileShader(sh);
-    return gl.getShaderParameter(sh, gl.COMPILE_STATUS) ? sh : null;
-  }
-  var vs = makeShader(gl.VERTEX_SHADER, VS);
-  var fs = makeShader(gl.FRAGMENT_SHADER, FS);
-  if (!vs || !fs) return;
-  var program = gl.createProgram();
-  gl.attachShader(program, vs);
-  gl.attachShader(program, fs);
-  gl.linkProgram(program);
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return;
-
-  var posLoc = gl.getAttribLocation(program, "a_position");
-  var timeLoc = gl.getUniformLocation(program, "u_time");
-  var mouseLoc = gl.getUniformLocation(program, "u_mouse");
-  var resLoc = gl.getUniformLocation(program, "u_resolution");
-  var imgResLoc = gl.getUniformLocation(program, "u_image_resolution");
-  var texLoc = gl.getUniformLocation(program, "u_texture");
-  var buffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]), gl.STATIC_DRAW);
-  var texture = gl.createTexture();
-  gl.bindTexture(gl.TEXTURE_2D, texture);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-
-  var pointer = { x: 0.5, y: 0.5 };
-  var imageSize = { width: 1, height: 1 };
-  var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var start = performance.now();
-
-  document.addEventListener("pointermove", function (e) {
-    var host = canvas.parentElement;
-    if (!host) return;
-    var rect = host.getBoundingClientRect();
-    if (!rect.width || !rect.height) return;
-    var x = (e.clientX - rect.left) / rect.width;
-    var y = 1 - (e.clientY - rect.top) / rect.height;
-    pointer.x = Math.max(0, Math.min(1, x));
-    pointer.y = Math.max(0, Math.min(1, y));
-  });
-
-  function render(now) {
-    // the dc runtime re-renders the hero after data loads; re-attach if our canvas got dropped
-    if (!canvas.isConnected) {
-      var host = findHost();
-      if (host) host.appendChild(canvas);
-    }
-    if (canvas.isConnected) {
-      var rect = canvas.parentElement.getBoundingClientRect();
-      var ratio = Math.min(window.devicePixelRatio || 1, 2);
-      var w = Math.max(1, Math.floor(rect.width * ratio));
-      var h = Math.max(1, Math.floor(rect.height * ratio));
-      if (canvas.width !== w || canvas.height !== h) {
-        canvas.width = w;
-        canvas.height = h;
-      }
-      gl.viewport(0, 0, w, h);
-      gl.useProgram(program);
-      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-      gl.enableVertexAttribArray(posLoc);
-      gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
-      gl.activeTexture(gl.TEXTURE0);
-      gl.bindTexture(gl.TEXTURE_2D, texture);
-      gl.uniform1i(texLoc, 0);
-      gl.uniform1f(timeLoc, reducedMotion ? 0 : (now - start) / 1000);
-      gl.uniform2f(mouseLoc, pointer.x, pointer.y);
-      gl.uniform2f(resLoc, canvas.width, canvas.height);
-      gl.uniform2f(imgResLoc, imageSize.width, imageSize.height);
-      gl.drawArrays(gl.TRIANGLES, 0, 6);
-    }
-    requestAnimationFrame(render);
-  }
-
-  var image = new Image();
-  image.onload = function () {
-    imageSize = { width: image.naturalWidth, height: image.naturalHeight };
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-    gl.bindTexture(gl.TEXTURE_2D, texture);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-    requestAnimationFrame(render);
-  };
-  image.src = "public/hero/background-bonkhouse.png";
-})();
-
-(function () {
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  var BASE = "/photos/house-house-2024/";
-  var PHOTOS = [
-    "mg-1639.jpg", "mg-1633.jpg", "img-0937.jpg",
-    "img-0901.jpg", "img-0915.jpg", "img-0919.jpg", "img-0939.jpg",
-    "img-5960.jpg", "img-5961.jpg", "mg-1634.jpg", "mg-1638.jpg", "mg-1646.jpg"
-  ].map(function (f) { return BASE + f; });
-  PHOTOS.forEach(function (u) { new Image().src = u; });
-  var next = 3;
-  var tick = 0;
-  setInterval(function () {
-    // re-query each tick: the dc runtime can re-render and replace the nodes
-    var imgs = document.querySelectorAll("img[data-photo-cycle]");
-    if (!imgs.length) return;
-    var img = imgs[tick % imgs.length];
-    var url = PHOTOS[next % PHOTOS.length];
-    img.style.opacity = "0";
-    setTimeout(function () {
-      img.src = url;
-      img.style.opacity = "1";
-    }, 350);
-    next++;
-    tick++;
-  }, 4000);
-})();
-</script>
+<script src="/home-effects.js" defer></script>
 </body>
 </html>

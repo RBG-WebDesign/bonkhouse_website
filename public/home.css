@@ -1,0 +1,60 @@
+.home-page { --home-section-space: clamp(48px, 6vw, 80px); }
+.home-page main > section { padding-block: var(--home-section-space) !important; }
+.home-page main > .home-hero { padding-block: 0 !important; }
+.home-page .home-hero-grid { padding-inline: var(--bh-gutter) !important; }
+.home-hero-actions { margin-top: 36px !important; gap: 12px !important; }
+.home-hero-actions .bh-button { min-height: 60px; padding-inline: 32px; }
+.home-hero [data-hero-copy] { min-width: 0; padding-block: 48px !important; }
+.home-hero [data-hero-copy] > img { display: block; }
+.home-hero [data-hero-poster] { padding: 24px 12px; }
+.home-page .home-upcoming { padding-block: clamp(48px, 6vw, 80px) !important; }
+.home-page .home-upcoming-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.65fr) !important; gap: clamp(28px, 4vw, 48px) !important; padding-inline: var(--bh-gutter) !important; }
+.home-upcoming-grid > div > p { max-width: 27ch; margin-top: 20px !important; font-size: clamp(18px, 1.8vw, 22px) !important; line-height: 1.6 !important; color: var(--bh-copy) !important; }
+.home-upcoming-grid dc-import { display: block; min-width: 0; }
+.home-section-heading { display: inline-block; padding-bottom: 10px; border-bottom: 1px solid rgba(255,212,0,.25); color: var(--bh-accent); text-shadow: 1px 1px 0 rgba(135,25,12,.7), 0 0 18px rgba(255,212,0,.12); }
+.home-load-state .bh-button { margin-top: 16px; }
+.home-load-state > p { margin-top: 16px !important; font-size: 18px !important; }
+.home-archive .bh-container > [data-m="grid"], .home-photos .bh-container > [data-m="grid"] { gap: 28px !important; margin-top: 36px !important; min-width: 0; }
+.home-archive-card { min-width: 0; min-height: 264px !important; padding: 24px !important; }
+.home-archive-card h3 { line-height: 1.08 !important; overflow-wrap: anywhere; }
+.home-archive-card > div:last-child span { max-width: 100%; white-space: normal; font-size: 10px !important; line-height: 1.5; }
+.home-archive-card:focus-visible { outline-offset: 7px; }
+.home-photos [data-m="grid"] { padding-inline: 10px; }
+.home-photos img { display: block; }
+.home-about [data-m="grid"] { gap: 32px !important; }
+.home-about [data-m="grid"] > div:last-child { max-width: 64ch; color: var(--bh-copy) !important; line-height: 1.85 !important; }
+.home-newsletter-inner { max-width: 640px; margin-inline: auto; padding-inline: var(--bh-gutter); }
+.home-subscribe { padding: clamp(24px, 3vw, 36px) !important; border-radius: 3px; }
+.home-subscribe-fields { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 12px; margin-top: 24px; }
+.home-subscribe-fields .bh-button { padding-inline: 22px; font-size: 22px; }
+.home-subscribe > p:nth-of-type(2) { color: var(--bh-copy) !important; }
+.home-footer > div { padding-inline: var(--bh-gutter) !important; }
+.home-footer a { display: inline-flex; align-items: center; min-height: 32px; }
+.home-footer > div:last-child { color: var(--bh-muted) !important; line-height: 1.6; }
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .home-hero { min-height: 600px !important; }
+  .home-hero [data-hero-copy] { max-width: 720px; margin-inline: auto; }
+  .home-hero-actions { justify-content: center; }
+  .home-archive-card { padding: 20px !important; min-height: 240px !important; }
+}
+@media (max-width: 767px) {
+  .home-hero { min-height: 0 !important; }
+  .home-hero-grid { gap: 16px !important; }
+  .home-hero [data-hero-copy] { padding-top: 40px !important; padding-bottom: 8px !important; }
+  .home-hero-actions { margin-top: 24px !important; }
+  .home-hero-actions .bh-button { min-height: 54px; padding: 12px 20px; font-size: 22px; }
+  .home-hero [data-hero-poster] { padding: 16px 12px 48px !important; }
+  .home-hero [data-hero-poster] .poster-cycle { max-width: 232px !important; }
+  .home-page .home-upcoming-grid { grid-template-columns: minmax(0, 1fr) !important; gap: 32px !important; }
+  .home-upcoming-grid > div > p { max-width: 34ch; }
+  .home-archive-card { min-height: 240px !important; }
+  .home-archive .bh-container > [data-m="grid"] { padding-inline: 5px; }
+  .home-photos .bh-container > [data-m="grid"] { max-width: 480px; margin-inline: auto; gap: 32px !important; padding-inline: 12px; }
+  .home-about [data-m="grid"] { gap: 24px !important; }
+  .home-subscribe-fields { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .home-subscribe-fields .bh-button { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-archive-card { transition: none !important; }
+}

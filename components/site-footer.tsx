@@ -4,17 +4,16 @@ import { publicAsset } from "@/lib/utils";
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-white/15 bg-black text-ink">
-      <div className="club-container grid gap-8 py-10 md:grid-cols-[1.2fr_0.8fr_0.8fr]">
+    <footer className="bh-footer border-t border-white/15 bg-black text-ink">
+      <div className="bh-container grid gap-8 py-10 md:grid-cols-[1.2fr_0.8fr_0.8fr]">
         <div>
           <img
             alt="Sunday Afternoon Bonk House"
             className="h-auto w-56"
             src={publicAsset("/bonkhouse-title.webp")}
           />
-          <p className="mt-4 max-w-xs text-sm leading-6 text-white/62">
-            A Culver City excuse to watch movies together, with double features, trailers,
-            neighborhood people, and just enough ceremony to make a Sunday feel official.
+          <p className="mt-4 max-w-xs text-sm leading-6 text-white/70">
+            Come Bonk with us.
           </p>
         </div>
         <div>
@@ -35,7 +34,7 @@ export function SiteFooter() {
           </div>
         </div>
       </div>
-      <div className="club-container border-t border-white/10 py-4 text-center text-xs text-white/40">
+      <div className="bh-container border-t border-white/10 py-4 text-center text-xs text-white/65">
         (c) 2026 Sunday Afternoon Bonkhouse. All rights reserved.
       </div>
     </footer>

@@ -98,8 +98,8 @@ function ImageField({
       const payload = await response.json();
       if (!response.ok) throw new Error(payload.error || "Upload failed.");
       setUrl(payload.url);
-    } catch (uploadError: any) {
-      setError(uploadError.message || "Upload failed.");
+    } catch (uploadError) {
+      setError(uploadError instanceof Error && uploadError.message ? uploadError.message : "Upload failed.");
     } finally {
       setBusy(false);
     }
@@ -269,8 +269,8 @@ export function AdminEventForm({ event }: { event?: EventRecord }) {
       if (!event && result.id) {
         router.push(`/admin/events/${result.id}`);
       }
-    } catch (saveError: any) {
-      setMessage(saveError.message || "Could not save the event.");
+    } catch (saveError) {
+      setMessage(saveError instanceof Error && saveError.message ? saveError.message : "Could not save the event.");
     } finally {
       setSaving(false);
     }

@@ -27,16 +27,16 @@ function Verdict({
   return (
     <>
       <div
-        className={`inline-block -rotate-3 border-4 px-5 py-3 font-display text-3xl uppercase tracking-wider sm:text-4xl ${
+        className={`bh-stamp inline-block -rotate-3 border-4 px-5 py-3 font-display text-3xl uppercase tracking-wider sm:text-4xl ${
           tone === "good" ? "border-butter text-butter" : "border-red-500 text-red-500"
         }`}
       >
         {stamp}
       </div>
-      <h1 className="mt-8 font-display text-5xl uppercase leading-[0.92] tracking-[-0.05em] text-white sm:text-6xl">
+      <h1 className="bh-page-title">
         {headline}
       </h1>
-      <p className="mt-5 max-w-xl text-lg leading-8 text-white/70">{body}</p>
+      <p className="bh-intro">{body}</p>
     </>
   );
 }
@@ -66,7 +66,7 @@ export default async function TicketPage({
   const waitlisted = ticket?.status === "waitlisted" || ticket?.seat_type === "waitlist";
 
   return (
-    <div className="club-container py-16">
+    <div className="bh-container bh-page bh-verdict">
       {!ticket ? (
         <Verdict
           stamp="Bogus ticket"
@@ -85,7 +85,7 @@ export default async function TicketPage({
         <Verdict
           stamp="In line"
           headline="Waitlisted, not seated (yet)"
-          body={`${guestName} is on the waitlist. No seat is confirmed yet — if one opens up, a fresh confirmation email with a real ticket will arrive.`}
+          body={`${guestName} is on the waitlist. No seat is confirmed yet. If one opens up, a fresh confirmation email with a real ticket will arrive.`}
           tone="bad"
         />
       ) : (
@@ -108,15 +108,15 @@ export default async function TicketPage({
         </div>
       ) : null}
 
-      <div className="mt-10 flex flex-wrap items-center gap-6">
+      <div className="bh-actions">
         <Link
-          className="inline-flex h-12 items-center rounded-[3px] border border-butter bg-butter px-6 font-bebas text-2xl uppercase tracking-wider leading-none text-black hover:bg-[#ffe15a]"
+          className="bh-button"
           href={eventHref}
         >
           {ticket ? "Back to the event" : "See what's screening"}
         </Link>
         {token ? (
-          <Link className="text-sm uppercase tracking-wide text-white/40 underline hover:text-white/70" href={`/admin/check-in?token=${encodeURIComponent(token)}`}>
+          <Link className="bh-button bh-button--text" href={`/admin/check-in?token=${encodeURIComponent(token)}`}>
             Working the door? Check in
           </Link>
         ) : null}

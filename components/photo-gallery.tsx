@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { Camera } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -12,38 +12,46 @@ const batchSize = 36;
 export function PhotoGallery({ photos }: { photos: Photo[] }) {
   const [visibleCount, setVisibleCount] = useState(batchSize);
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const captionId = useId();
   const visiblePhotos = useMemo(() => photos.slice(0, visibleCount), [photos, visibleCount]);
   const hasMore = visibleCount < photos.length;
 
   useEffect(() => {
-    if (!selectedPhoto) {
+    const dialog = dialogRef.current;
+    if (!selectedPhoto || !dialog) {
       return;
     }
 
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setSelectedPhoto(null);
-      }
-    };
-
     const previousOverflow = document.body.style.overflow;
+    const previouslyFocused = document.activeElement;
     document.body.style.overflow = "hidden";
-    window.addEventListener("keydown", handleKeyDown);
+    dialog.showModal();
 
     return () => {
       document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", handleKeyDown);
+      dialog.close();
+      if (previouslyFocused instanceof HTMLElement && previouslyFocused.isConnected) {
+        previouslyFocused.focus({ preventScroll: true });
+      }
     };
   }, [selectedPhoto]);
 
   return (
     <>
+      {photos.length === 0 ? (
+        <div className="bh-state mt-10" role="status">
+          <h2 className="bh-section-title">Photos coming soon</h2>
+          <p>Photos from our screenings will appear here.</p>
+        </div>
+      ) : null}
       <div className="photo-masonry mt-10">
         {visiblePhotos.map((photo) => (
           <article className="club-card photo-gallery-card mb-5 break-inside-avoid p-4" key={photo.id}>
             <button
               aria-label={`Enlarge ${photo.caption}`}
               className="focus-ring group block w-full overflow-hidden rounded-sm text-left"
+              disabled={!photo.imageUrl}
               onClick={() => setSelectedPhoto(photo)}
               type="button"
             >
@@ -74,19 +82,20 @@ export function PhotoGallery({ photos }: { photos: Photo[] }) {
 
       {hasMore ? (
         <div className="mt-8 flex justify-center">
-          <Button onClick={() => setVisibleCount((count) => count + batchSize)} type="button">
+          <Button className="bh-button" onClick={() => setVisibleCount((count) => count + batchSize)} type="button">
             Load more photos
           </Button>
         </div>
       ) : null}
 
       {selectedPhoto ? (
-        <div
+        <dialog
+          ref={dialogRef}
           aria-label="Expanded photo viewer"
-          aria-modal="true"
+          aria-describedby={captionId}
           className="photo-lightbox"
           onClick={() => setSelectedPhoto(null)}
-          role="dialog"
+          onCancel={() => setSelectedPhoto(null)}
         >
           <button
             aria-label="Close photo viewer"
@@ -103,12 +112,12 @@ export function PhotoGallery({ photos }: { photos: Photo[] }) {
               decoding="async"
               src={publicAsset(selectedPhoto.imageUrl)}
             />
-            <figcaption className="photo-lightbox__caption">
+            <figcaption id={captionId} className="photo-lightbox__caption">
               <span>{selectedPhoto.caption}</span>
               <span>{selectedPhoto.eventTitle}</span>
             </figcaption>
           </figure>
-        </div>
+        </dialog>
       ) : null}
     </>
   );

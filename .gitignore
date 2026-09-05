@@ -6,6 +6,7 @@ coverage/
 .vercel/
 *.tsbuildinfo
 .playwright-mcp/
+.playwright-cli/
 tmp-dev*.log
 
 public/logos past/

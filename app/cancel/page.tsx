@@ -31,27 +31,27 @@ export default async function CancelPage({
   const showForm = !done && !failed && reservation && token;
 
   return (
-    <div className="club-container py-16">
-      <div className="inline-block -rotate-3 border-4 border-butter px-5 py-3 font-display text-3xl uppercase tracking-wider text-butter sm:text-4xl">
+    <div className="bh-container bh-page bh-verdict">
+      <div className="bh-stamp inline-block -rotate-3 border-4 border-butter px-5 py-3 font-display text-3xl uppercase tracking-wider text-butter sm:text-4xl">
         {stamp}
       </div>
-      <h1 className="mt-8 font-display text-5xl uppercase leading-[0.92] tracking-[-0.05em] text-white sm:text-6xl">{headline}</h1>
-      <p className="mt-5 max-w-xl text-lg leading-8 text-white/70">{body}</p>
+      <h1 className="bh-page-title">{headline}</h1>
+      <p className="bh-intro">{body}</p>
 
-      <div className="mt-10 flex flex-wrap items-center gap-6">
+      <div className="bh-actions">
         {showForm ? (
           <form action="/api/rsvp/cancel" method="post">
             <input name="reservation" type="hidden" value={reservation} />
             <input name="token" type="hidden" value={token} />
             <button
-              className="inline-flex h-12 items-center rounded-[3px] border border-butter bg-butter px-6 font-bebas text-2xl uppercase tracking-wider leading-none text-black hover:bg-[#ffe15a]"
+              className="bh-button"
               type="submit"
             >
               Release my seats
             </button>
           </form>
         ) : null}
-        <Link className="text-sm uppercase tracking-wide text-white/60 underline hover:text-white" href="/screenings">
+        <Link className="bh-button bh-button--text" href="/screenings">
           {showForm ? "Keep my seats" : "See what's screening"}
         </Link>
       </div>

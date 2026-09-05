@@ -21,16 +21,21 @@ export function RemoveReservationButton({
 
     setBusy(true);
     setError("");
-    const response = await fetch(`/api/admin/reservations/${reservationId}`, { method: "DELETE" });
+    try {
+      const response = await fetch(`/api/admin/reservations/${reservationId}`, { method: "DELETE" });
 
-    if (!response.ok) {
-      const body = await response.json().catch(() => null);
-      setError(body?.error || "Could not remove.");
+      if (!response.ok) {
+        const body = await response.json().catch(() => null);
+        setError(body?.error || "Could not remove.");
+        return;
+      }
+
+      router.refresh();
+    } catch {
+      setError("Could not reach the server. Try again.");
+    } finally {
       setBusy(false);
-      return;
     }
-
-    router.refresh();
   }
 
   return (
@@ -43,7 +48,7 @@ export function RemoveReservationButton({
       >
         {busy ? "Removing…" : "Remove"}
       </button>
-      {error ? <span className="ml-2 text-xs font-bold text-cherry">{error}</span> : null}
+      {error ? <span role="alert" className="ml-2 text-xs font-bold text-cherry">{error}</span> : null}
     </span>
   );
 }

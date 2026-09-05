@@ -1,6 +1,18 @@
 import { NextResponse } from "next/server";
 import { isAdminRequest } from "@/lib/admin";
 
+type Attendee = {
+  guest_name: string;
+  guest_email: string;
+  status: string;
+  quantity: number;
+  tickets: {
+    seat_type: string;
+    status: string;
+    checked_in_at: string | null;
+  }[];
+};
+
 export async function GET(
   _request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -16,12 +28,13 @@ export async function GET(
     .from("reservations")
     .select("guest_name,guest_email,status,quantity,tickets(seat_type,status,checked_in_at)")
     .eq("event_id", id)
-    .order("created_at", { ascending: true });
+    .order("created_at", { ascending: true })
+    .returns<Attendee[]>();
 
   const header = ["name", "email", "reservation_status", "quantity", "ticket_statuses"].join(",");
-  const rows = (data || []).map((reservation: any) => {
+  const rows = (data || []).map((reservation) => {
     const ticketStatuses = (reservation.tickets || [])
-      .map((ticket: any) => `${ticket.seat_type}:${ticket.status}${ticket.checked_in_at ? ":checked" : ""}`)
+      .map((ticket) => `${ticket.seat_type}:${ticket.status}${ticket.checked_in_at ? ":checked" : ""}`)
       .join(" | ");
     return [
       csv(reservation.guest_name),

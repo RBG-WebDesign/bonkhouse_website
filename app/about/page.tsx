@@ -44,6 +44,11 @@ export default function AboutPage() {
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+    const backdrop = canvas.parentElement!;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const smallScreen = window.matchMedia("(pointer: coarse), (max-width: 767px)");
+    let engaged = false;
+    let pixelScale = 1;
 
     const W = 480;
     const H = 270;
@@ -57,7 +62,6 @@ export default function AboutPage() {
     // that get shuffled and offset each tick, instead of half a million
     // Math.random() calls per frame.
     const FPS = 30;
-    const FRAME_MS = 1000 / FPS;
     const frameScale = FPS / 60; // word lifetimes were tuned in 60fps ticks
     const NOISE_FRAMES = 6;
     const PAD = 64;
@@ -79,11 +83,17 @@ export default function AboutPage() {
       return c;
     });
 
-    const photos = PHOTOS.map((src) => {
-      const img = new Image();
-      img.src = src;
-      return img;
-    });
+    // A flash needs one photo, so do not download the entire gallery on entry.
+    const photos: (HTMLImageElement | undefined)[] = [];
+    const photoAt = (index: number) => {
+      if (!photos[index]) {
+        const img = new Image();
+        img.decoding = "async";
+        img.src = PHOTOS[index];
+        photos[index] = img;
+      }
+      return photos[index];
+    };
 
     let raf = 0;
     let frame = 0;
@@ -101,12 +111,13 @@ export default function AboutPage() {
     let mouseY = 0.5;
 
     const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      const maxWidth = smallScreen.matches ? 640 : 1280;
+      pixelScale = Math.min(1, maxWidth / window.innerWidth, 720 / window.innerHeight);
+      canvas.width = Math.round(window.innerWidth * pixelScale);
+      canvas.height = Math.round(window.innerHeight * pixelScale);
       ctx.imageSmoothingEnabled = false;
     };
     resize();
-    window.addEventListener("resize", resize);
 
     const onMove = (e: PointerEvent) => {
       mouseX = e.clientX / window.innerWidth;
@@ -215,20 +226,22 @@ export default function AboutPage() {
       bctx.restore();
     };
 
-    const drawActiveWords = () => {
+    const drawActiveWords = (elapsedFrames: number) => {
       for (let i = activeWords.length - 1; i >= 0; i--) {
         const event = activeWords[i];
         drawWordEvent(event);
-        event.frames--;
+        event.frames -= elapsedFrames;
         if (event.frames <= 0) {
           activeWords.splice(i, 1);
         }
       }
     };
 
-    const onDown = () => {
+    const onDown = (event: PointerEvent) => {
+      if (reducedMotion.matches || (event.target instanceof Element && event.target.closest("header, button, a"))) return;
       burst = 24;
-      flashPhoto = Math.floor(Math.random() * photos.length);
+      flashPhoto = Math.floor(Math.random() * PHOTOS.length);
+      photoAt(flashPhoto);
       flashFrames = 4;
       // a click forces BONK into the sequence without resetting the sentence
       activeWords.push(makeWordEvent("BONK"));
@@ -239,8 +252,12 @@ export default function AboutPage() {
 
     let lastTick = 0;
     const tick = (now: number) => {
-      raf = requestAnimationFrame(tick);
-      if (now - lastTick < FRAME_MS) return;
+      raf = 0;
+      if (document.hidden) return;
+      if (!reducedMotion.matches) raf = requestAnimationFrame(tick);
+      const fps = engaged ? 15 : smallScreen.matches ? 20 : FPS;
+      if (now - lastTick < 1000 / fps) return;
+      const elapsedFrames = lastTick ? Math.min(3, (now - lastTick) / (1000 / FPS)) : 1;
       lastTick = now;
       frame++;
 
@@ -261,8 +278,9 @@ export default function AboutPage() {
       }
 
       // subliminal photo splice, a few frames at a time
-      if (flashFrames <= 0 && Math.random() < 0.006) {
-        flashPhoto = Math.floor(Math.random() * photos.length);
+      if (!reducedMotion.matches && flashFrames <= 0 && Math.random() < 0.006) {
+        flashPhoto = Math.floor(Math.random() * PHOTOS.length);
+        photoAt(flashPhoto);
         flashFrames = 2 + Math.floor(Math.random() * 4);
       }
       if (flashFrames > 0) {
@@ -289,18 +307,18 @@ export default function AboutPage() {
           bctx.filter = "none";
           bctx.globalAlpha = 1;
         }
-        flashFrames--;
+        flashFrames -= elapsedFrames;
       }
 
       // the phrase runs continuously, one scattered word at a time
-      if (performance.now() >= nextWordAt) {
+      if (!reducedMotion.matches && performance.now() >= nextWordAt) {
         spawnNextWord();
       }
-      drawActiveWords();
+      drawActiveWords(elapsedFrames);
 
       // vertical hold slipping
       const jumpY =
-        Math.random() < 0.04 ? (Math.random() - 0.5) * canvas.height * 0.5 : 0;
+        !reducedMotion.matches && Math.random() < 0.04 ? (Math.random() - 0.5) * canvas.height * 0.5 : 0;
       ctx.drawImage(buffer, 0, jumpY, canvas.width, canvas.height);
       if (jumpY) {
         ctx.drawImage(
@@ -319,33 +337,51 @@ export default function AboutPage() {
       const slices = Math.min(12, 2 + Math.floor(burst));
       for (let s = 0; s < slices; s++) {
         const sy = Math.random() * canvas.height;
-        const sh = 4 + Math.random() * 42;
-        const dx = (Math.random() - 0.5) * (30 + burst * 22);
+        const sh = (4 + Math.random() * 42) * pixelScale;
+        const dx = (Math.random() - 0.5) * (30 + burst * 22) * pixelScale;
         ctx.drawImage(buffer, 0, sy * scaleY, W, sh * scaleY, dx, sy, canvas.width, sh);
       }
 
       // the cursor drags the signal sideways
       const cy = mouseY * canvas.height;
-      ctx.drawImage(buffer, 0, (cy - 22) * scaleY, W, 44 * scaleY, (mouseX - 0.5) * 140, cy - 22, canvas.width, 44);
+      ctx.drawImage(buffer, 0, (cy - 22 * pixelScale) * scaleY, W, 44 * pixelScale * scaleY, (mouseX - 0.5) * 140 * pixelScale, cy - 22 * pixelScale, canvas.width, 44 * pixelScale);
 
       // occasional chroma ghost
       if (burst > 8 || frame % 100 < 2) {
         ctx.globalCompositeOperation = "lighter";
         ctx.globalAlpha = 0.3;
-        ctx.drawImage(canvas, 7, 0);
+        ctx.drawImage(canvas, 7 * pixelScale, 0);
         ctx.globalAlpha = 1;
         ctx.globalCompositeOperation = "source-over";
       }
 
-      burst = Math.max(0, burst - 1.6);
+      burst = Math.max(0, burst - 1.6 * elapsedFrames);
     };
+    const dimBackdrop = () => {
+      engaged = true;
+      backdrop.dataset.dimmed = "true";
+    };
+    const resumeDrawing = () => {
+      cancelAnimationFrame(raf);
+      lastTick = 0;
+      backdrop.dataset.hidden = String(document.hidden);
+      if (!document.hidden) raf = requestAnimationFrame(tick);
+    };
+    const onDisplayChange = () => { resize(); resumeDrawing(); };
+    document.addEventListener("tv:click", dimBackdrop, { once: true });
+    document.addEventListener("visibilitychange", resumeDrawing);
+    reducedMotion.addEventListener("change", resumeDrawing);
+    window.addEventListener("resize", onDisplayChange);
     raf = requestAnimationFrame(tick);
 
     return () => {
       cancelAnimationFrame(raf);
-      window.removeEventListener("resize", resize);
+      window.removeEventListener("resize", onDisplayChange);
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerdown", onDown);
+      document.removeEventListener("tv:click", dimBackdrop);
+      document.removeEventListener("visibilitychange", resumeDrawing);
+      reducedMotion.removeEventListener("change", resumeDrawing);
     };
   }, []);
 
@@ -371,7 +407,15 @@ export default function AboutPage() {
           inset: 0;
           width: 100%;
           height: 100%;
+          opacity: 1;
+          transition: opacity 800ms ease;
           animation: about-hue 13s steps(1, end) infinite;
+        }
+        .about-void[data-dimmed="true"] canvas { opacity: .5; }
+        .about-void[data-hidden="true"] canvas,
+        .about-void[data-hidden="true"] .about-scanlines { animation-play-state: paused; }
+        @media (prefers-reduced-motion: reduce) {
+          .about-void canvas, .about-void .about-scanlines { animation: none !important; transition: none; }
         }
         .about-scanlines {
           position: absolute;

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Bebas_Neue, Covered_By_Your_Grace, Special_Elite } from "next/font/google";
 import "./globals.css";
+import "../public/bonkhouse.css";
+import "../public/site-header.css";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 
@@ -38,9 +40,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${bebas.variable} ${hand.variable} ${special.variable}`}>
-      <body>
+      <body className="bh-site">
+        <a className="bh-skip-link" href="#main-content">Skip to content</a>
         <SiteHeader />
-        <main>{children}</main>
+        <main id="main-content" tabIndex={-1}>{children}</main>
         <SiteFooter />
       </body>
     </html>

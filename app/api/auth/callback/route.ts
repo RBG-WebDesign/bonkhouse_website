@@ -13,7 +13,15 @@ export async function GET(request: Request) {
   // Only same-site paths: the session cookie was just set for THIS origin, so
   // sending the browser anywhere else (another host, an open redirect) would
   // land it logged out.
-  const next = requestedNext.startsWith("/") && !requestedNext.startsWith("//") ? requestedNext : "/admin";
+  let next = new URL("/admin", origin);
+  if (requestedNext.startsWith("/")) {
+    try {
+      const candidate = new URL(requestedNext, origin);
+      if (candidate.origin === next.origin) next = candidate;
+    } catch {
+      // Malformed destinations use the normal admin landing page.
+    }
+  }
 
   const supabase = await createClient();
 
@@ -25,7 +33,7 @@ export async function GET(request: Request) {
     if (error) {
       return NextResponse.redirect(new URL("/admin?signin=1&expired=1", origin));
     }
-    return NextResponse.redirect(new URL(next, origin));
+    return NextResponse.redirect(next);
   }
 
   if (code) {
@@ -35,5 +43,5 @@ export async function GET(request: Request) {
     }
   }
 
-  return NextResponse.redirect(new URL(next, origin));
+  return NextResponse.redirect(next);
 }

@@ -1,95 +1,99 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <base href="/">
 <script src="./support.js"></script>
 </head>
-<body>
+<body class="bh-site bh-screenings-page">
 <x-dc>
 <helmet>
+<title>Screenings | Sunday Afternoon Bonkhouse</title>
+<link rel="icon" href="/icon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Covered+By+Your+Grace&amp;family=Special+Elite&amp;display=swap" rel="stylesheet">
-<style>
-body{margin:0;min-height:100vh;overflow-x:hidden;color:#f7f4ea;font-family:"Trebuchet MS",Verdana,sans-serif;background:radial-gradient(circle at 65% 12%,rgba(255,212,0,.075),transparent 24rem),radial-gradient(circle at 18% 20%,rgba(129,39,24,.11),transparent 18rem),linear-gradient(180deg,#050403 0%,#090705 48%,#000 100%)}
-*{box-sizing:border-box}
-a{color:inherit;text-decoration:none}
-a:hover{color:#ffd400}
-body::after{position:fixed;inset:0;z-index:71;pointer-events:none;content:"";opacity:.26;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.92' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.42'/%3E%3C/svg%3E"),radial-gradient(ellipse at center,transparent 48%,rgba(0,0,0,.45) 100%);mix-blend-mode:overlay}
-@media (max-width:899px){[data-m="nav"]{display:none!important}}
-@media (max-width:767px){[data-m="hpad"]{padding:0 16px!important}[data-m="grid"]{grid-template-columns:1fr!important}[data-m="stack"]{flex-direction:column!important}[data-m="stack"] > *{width:100%}[data-m="fullbtn"] > a{flex:1 1 100%}[data-m="ticketmeta"]{flex-direction:column!important;align-items:flex-start!important;gap:6px!important}[data-m="ticketmeta"] > span[aria-hidden]{display:none!important}[data-m="ticket"]{flex-direction:column!important;gap:16px}[data-m="ticketstub"]{padding-right:0!important;padding-bottom:12px;justify-content:center;border-bottom:1px dashed rgba(247,244,234,.3)}[data-m="tickettext"]{writing-mode:horizontal-tb!important;transform:none!important}[data-m="ticketdiv"]{display:none!important}[data-m="ticketbody"]{padding-left:0!important}[data-m="secpad"]{padding-left:16px!important;padding-right:16px!important}[data-m="secpad"] > h1{font-size:44px!important}[data-m="secpad"] > h2{font-size:40px!important}[data-m="grid"]{gap:28px!important}}
-</style>
+<link rel="stylesheet" href="/bonkhouse.css">
+<link rel="stylesheet" href="/site-header.css">
+<link rel="stylesheet" href="/archive.css">
 </helmet>
 
-<div style="background:#000;color:#f7f4ea">
-
+<div class="bh-screenings">
+<a class="bh-skip-link" href="#main-content">Skip to content</a>
 <dc-import name="SiteHeader" active="screenings" style="position:sticky;top:0;z-index:50;display:block" hint-size="100%,81px"></dc-import>
+<main id="main-content" tabIndex="-1">
+<section class="bh-container bh-screenings-current" aria-labelledby="now-screening">
+  <h1 class="bh-screenings-title" id="now-screening">Now Screening</h1>
 
-<section data-m="secpad" style="max-width:1280px;margin:0 auto;padding:56px 32px 0">
-  <h1 style="display:inline-block;margin:0;padding-bottom:8px;border-bottom:1px solid rgba(255,212,0,.25);font-family:'Bebas Neue',Impact,sans-serif;font-size:56px;font-weight:400;line-height:1;letter-spacing:.05em;text-transform:uppercase;color:#ffd400;text-shadow:1px 1px 0 rgba(135,25,12,.7),0 0 18px rgba(255,212,0,.12)">Now Screening</h1>
+  <sc-if value="{{ loading }}" hint-placeholder-val="{{ false }}">
+    <div class="bh-state bh-screenings-state" role="status">
+      <p class="bh-eyebrow">Screenings</p>
+      <p>Checking the calendar...</p>
+    </div>
+  </sc-if>
 
   <sc-if value="{{ hasCurrent }}" hint-placeholder-val="{{ true }}">
-    <div data-m="grid" style="display:grid;grid-template-columns:1.9fr 1.1fr;gap:48px;align-items:center;margin-top:40px">
+    <div class="bh-screenings-feature">
       <dc-import name="Ticket" hint-size="100%,320px"></dc-import>
-
-      <div>
-        <p style="margin:0;font-size:20px;line-height:1.6;color:rgba(255,255,255,.9)">{{ dateLine }}</p>
-        <div data-m="fullbtn" style="display:flex;flex-wrap:wrap;gap:16px;margin-top:24px">
-          <a href="{{ curHref }}" style="position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:60px;padding:0 40px;border:1px solid #ffd400;border-radius:3px;background:#ffd400;color:#000;font-family:'Bebas Neue',Impact,sans-serif;font-size:24px;letter-spacing:.05em;text-transform:uppercase;box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 8px 22px rgba(0,0,0,.32),0 0 26px rgba(255,212,0,.18)" style-hover="background:#ffe15a;transform:translateY(-2px)">{{ curCta }}
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
-          </a>
-        </div>
+      <div class="bh-screenings-details">
+        <p>{{ dateLine }}</p>
+        <a class="bh-button" href="{{ curHref }}">{{ curCta }}
+          <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+        </a>
       </div>
     </div>
   </sc-if>
 
   <sc-if value="{{ noCurrent }}" hint-placeholder-val="{{ false }}">
-    <div style="margin-top:40px;padding:32px;border:1px dashed rgba(255,212,0,.45);border-radius:3px;background:rgba(255,255,255,.02)">
-      <p style="margin:0;max-width:40rem;font-size:20px;line-height:1.6;color:rgba(255,255,255,.9)">Nothing on the calendar yet. The next screening lands here the moment it is announced.</p>
-      <a href="/#list" style="display:inline-flex;align-items:center;gap:8px;margin-top:20px;height:52px;padding:0 28px;border:1px solid #ffd400;border-radius:3px;background:#ffd400;color:#000;font-family:'Bebas Neue',Impact,sans-serif;font-size:22px;letter-spacing:.05em;text-transform:uppercase" style-hover="background:#ffe15a">JOIN THE LIST</a>
+    <div class="bh-state bh-screenings-state">
+      <p class="bh-eyebrow">The next screening</p>
+      <p>Nothing on the calendar yet. The next screening lands here the moment it is announced.</p>
+      <a class="bh-button" href="/#list">Join the list</a>
     </div>
   </sc-if>
 
   <sc-if value="{{ loadFailed }}" hint-placeholder-val="{{ false }}">
-    <p style="margin:24px 0 0;font-family:'Special Elite',monospace;font-size:13px;color:rgba(255,255,255,.55)">Screenings are taking a moment to load. Refresh in a bit.</p>
+    <div class="bh-state bh-screenings-state" role="alert">
+      <h2 class="bh-section-title">Screenings could not load</h2>
+      <p>We could not check the calendar. Try again to see what is screening.</p>
+      <button class="bh-button" type="button" onClick="{{ retry }}">Try again</button>
+    </div>
   </sc-if>
 </section>
 
 <sc-for list="{{ sections }}" as="s" hint-placeholder-count="1">
-<section data-m="secpad" style="max-width:1280px;margin:0 auto;padding:80px 32px 0">
-  <h2 style="display:inline-block;margin:0;padding-bottom:8px;border-bottom:1px solid rgba(255,212,0,.25);font-family:'Bebas Neue',Impact,sans-serif;font-size:48px;font-weight:400;line-height:1;letter-spacing:.05em;text-transform:uppercase;color:#ffd400;text-shadow:1px 1px 0 rgba(135,25,12,.7),0 0 18px rgba(255,212,0,.12)">{{ s.title }}</h2>
-
-  <div data-m="grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:36px 32px;margin-top:48px;align-items:start">
+<section class="bh-container bh-archive-section" aria-label="{{ s.title }}">
+  <h2 class="bh-screenings-title bh-screenings-title--section">{{ s.title }}</h2>
+  <div class="bh-archive-grid">
     <sc-for list="{{ s.cards }}" as="p" hint-placeholder-count="3">
-    <a href="{{ p.href }}" style="position:relative;display:flex;flex-direction:column;background:linear-gradient(180deg,#1b1610,#0d0b08);border:1px solid #4a3d2c;border-radius:4px;overflow:hidden;color:#f7f4ea;user-select:none;isolation:isolate;box-shadow:0 0 0 1px rgba(255,212,0,.12),0 18px 48px rgba(0,0,0,.6);transform:rotate({{ p.rot }});transition:transform .3s" style-hover="transform:translateY(-6px) rotate(0deg)">
-      <div style="position:relative;aspect-ratio:3/4;overflow:hidden;background:#101010">
+    <a class="bh-archive-card" href="{{ p.href }}" style="--card-rotation:{{ p.rot }}">
+      <div class="bh-archive-art">
         <sc-if value="{{ p.hasPoster }}" hint-placeholder-val="{{ true }}">
-          <img loading="lazy" alt="{{ p.title }} poster" src="{{ p.poster }}" style="display:block;width:100%;height:100%;object-fit:cover;transition:transform .4s" style-hover="transform:scale(1.04)">
+          <img loading="lazy" decoding="async" alt="" src="{{ p.poster }}" onError="{{ p.onPosterError }}">
         </sc-if>
         <sc-if value="{{ p.noPoster }}" hint-placeholder-val="{{ false }}">
-          <div style="display:grid;place-items:center;height:100%;padding:32px 24px;text-align:center;font-family:'Bebas Neue',Impact,sans-serif;font-size:34px;line-height:.95;letter-spacing:.03em;text-transform:uppercase;color:rgba(247,244,234,.45)">{{ p.title }}</div>
+          <div class="bh-archive-placeholder" aria-hidden="true">
+            <span>Bonkhouse presents</span>
+            <strong>{{ p.title }}</strong>
+          </div>
         </sc-if>
-        <div style="position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 40px rgba(0,0,0,.4);background:linear-gradient(180deg,rgba(0,0,0,.12),transparent 22%,transparent 76%,rgba(0,0,0,.45))"></div>
-        <div style="position:absolute;top:10px;left:10px;padding:2px 8px;text-align:center;background:#f2ede0;border:1px solid rgba(0,0,0,.1);border-radius:2px;box-shadow:0 2px 6px rgba(0,0,0,.35);transform:rotate(-2deg)">
-          <div style="font-size:9.6px;font-weight:900;line-height:1;color:#a83428">{{ p.mon }}</div>
-          <div style="margin-top:2px;font-family:'Special Elite',monospace;font-size:24px;font-weight:700;line-height:1;color:#000">{{ p.day }}</div>
-          <div style="margin-top:2px;font-family:'Special Elite',monospace;font-size:9px;letter-spacing:.08em;line-height:1;color:rgba(0,0,0,.5)">{{ p.year }}</div>
-        </div>
+        <div class="bh-archive-art-shade" aria-hidden="true"></div>
+        <time class="bh-archive-date" dateTime="{{ p.startsAt }}" aria-label="{{ p.dateLong }}">
+          <span>{{ p.mon }}</span>
+          <strong>{{ p.day }}</strong>
+          <span>{{ p.year }}</span>
+        </time>
       </div>
-      <div style="position:relative;height:0;border-top:2px dashed rgba(247,244,234,.22)">
-        <div style="position:absolute;left:-13px;top:-13px;width:24px;height:24px;border-radius:50%;background:#000;border-right:1.5px solid #4a3d2c"></div>
-        <div style="position:absolute;right:-13px;top:-13px;width:24px;height:24px;border-radius:50%;background:#000;border-left:1.5px solid #4a3d2c"></div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:8px;padding:18px 18px 16px">
-        <p style="margin:0;font-family:'Special Elite',monospace;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#ffd400">{{ p.meta }}</p>
-        <h4 style="margin:0;font-family:'Bebas Neue',Impact,sans-serif;font-size:26px;font-weight:400;letter-spacing:.03em;line-height:.98;text-transform:uppercase;color:#f7f4ea;text-wrap:balance">{{ p.title }}</h4>
-        <p style="margin:0;font-size:12.5px;line-height:1.55;color:rgba(247,244,234,.6)">{{ p.blurb }}</p>
-        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px">
-          <span style="display:inline-block;padding:3px 10px;border:1px solid rgba(247,244,234,.3);border-radius:1.5px;color:rgba(247,244,234,.65);font-family:'Special Elite',monospace;font-size:8.8px;font-weight:700;letter-spacing:.06em;text-transform:uppercase">{{ s.tag }}</span>
+      <div class="bh-archive-perforation" aria-hidden="true"></div>
+      <div class="bh-archive-copy">
+        <p class="bh-archive-meta">{{ p.meta }}</p>
+        <h3>{{ p.title }}</h3>
+        <p class="bh-archive-blurb">{{ p.blurb }}</p>
+        <div class="bh-archive-tags">
+          <span class="bh-archive-tag">{{ s.tag }}</span>
           <sc-if value="{{ p.hasBadge }}" hint-placeholder-val="{{ false }}">
-            <span style="display:inline-block;padding:3px 10px;border:1px solid rgba(0,0,0,.1);border-radius:1.5px;background:{{ p.badgeBg }};color:#fff;font-family:'Special Elite',monospace;font-size:8.8px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;transform:rotate(.8deg);box-shadow:0 4px 6px -1px rgba(0,0,0,.3)">{{ p.badge }}</span>
+            <span class="bh-archive-tag bh-archive-tag--badge" style="background:{{ p.badgeBg }}">{{ p.badge }}</span>
           </sc-if>
         </div>
       </div>
@@ -98,38 +102,62 @@ body::after{position:fixed;inset:0;z-index:71;pointer-events:none;content:"";opa
   </div>
 </section>
 </sc-for>
+</main>
 
-<footer style="margin-top:96px;border-top:1px solid rgba(255,255,255,.15);background:#000">
-  <div style="max-width:1280px;margin:0 auto;padding:16px 32px;text-align:center;font-size:12px;color:rgba(255,255,255,.4)">(c) 2026 Sunday Afternoon Bonkhouse. All rights reserved. &middot; <a href="/" style="color:rgba(255,255,255,.6)">Back to the clubhouse</a></div>
+<footer class="bh-screenings-footer">
+  <div class="bh-container">(c) 2026 Sunday Afternoon Bonkhouse. All rights reserved. &middot; <a href="/">Back to the clubhouse</a></div>
 </footer>
-
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
-// One list from /events.js (Supabase). The current screening gets the ticket;
-// any other published dates sit under "Coming Up"; everything else is archived.
+// The current screening gets the ticket; other future dates and the archive
+// follow it in chronological groups.
 class Component extends DCLogic {
   state = { loaded: false, ok: true, cur: null, sections: [] };
-  componentDidMount() {
-    import("/events.js").then((m) => m.splitEvents().then(({ ok, current, upcoming, past }) => {
-      const card = (e, i) => ({ ...e, noPoster: !e.hasPoster, rot: (i % 2 ? 0.5 : -0.6) + "deg", badgeBg: m.badgeColor(i) });
+  async componentDidMount() {
+    this.mounted = true;
+    try {
+      const m = await import("/events.js");
+      const { ok, current, upcoming, past } = await m.splitEvents();
+      const card = (e, i) => ({
+        ...e,
+        noPoster: !e.hasPoster,
+        rot: (i % 2 ? 0.5 : -0.6) + "deg",
+        badgeBg: m.badgeColor(i),
+        onPosterError: () => this.hidePoster(e.slug)
+      });
       const sections = [
         { title: "Coming Up", tag: "UPCOMING", cards: upcoming.slice(1).map(card) },
         { title: "Past Screenings", tag: "ARCHIVED", cards: past.map(card) }
       ].filter((s) => s.cards.length);
-      this.setState({ loaded: true, ok, cur: current, sections });
-    }));
+      if (this.mounted) this.setState({ loaded: true, ok, cur: current, sections });
+    } catch {
+      if (this.mounted) this.setState({ loaded: true, ok: false });
+    }
+  }
+  componentWillUnmount() {
+    this.mounted = false;
+  }
+  hidePoster(slug) {
+    this.setState({
+      sections: this.state.sections.map((section) => ({
+        ...section,
+        cards: section.cards.map((card) => card.slug === slug ? { ...card, hasPoster: false, noPoster: true } : card)
+      }))
+    });
   }
   renderVals() {
     const c = this.state.cur;
     return {
+      loading: !this.state.loaded,
       hasCurrent: !!c,
       noCurrent: this.state.loaded && this.state.ok && !c,
       loadFailed: this.state.loaded && !this.state.ok,
       dateLine: c ? c.dateLine : "",
-      curHref: c ? c.href : "/",
-      curCta: c && !c.rsvp.open ? c.rsvp.label : "RSVP",
-      sections: this.state.sections
+      curHref: c ? c.href : "/screenings",
+      curCta: c ? c.soldOut && c.rsvp.open ? "Join the waitlist" : !c.rsvp.open ? c.rsvp.label : "RSVP" : "RSVP",
+      sections: this.state.sections,
+      retry: () => location.reload()
     };
   }
 }

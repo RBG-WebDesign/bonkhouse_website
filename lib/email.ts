@@ -57,11 +57,14 @@ export function ticketQrImageUrl(token: string) {
 }
 
 export async function sendTicketEmail(input: TicketEmailInput) {
+  const variant = input.tickets.length > 0 && input.tickets.every((ticket) => ticket.seatType === "waitlist")
+    ? "waitlisted"
+    : "confirmed";
   return deliver({
     to: input.to,
-    subject: emailSubject("confirmed", input.eventTitle),
+    subject: emailSubject(variant, input.eventTitle),
     html: renderBonkhouseEmail({
-      variant: "confirmed",
+      variant,
       guestName: input.guestName,
       eventTitle: input.eventTitle,
       eventDate: input.eventDate,

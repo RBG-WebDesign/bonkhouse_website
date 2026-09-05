@@ -60,6 +60,8 @@ export default async function AdminPage({
     })
   );
 
+  // This async server component groups screenings using the current request time.
+  // eslint-disable-next-line react-hooks/purity
   const now = Date.now();
   const groups: Array<[string, typeof events]> = [
     ["Upcoming & live", (events || []).filter((e) => e.status === "published" && new Date(e.starts_at).getTime() >= now)],

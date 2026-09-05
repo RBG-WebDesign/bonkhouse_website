@@ -9,17 +9,20 @@ export function MailingListForm() {
 
   async function submit(formData: FormData) {
     setStatus("loading");
-    const response = await fetch("/api/mailing-list", {
-      method: "POST",
-      body: JSON.stringify({
-        email: formData.get("email"),
-        name: formData.get("name"),
-        tags: formData.getAll("tags")
-      }),
-      headers: { "Content-Type": "application/json" }
-    });
-
-    setStatus(response.ok ? "success" : "error");
+    try {
+      const response = await fetch("/api/mailing-list", {
+        method: "POST",
+        body: JSON.stringify({
+          email: formData.get("email"),
+          name: formData.get("name"),
+          tags: formData.getAll("tags")
+        }),
+        headers: { "Content-Type": "application/json" }
+      });
+      setStatus(response.ok ? "success" : "error");
+    } catch {
+      setStatus("error");
+    }
   }
 
   return (
@@ -39,11 +42,15 @@ export function MailingListForm() {
       </div>
       <div className="mt-5 grid gap-3 md:grid-cols-[1fr_1fr_auto]">
         <input
+          aria-label="Name"
+          autoComplete="name"
           className="focus-ring rounded-md border border-white/20 bg-black px-4 py-3 text-white placeholder:text-white/42"
           name="name"
           placeholder="Name"
         />
         <input
+          aria-label="Email"
+          autoComplete="email"
           className="focus-ring rounded-md border border-white/20 bg-black px-4 py-3 text-white placeholder:text-white/42"
           name="email"
           placeholder="Email"
@@ -63,8 +70,8 @@ export function MailingListForm() {
           </label>
         ))}
       </div>
-      {status === "success" ? <p className="mt-4 text-sm font-bold text-butter">You are on the list.</p> : null}
-      {status === "error" ? <p className="mt-4 text-sm font-bold text-cherry">Something did not land. Try again.</p> : null}
+      {status === "success" ? <p role="status" className="mt-4 text-sm font-bold text-butter">You are on the list.</p> : null}
+      {status === "error" ? <p role="alert" className="mt-4 text-sm font-bold text-cherry">Something did not land. Try again.</p> : null}
     </form>
   );
 }

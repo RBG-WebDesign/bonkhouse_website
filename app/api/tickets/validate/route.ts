@@ -18,11 +18,15 @@ export async function POST(request: Request) {
   }
 
   const tokenHash = await hashTicketToken(token);
-  const { data: ticket } = await supabase
+  const { data: ticket, error: lookupError } = await supabase
     .from("tickets")
     .select("*, events(id,title), reservations(guest_name,guest_email)")
     .eq("token_hash", tokenHash)
     .maybeSingle();
+
+  if (lookupError) {
+    return NextResponse.json({ status: "Error", message: "Could not look up this ticket. Try again." }, { status: 500 });
+  }
 
   if (!ticket) {
     return NextResponse.json({ status: "Invalid", message: "Ticket not found. Flag this at the door." }, { status: 404 });
@@ -70,12 +74,41 @@ export async function POST(request: Request) {
   }
 
   const checkedInAt = new Date().toISOString();
-  await supabase.from("tickets").update({ checked_in_at: checkedInAt }).eq("id", ticket.id);
-  await supabase.from("checkins").insert({
+  // Claim the ticket in one conditional write so two scans cannot both admit it.
+  const { data: claimed, error: checkInError } = await supabase
+    .from("tickets")
+    .update({ checked_in_at: checkedInAt })
+    .eq("id", ticket.id)
+    .eq("status", "valid")
+    .neq("seat_type", "waitlist")
+    .is("checked_in_at", null)
+    .select("id")
+    .maybeSingle();
+
+  if (checkInError) {
+    return NextResponse.json({ status: "Error", message: "Could not save this check-in. Try again." }, { status: 500 });
+  }
+
+  if (!claimed) {
+    return NextResponse.json({
+      status: "Not checked in",
+      message: "This ticket was just checked in or changed. Scan it again to see its current status."
+    }, { status: 409 });
+  }
+
+  const { error: logError } = await supabase.from("checkins").insert({
     event_id: ticket.event_id,
     ticket_id: ticket.id,
     checked_in_at: checkedInAt
   });
+
+  if (logError) {
+    return NextResponse.json({
+      status: "Check-in needs review",
+      message: "The ticket was marked as checked in, but its log could not be saved. Ask the host to verify before admitting.",
+      checkedInAt
+    }, { status: 500 });
+  }
 
   return NextResponse.json({
     status: "Good",

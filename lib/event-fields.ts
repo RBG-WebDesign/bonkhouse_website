@@ -5,7 +5,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 
 const STATUSES = ["draft", "published", "archived", "cancelled"];
 
-export function eventPayloadToRow(body: any): { row?: Record<string, unknown>; error?: string } {
+export function eventPayloadToRow(body: Record<string, unknown>): { row?: Record<string, unknown>; error?: string } {
   const title = String(body.title || "").trim();
   const slug = String(body.slug || "").trim().toLowerCase();
 

@@ -6,8 +6,22 @@ import { RemoveReservationButton } from "@/components/remove-reservation-button"
 import { buttonVariants } from "@/components/ui/button";
 import { requireAdmin } from "@/lib/admin";
 
+type AttendeeTicket = {
+  seat_type: "standard" | "overflow" | "waitlist";
+  status: string;
+  checked_in_at: string | null;
+};
+
+type Attendee = {
+  id: string;
+  guest_name: string;
+  guest_email: string;
+  status: string;
+  tickets: AttendeeTicket[];
+};
+
 // "Standard ticket × 2 · 1 checked in" beats one chip per ticket.
-function summarizeTickets(tickets: any[] | null | undefined) {
+function summarizeTickets(tickets: AttendeeTicket[] | null | undefined) {
   const labels: Record<string, string> = { standard: "Standard ticket", overflow: "Overflow ticket", waitlist: "Waitlist" };
   const groups = new Map<string, { label: string; count: number; checkedIn: number; cancelled: number }>();
   for (const ticket of tickets || []) {
@@ -34,19 +48,20 @@ export default async function AdminEventPage({
     .from("reservations")
     .select("id,guest_name,guest_email,status,quantity,created_at,tickets(id,seat_type,status,checked_in_at)")
     .eq("event_id", id)
-    .order("created_at", { ascending: true });
+    .order("created_at", { ascending: true })
+    .returns<Attendee[]>();
 
   if (!event) {
     return <div className="mx-auto max-w-4xl px-4 py-10">Event not found.</div>;
   }
 
   const counts = (attendees || []).reduce(
-    (acc, reservation: any) => {
-      reservation.tickets?.forEach((ticket: any) => {
+    (acc, reservation) => {
+      reservation.tickets?.forEach((ticket) => {
         // Cancelled tickets stay on file for the guestlist but hold no seat.
         if (ticket.status === "cancelled") return;
         acc.total += 1;
-        acc[ticket.seat_type as "standard" | "overflow" | "waitlist"] += 1;
+        acc[ticket.seat_type] += 1;
         if (ticket.checked_in_at) {
           acc.checkedIn += 1;
         }
@@ -102,7 +117,7 @@ export default async function AdminEventPage({
                 </tr>
               </thead>
               <tbody>
-                {(attendees || []).map((reservation: any) => (
+                {(attendees || []).map((reservation) => (
                   <tr className="border-b border-ink/20" key={reservation.id}>
                     <td className="p-3 font-bold">{reservation.guest_name}</td>
                     <td className="p-3">{reservation.guest_email}</td>

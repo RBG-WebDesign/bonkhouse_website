@@ -11,7 +11,7 @@ declare global {
     SINFELD_EMBED?: boolean;
     SINFELD_ASSET_BASE?: string;
     SINFELD_TRANSPARENT?: boolean;
-    startSinfeld?: () => void;
+    startSinfeld?: () => (() => void);
     sinfeldListeners?: AbortController;
   }
 }
@@ -19,6 +19,8 @@ declare global {
 export function SinfeldTv() {
   useEffect(() => {
     let cancelled = false;
+    let stopGame: (() => void) | undefined;
+    let stopTv: (() => void) | undefined;
     window.SINFELD_EMBED = true;
     window.SINFELD_ASSET_BASE = ASSET_BASE;
     window.SINFELD_TRANSPARENT = true;
@@ -26,13 +28,18 @@ export function SinfeldTv() {
     (async () => {
       const [, tv] = await Promise.all([import("@/lib/sinfeld/game.js"), import("@/lib/sinfeld/tv.mjs")]);
       if (cancelled) return;
-      window.startSinfeld?.();
-      await tv.startSinfeldTv();
-    })();
+      stopGame = window.startSinfeld?.();
+      stopTv = tv.startSinfeldTv();
+    })().catch(() => {
+      if (cancelled) return;
+      const message = document.querySelector("#loading p");
+      if (message) message.textContent = "Game could not load. Reload to try again.";
+    });
 
     return () => {
       cancelled = true;
-      window.sinfeldListeners?.abort(); // the loops stop on their own once the canvases leave the DOM
+      stopTv?.();
+      stopGame?.();
     };
   }, []);
 
@@ -58,51 +65,59 @@ export function SinfeldTv() {
       </button>
 
       <div className="touch-controls" aria-label="Touch controls">
-        <button data-control="left" aria-label="Move left">
+        <button type="button" data-control="left" aria-label="Move left">
           ←
         </button>
-        <button data-control="right" aria-label="Move right">
+        <button type="button" data-control="right" aria-label="Move right">
           →
         </button>
-        <button data-control="jump" className="jump-button" aria-label="Jump">
+        <button type="button" data-control="jump" className="jump-button" aria-label="Jump">
           ↑
         </button>
       </div>
 
-      <audio id="music" loop preload="metadata" src={`${ASSET_BASE}audio/music/music-loop.mp3`} />
+      <audio id="music" loop preload="none" src={`${ASSET_BASE}audio/music/music-loop.mp3`} />
 
       <style>{`
         .sinfeld-shell {
+          --game-bottom-space: 0px;
           position: fixed;
           inset: 0;
+          height: 100dvh;
           z-index: 45; /* above the about-page static (40), below the site header (50) */
           overflow: hidden;
           pointer-events: none;
+          -webkit-user-select: none;
+          user-select: none;
+          -webkit-touch-callout: none;
         }
         .sinfeld-shell #tv-stage {
           position: absolute;
-          inset: 0;
+          top: var(--bh-header-height, 80px);
+          left: 0;
           z-index: 2;
           display: block;
           width: 100%;
-          height: 100%;
+          height: calc(100% - var(--bh-header-height, 80px) - var(--game-bottom-space));
           opacity: 0;
           outline: none;
-          pointer-events: auto;
+          pointer-events: none;
+          touch-action: none;
           transition: opacity 700ms ease;
         }
-        .sinfeld-shell.tv-mode #tv-stage { opacity: 1; }
+        .sinfeld-shell.tv-mode #tv-stage { opacity: 1; pointer-events: auto; }
         .sinfeld-shell #game {
           position: absolute;
           z-index: 1;
-          top: 50%;
+          top: calc(var(--bh-header-height, 80px) + (100% - var(--bh-header-height, 80px) - var(--game-bottom-space)) / 2);
           left: 50%;
-          width: min(100vw, calc(100vh * 16 / 9));
+          width: min(100%, calc((100dvh - var(--bh-header-height, 80px) - var(--game-bottom-space)) * 16 / 9));
           aspect-ratio: 16 / 9;
           transform: translate(-50%, -50%);
           image-rendering: pixelated;
           outline: none;
           pointer-events: auto;
+          touch-action: none;
           transition: opacity 500ms ease;
         }
         .sinfeld-shell.tv-mode #game { opacity: 0; pointer-events: none; }
@@ -162,17 +177,25 @@ export function SinfeldTv() {
         .sinfeld-shell .music-toggle[aria-pressed="true"] .music-bars i:nth-child(3) { animation-delay: -350ms; }
         @keyframes sinfeld-music { to { height: 100%; } }
         .sinfeld-shell .touch-controls { display: none; }
-        @media (pointer: coarse) {
+        @media (pointer: coarse), (max-width: 767px) {
+          .sinfeld-shell { --game-bottom-space: calc(126px + env(safe-area-inset-bottom, 0px)); }
+          .sinfeld-shell .music-toggle {
+            right: max(12px, env(safe-area-inset-right));
+            bottom: calc(82px + env(safe-area-inset-bottom, 0px));
+            min-height: 32px;
+            opacity: .8;
+          }
           .sinfeld-shell .touch-controls {
             position: absolute;
             z-index: 6;
-            right: 12px;
-            bottom: max(12px, env(safe-area-inset-bottom));
-            left: 12px;
+            right: max(12px, env(safe-area-inset-right));
+            bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+            left: max(12px, env(safe-area-inset-left));
             display: grid;
             grid-template-columns: 1fr 1fr 1.3fr;
             gap: 10px;
             pointer-events: auto;
+            touch-action: none;
           }
           .sinfeld-shell .touch-controls button {
             min-height: 58px;
@@ -182,8 +205,17 @@ export function SinfeldTv() {
             background: rgba(16, 22, 34, 0.7);
             font: 400 24px/1 Impact, sans-serif;
             touch-action: none;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
           }
+          .sinfeld-shell .touch-controls button[data-held="true"] { background: rgba(40, 61, 76, .95); border-color: #65e8ff; }
           .sinfeld-shell .touch-controls .jump-button { border-color: rgba(255, 92, 53, 0.55); color: #ff5c35; }
+        }
+        @media (orientation: landscape) and (max-height: 600px) {
+          .sinfeld-shell { --game-bottom-space: env(safe-area-inset-bottom, 0px); }
+          .sinfeld-shell .touch-controls { grid-template-columns: 58px 58px 1fr 72px; }
+          .sinfeld-shell .jump-button { grid-column: 4; }
         }
       `}</style>
     </section>
