@@ -97,7 +97,7 @@ class Component extends DCLogic {
       screeningsCurrent: active === "screenings" ? "page" : undefined,
       aboutCurrent: active === "about" ? "page" : undefined,
       ctaHref: this.props.ctaHref || (cur ? cur.href : loaded ? "/#list" : "/screenings"),
-      ctaLabel: this.props.ctaLabel || (cur || !loaded ? "RSVP" : "JOIN THE LIST"),
+      ctaLabel: this.props.ctaLabel || (cur?.waitlistOnly ? "Waitlist" : cur?.soldOut ? "Standby tickets" : cur || !loaded ? "RSVP" : "JOIN THE LIST"),
       menuOpen,
       menuClosed: !menuOpen,
       menuLabel: menuOpen ? "Close menu" : "Open menu",

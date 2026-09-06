@@ -73,6 +73,17 @@ export async function POST(request: Request) {
     });
   }
 
+  if (ticket.seat_type === "overflow" && body.admitStandby !== true) {
+    return NextResponse.json({
+      status: "Standby",
+      message: "Entry is not guaranteed. Check that space is available before admitting this standby guest.",
+      guestName: ticket.reservations?.guest_name,
+      eventTitle: ticket.events?.title,
+      seatType: ticket.seat_type,
+      requiresStandbyAdmission: true
+    });
+  }
+
   const checkedInAt = new Date().toISOString();
   // Claim the ticket in one conditional write so two scans cannot both admit it.
   const { data: claimed, error: checkInError } = await supabase

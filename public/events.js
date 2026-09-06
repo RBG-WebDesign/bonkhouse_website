@@ -51,8 +51,11 @@ function rsvpState(row, now) {
   if (closes && now > closes) {
     return { open: false, label: "RSVPs closed", note: "This screening is no longer taking RSVPs." };
   }
+  if (row.waitlistOnly) {
+    return { open: true, label: "Sold out: waitlist only", note: "All seats and standby spots are claimed. Join the waitlist and we will email you if a spot opens up. Joining does not guarantee entry." };
+  }
   if (row.soldOut) {
-    return { open: true, label: "Waitlist only", note: "Every seat is claimed. RSVP to join the waitlist and we will email you if seats open up." };
+    return { open: true, label: "Sold out: standby tickets only", note: "All standard seats are sold out. You can reserve a standby ticket, but entry is not guaranteed. The host can admit standby guests only if space is available." };
   }
   return { open: true, label: "RSVP open", note: "" };
 }
@@ -63,7 +66,9 @@ export function mapRow(row, now = Date.now()) {
   const doorsT = time(row.doors_at) || startT;
   const gateT = time(row.gate_closes_at);
   const venue = row.venue_name || "";
-  const capacity = (row.capacity_standard || 0) + (row.capacity_overflow || 0);
+  const standardCapacity = Number(row.capacity_standard || 0);
+  const standbyCapacity = Number(row.capacity_overflow || 0);
+  const capacity = standardCapacity + standbyCapacity;
   const claimed = Number(row.tickets_claimed || 0);
   const logo = row.logo_url || "";
   const crop = Object.keys(LEGACY_LOGO_CROP).find((file) => logo.endsWith(file));
@@ -73,7 +78,8 @@ export function mapRow(row, now = Date.now()) {
   // is_upcoming comes from the view; the fallback only matters before the
   // 202609020001 migration has been applied.
   const isUpcoming = row.is_upcoming ?? (row.status === "published" && (ms(row.starts_at) || 0) + 6 * 3600 * 1000 > now);
-  const soldOut = capacity > 0 && claimed >= capacity;
+  const soldOut = claimed >= standardCapacity;
+  const waitlistOnly = claimed >= capacity;
 
   return {
     slug: row.slug,
@@ -109,7 +115,7 @@ export function mapRow(row, now = Date.now()) {
     barLabel: "RSVP · Free · " + fmt(row.starts_at, { weekday: "short", month: "short", day: "numeric" }),
     venueShort: venue,
     venueLine: [venue, row.venue_address].filter(Boolean).join(", "),
-    capacityLabel: (row.capacity_standard || 0) + " seats + " + (row.capacity_overflow || 0) + " overflow",
+    capacityLabel: standardCapacity + " seats + " + standbyCapacity + " standby spots",
     capacityStandard: row.capacity_standard || 0,
     capacityOverflow: row.capacity_overflow || 0,
     maxTickets: Math.max(1, Math.min(10, Number(row.max_tickets_per_rsvp || 4))),
@@ -121,18 +127,22 @@ export function mapRow(row, now = Date.now()) {
     hasProgram: !!(row.program && row.program.length),
     meta: startT + (venue ? " · " + venue : ""),
     soldOut,
-    seatsLeft: Math.max(0, capacity - claimed),
-    rsvp: rsvpState({ ...row, isUpcoming, soldOut }, now)
+    waitlistOnly,
+    seatsLeft: Math.max(0, standardCapacity - claimed),
+    rsvp: rsvpState({ ...row, isUpcoming, soldOut, waitlistOnly }, now)
   };
 }
 
 let eventsPromise = null;
+let eventsLoadedAt = 0;
 
 // Resolves to every public screening, newest first. On a network failure it
 // resolves to [] with ok = false so pages can show a calm empty state.
-export function loadEvents() {
-  if (!eventsPromise) {
+export function loadEvents({ refresh = false } = {}) {
+  if (!eventsPromise || refresh || Date.now() - eventsLoadedAt > 30000) {
+    eventsLoadedAt = Date.now();
     eventsPromise = fetch(SUPABASE_URL + "/rest/v1/public_events?select=*&order=starts_at.desc", {
+      cache: "no-store",
       headers: { apikey: SUPABASE_KEY, Authorization: "Bearer " + SUPABASE_KEY }
     })
       .then((res) => (res.ok ? res.json() : Promise.reject(new Error("events fetch failed " + res.status))))
@@ -155,8 +165,8 @@ export async function splitEvents() {
   return { ok, current: upcoming[0] || null, upcoming, past };
 }
 
-export async function getEvent(slug) {
-  const { events } = await loadEvents();
+export async function getEvent(slug, options) {
+  const { events } = await loadEvents(options);
   return events.find((e) => e.slug === slug) || null;
 }
 

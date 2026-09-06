@@ -8,6 +8,7 @@ import {
   ticketQrImageUrl
 } from "@/lib/email";
 import { rsvpErrorResponse } from "@/lib/rsvp-errors";
+import { reservationTicketStatus } from "@/lib/ticket-status";
 import { createClient } from "@/lib/supabase/server";
 import { hashTicketToken, makeTicketToken, ticketQrDataUrl, ticketQrUrl } from "@/lib/tickets";
 
@@ -109,9 +110,7 @@ export async function POST(request: Request) {
       };
     })
   );
-  const reservationStatus = generated.every((ticket) => ticket.seatType === "waitlist")
-    ? "waitlisted"
-    : "confirmed";
+  const reservationStatus = reservationTicketStatus(generated.map((ticket) => ticket.seatType));
 
   if (inviteCode) {
     await supabase.rpc("increment_invite_code_use", {

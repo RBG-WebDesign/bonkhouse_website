@@ -22,7 +22,7 @@ Everything the site knows about a screening lives in **one place: the `events` t
 | Venue name / address | Ticket, event page, archive cards, and the ticket email |
 | Doors / Starts / Ends / Gate closes | Every time label on the site and in the email |
 | RSVPs open / close | Leave blank to open now and close when the gate closes |
-| Capacity | Seats, overflow, and max tickets per RSVP |
+| Capacity | Standard seats, standby spots, and max tickets per RSVP |
 | Program | Numbered list on the event page (one item per line) |
 | Notes | Gate instructions go in the email; the accessibility note shows on the event page |
 | Status | See step 3 |
@@ -46,7 +46,9 @@ Nothing. The site reads Supabase live; changes appear on the next page load.
 
 ## What happens on its own
 
-- **Sold out:** when every seat and overflow seat is claimed, the form becomes "Join the waitlist" and RSVPs go to the waitlist.
+- **Sold out:** when standard seats fill, the site says "Sold out: standby tickets only." Standby tickets do not guarantee entry. When standby spots also fill, new RSVPs join the waitlist.
+- **Standby check-in:** scanning a standby ticket shows its status without checking it in. Once the host has verified space, use "Space available: admit standby guest."
+- **Existing data:** standby tickets continue using the database's `overflow` seat type. These labels require no migration and do not change existing reservations or capacities.
 - **Cancellations:** the "release your seats" link in the ticket email opens a confirmation page; only pressing the button cancels. The guest gets a cancellation email, and freed seats go to the oldest waitlisted party that fits, who get a fresh ticket email. Removing someone from the admin guestlist promotes the waitlist the same way.
 - **One reservation per email** per screening. A guest who wants different seats releases the old ones first.
 - **RSVPs close** at the gate-close time unless you set an explicit close time.

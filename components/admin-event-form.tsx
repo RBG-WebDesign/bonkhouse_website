@@ -347,11 +347,11 @@ export function AdminEventForm({ event }: { event?: EventRecord }) {
           <DateTimeField initialIso={event?.rsvp_closes_at} label="RSVPs close" namePrefix="rsvpCloses" />
         </div>
 
-        <SectionHeading hint="Standard fills first, then overflow, then the waitlist starts." title="Capacity" />
+        <SectionHeading hint="Standard seats fill first, then standby spots, then the waitlist starts. Standby does not guarantee entry." title="Capacity" />
         <div className="grid gap-3 sm:grid-cols-3">
           {[
             ["Standard seats", "capacityStandard", event?.capacity_standard ?? 80, 0, undefined],
-            ["Overflow seats", "capacityOverflow", event?.capacity_overflow ?? 20, 0, undefined],
+            ["Standby spots", "capacityOverflow", event?.capacity_overflow ?? 20, 0, undefined],
             ["Max per RSVP", "maxTicketsPerRsvp", event?.max_tickets_per_rsvp ?? 4, 1, 10]
           ].map(([label, name, value, min, max]) => (
             <label

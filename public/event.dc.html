@@ -134,7 +134,7 @@ body::after{position:fixed;inset:0;z-index:71;pointer-events:none;content:"";opa
               </label>
               <div class="event-field-pair">
                 <label class="bh-field" for="event-quantity">
-                  <span class="bh-field-label">Seats</span>
+                  <span class="bh-field-label">{{ quantityLabel }}</span>
                   <select class="bh-input" id="event-quantity" name="quantity" aria-describedby="event-seat-info">{{ qtyOptions }}</select>
                 </label>
                 <label class="bh-field" for="event-invite">
@@ -228,7 +228,16 @@ class Component extends DCLogic {
   state = { loaded: false, ok: true, ev: null, next: null, result: null, submitting: false, error: "" };
   rsvpObserver = null;
   observedRsvp = null;
+  refreshAvailability = async () => {
+    if (document.hidden || !this.state.ev || this.state.submitting || this.state.result) return;
+    const m = await import("/events.js");
+    const ev = await m.getEvent(this.state.ev.slug, { refresh: true });
+    if (this.mounted && ev) this.setState({ ev });
+  };
   async componentDidMount() {
+    this.mounted = true;
+    this.availabilityTimer = setInterval(this.refreshAvailability, 30000);
+    document.addEventListener("visibilitychange", this.refreshAvailability);
     try {
       const slug = decodeURIComponent(location.pathname.replace(/\/+$/, "").split("/").pop() || "");
       const m = await import("/events.js");
@@ -254,6 +263,9 @@ class Component extends DCLogic {
     this.rsvpObserver.observe(rsvp);
   }
   componentWillUnmount() {
+    this.mounted = false;
+    clearInterval(this.availabilityTimer);
+    document.removeEventListener("visibilitychange", this.refreshAvailability);
     this.rsvpObserver?.disconnect();
   }
   renderVals() {
@@ -263,7 +275,7 @@ class Component extends DCLogic {
     const r = this.state.result;
     const upcomingButClosed = !!ev && ev.isUpcoming && !rsvp.open;
     const intro = ev
-      ? "First " + e.capacityStandard + " RSVPs get standard seats. The next " + e.capacityOverflow + " are confirmed overflow, then the waitlist starts." + (e.soldOut ? " " + rsvp.note : "")
+      ? e.soldOut ? rsvp.note : e.seatsLeft + (e.seatsLeft === 1 ? " standard seat remains." : " standard seats remain.") + " After those are claimed, tickets are standby only and entry is not guaranteed. Once standby is full, the waitlist opens."
       : "";
     return {
       loading: !this.state.loaded,
@@ -272,7 +284,7 @@ class Component extends DCLogic {
       loadFailed: this.state.loaded && !this.state.ok,
       retry: () => location.reload(),
       headerHref: ev && ev.isUpcoming ? "#rsvp" : "",
-      headerLabel: ev && ev.isUpcoming ? (rsvp.open ? (e.soldOut ? "Waitlist" : "RSVP") : rsvp.label) : "",
+      headerLabel: ev && ev.isUpcoming ? (rsvp.open ? (e.waitlistOnly ? "Waitlist" : e.soldOut ? "Standby tickets" : "RSVP") : rsvp.label) : "",
       title: e.title ?? "",
       hasPoster: !!e.poster,
       poster: e.poster ?? "",
@@ -301,25 +313,24 @@ class Component extends DCLogic {
       hasAccessNote: !!e.accessNote,
       accessNote: e.accessNote ?? "",
       showBar: !!ev && rsvp.open && !r,
-      barLabel: e.soldOut ? "Join the waitlist" : e.barLabel ?? "",
+      barLabel: e.waitlistOnly ? "Join the waitlist" : e.soldOut ? "Get standby tickets" : e.barLabel ?? "",
       hasNext: !!this.state.next,
       nextHref: this.state.next ? this.state.next.href : "",
       nextTitle: this.state.next ? this.state.next.title : "",
-      formTitle: e.soldOut ? "Join the waitlist" : "Free RSVP",
+      formTitle: e.waitlistOnly ? "Sold out: join the waitlist" : e.soldOut ? "Sold out: standby tickets only" : "Free RSVP",
       rsvpIntro: intro,
       invitePlaceholder: e.inviteOnly ? "Invite code (required)" : "Invite code, optional",
+      quantityLabel: e.waitlistOnly ? "People" : "Tickets",
       qtyOptions: Array.from({ length: e.maxTickets || 4 }, (_, i) =>
-        React.createElement("option", { key: i + 1, value: i + 1 }, (i + 1) + (i ? " seats" : " seat"))
+        React.createElement("option", { key: i + 1, value: i + 1 }, (i + 1) + (e.waitlistOnly ? (i ? " people" : " person") : (i ? " tickets" : " ticket")))
       ),
       confirmed: !!r,
-      resultTitle: r && r.waitlisted ? "You're on the waitlist" : "Tickets confirmed",
-      resultNote: r && r.waitlisted
-        ? "No seat yet. If one opens up, we email you a fresh confirmation with a real ticket."
-        : "Your reservation is saved. Save your QR tickets and show them at the gate.",
+      resultTitle: r ? r.title : "",
+      resultNote: r ? r.note : "",
       resId: r ? r.id : "",
       tickets: r ? r.tickets : [],
       submitting: this.state.submitting,
-      submitLabel: this.state.submitting ? "Saving RSVP..." : e.soldOut ? "Join the waitlist" : "Reserve tickets",
+      submitLabel: this.state.submitting ? "Saving RSVP..." : e.waitlistOnly ? "Join the waitlist" : e.soldOut ? "Get standby tickets" : "Reserve tickets",
       error: this.state.error,
       hasError: !!this.state.error,
       submit: async (ev2) => {
@@ -342,17 +353,26 @@ class Component extends DCLogic {
           if (!response.ok) throw new Error(payload.error || "Could not save your RSVP.");
           const tickets = (payload.tickets || []).map((ticket, index) => ({
             label: qty > 1 ? name + " · Ticket " + (index + 1) : name,
-            seat: String(ticket.seatType || payload.status || "confirmed").replace(/^./, (c) => c.toUpperCase()) + " seat",
+            seat: ticket.seatType === "standard" ? "Confirmed standard seat" : ticket.seatType === "overflow" ? "Standby ticket: entry is not guaranteed" : "Waitlist: no seat or entry confirmed",
             qr: ticket.qrDataUrl || "",
             hasQr: !!ticket.qrDataUrl,
             noQr: !ticket.qrDataUrl
           }));
-          this.setState({ result: { id: payload.reservationId, tickets, waitlisted: payload.status === "waitlisted" }, submitting: false, error: "" });
+          const types = (payload.tickets || []).map((ticket) => ticket.seatType);
+          const allStandard = types.length > 0 && types.every((seat) => seat === "standard");
+          const allStandby = types.length > 0 && types.every((seat) => seat === "overflow");
+          const allWaitlisted = types.length > 0 && types.every((seat) => seat === "waitlist");
+          const title = allStandard ? "Tickets confirmed" : allStandby ? "You're on standby" : allWaitlisted ? "You're on the waitlist" : "Your ticket status";
+          const note = allStandard ? "Your reservation is saved. Save your QR tickets and show them at the gate."
+            : allStandby ? "Standard seats are sold out. Your standby ticket is saved, but entry is not guaranteed. Show it to the host, who can admit you only if space is available."
+            : allWaitlisted ? "No seat or entry is confirmed. We will email you if a spot opens up."
+            : "Check each ticket above: only standard seats are confirmed. Standby tickets depend on space at the door. Waitlisted guests will be emailed if a spot opens up.";
+          this.setState({ result: { id: payload.reservationId, tickets, title, note }, submitting: false, error: "" });
         } catch (error) {
           this.setState({ submitting: false, error: error.message || "Could not save your RSVP." });
         }
       },
-      reset: () => this.setState({ result: null, submitting: false, error: "" })
+      reset: () => this.setState({ result: null, submitting: false, error: "" }, this.refreshAvailability)
     };
   }
 }

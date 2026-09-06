@@ -11,6 +11,7 @@ type ValidationResult = {
   eventTitle?: string;
   seatType?: string;
   checkedInAt?: string;
+  requiresStandbyAdmission?: boolean;
 };
 
 export function CheckInPanel({ initialToken = "" }: { initialToken?: string }) {
@@ -19,14 +20,14 @@ export function CheckInPanel({ initialToken = "" }: { initialToken?: string }) {
   const [result, setResult] = useState<ValidationResult | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const validate = useCallback(async (value: string, selectedEventId = "") => {
+  const validate = useCallback(async (value: string, selectedEventId = "", admitStandby = false) => {
     setLoading(true);
     setResult(null);
     try {
       const response = await fetch("/api/tickets/validate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: value, eventId: selectedEventId || undefined })
+        body: JSON.stringify({ token: value, eventId: selectedEventId || undefined, admitStandby })
       });
       const payload = await response.json();
       setResult(payload);
@@ -61,7 +62,7 @@ export function CheckInPanel({ initialToken = "" }: { initialToken?: string }) {
           aria-label="Ticket token"
           disabled={loading}
           className="focus-ring rounded-full border-2 border-ink bg-paper px-4 py-3"
-          onChange={(event) => setToken(event.target.value)}
+          onChange={(event) => { setToken(event.target.value); setResult(null); }}
           placeholder="Ticket token"
           value={token}
         />
@@ -69,7 +70,7 @@ export function CheckInPanel({ initialToken = "" }: { initialToken?: string }) {
           aria-label="Optional event ID"
           disabled={loading}
           className="focus-ring rounded-full border-2 border-ink bg-paper px-4 py-3"
-          onChange={(event) => setEventId(event.target.value)}
+          onChange={(event) => { setEventId(event.target.value); setResult(null); }}
           placeholder="Optional event id for wrong-event checks"
           value={eventId}
         />
@@ -83,7 +84,12 @@ export function CheckInPanel({ initialToken = "" }: { initialToken?: string }) {
           <p className="mt-2 font-bold">{result.message}</p>
           {result.guestName ? <p className="mt-2 text-sm">Guest: {result.guestName}</p> : null}
           {result.eventTitle ? <p className="text-sm">Event: {result.eventTitle}</p> : null}
-          {result.seatType ? <p className="text-sm">Seat: {result.seatType}</p> : null}
+          {result.seatType ? <p className="text-sm">Ticket: {result.seatType === "overflow" ? "Standby" : result.seatType}</p> : null}
+          {result.requiresStandbyAdmission ? (
+            <Button className="mt-4" disabled={loading} onClick={() => validate(token.trim(), eventId.trim(), true)} type="button">
+              Space available: admit standby guest
+            </Button>
+          ) : null}
         </div>
       ) : null}
     </div>

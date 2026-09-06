@@ -93,11 +93,11 @@ function checkInRoute(supabase) {
   }).POST;
 }
 
-function scanRequest() {
+function scanRequest(extra = {}) {
   return new Request("https://bonkhouse.test/api/tickets/validate", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ token: "test-token" })
+    body: JSON.stringify({ token: "test-token", ...extra })
   });
 }
 
@@ -119,6 +119,36 @@ test("a cancellation between lookup and claim cannot admit the ticket", async ()
   assert.notEqual((await response.json()).status, "Good");
   assert.equal(database.ticket.checked_in_at, null);
   assert.equal(database.logs.length, 0);
+});
+
+test("a standby scan does not admit the guest until the host confirms space", async () => {
+  const database = ticketDatabase();
+  database.ticket.seat_type = "overflow";
+  const post = checkInRoute(database);
+  const pending = await (await post(scanRequest())).json();
+  assert.equal(pending.status, "Standby");
+  assert.equal(pending.requiresStandbyAdmission, true);
+  assert.equal(database.ticket.checked_in_at, null);
+  assert.equal(database.logs.length, 0);
+  // Only a boolean confirmation from the host counts.
+  assert.equal((await (await post(scanRequest({ admitStandby: "true" }))).json()).status, "Standby");
+  const admitted = await (await post(scanRequest({ admitStandby: true }))).json();
+  assert.equal(admitted.status, "Good");
+  assert.ok(database.ticket.checked_in_at);
+  assert.equal(database.logs.length, 1);
+  assert.equal((await (await post(scanRequest({ admitStandby: true }))).json()).status, "Already used");
+  assert.equal(database.logs.length, 1);
+});
+
+test("standby admission cannot override a cancelled or waitlisted ticket", async () => {
+  for (const status of ["cancelled", "waitlisted"]) {
+    const database = ticketDatabase();
+    database.ticket.status = status;
+    database.ticket.seat_type = "overflow";
+    await checkInRoute(database)(scanRequest({ admitStandby: true }));
+    assert.equal(database.ticket.checked_in_at, null);
+    assert.equal(database.logs.length, 0);
+  }
 });
 
 for (const failure of ["lookupError", "updateError", "logError"]) {
@@ -166,11 +196,13 @@ test("callback preserves a local destination and query for magic-link sign-in", 
 });
 
 const templates = loadTs("lib/email-templates.ts");
+const ticketStatus = loadTs("lib/ticket-status.ts");
 
 async function capturedTicketEmail(seatTypes) {
   let sent;
   const email = loadTs("lib/email.ts", {
     "@/lib/email-templates": templates,
+    "@/lib/ticket-status": ticketStatus,
     "@/lib/utils": { emailSiteUrl: () => "https://bonkhouse.test" }
   }, {
     process: { env: { RESEND_API_KEY: "test-only" } },
@@ -205,8 +237,94 @@ test("fully waitlisted reservations get waitlist copy and no admission QR codes"
 });
 
 test("confirmed reservations retain confirmation copy and their QR codes", async () => {
-  const sent = await capturedTicketEmail(["standard", "overflow"]);
+  const sent = await capturedTicketEmail(["standard", "standard"]);
   assert.match(sent.subject, /tickets for Test screening/);
   assert.match(sent.html, /RSVP CONFIRMED/);
   assert.equal((sent.html.match(/alt="Ticket QR code"/g) || []).length, 2);
+});
+
+test("standby emails never promise seats and retain clearly labelled QR tickets", async () => {
+  const sent = await capturedTicketEmail(["overflow", "overflow"]);
+  assert.match(sent.subject, /standby tickets/);
+  assert.match(sent.html, /STANDBY TICKET/);
+  assert.match(sent.html, /entry is not guaranteed/);
+  assert.doesNotMatch(sent.html, /RSVP CONFIRMED|YOUR SEATS ARE IN THE BAG|Admit /);
+  assert.equal((sent.html.match(/alt="Ticket QR code"/g) || []).length, 2);
+});
+
+test("mixed emails identify every ticket and never provide a waitlist QR", async () => {
+  const sent = await capturedTicketEmail(["standard", "overflow", "waitlist"]);
+  assert.match(sent.html, /Confirmed standard seat/);
+  assert.match(sent.html, /Standby ticket: entry is not guaranteed/);
+  assert.match(sent.html, /Waitlist: no seat or entry confirmed/);
+  assert.doesNotMatch(sent.html, /YOUR SEATS ARE IN THE BAG|Admit /);
+  assert.equal((sent.html.match(/alt="Ticket QR code"/g) || []).length, 2);
+  assert.doesNotMatch(sent.html, /test-2/);
+});
+
+test("RSVP responses report the allocated ticket types without changing the database allocation", async () => {
+  for (const [seats, status] of [
+    [["standard"], "confirmed"], [["overflow"], "standby"], [["waitlist"], "waitlisted"],
+    [["standard", "overflow"], "mixed"], [["overflow", "waitlist"], "mixed"]
+  ]) {
+    let writes = 0;
+    let emailed;
+    const query = {
+      select() { return query; }, eq() { return query; },
+      async single() { return { data: { id: "screening", status: "published", max_tickets_per_rsvp: 4 } }; }
+    };
+    const post = loadTs("app/api/rsvp/route.ts", {
+      "next/server": { NextResponse },
+      "@/lib/email": {
+        cancelUrl: () => "https://bonkhouse.test/cancel", confirmationCode: () => "TEST",
+        EVENT_FOR_EMAIL_SELECT: "id", eventEmailFields: () => ({}),
+        sendTicketEmail: async (input) => { emailed = input; }, ticketQrImageUrl: (token) => token
+      },
+      "@/lib/rsvp-errors": loadTs("lib/rsvp-errors.ts"),
+      "@/lib/ticket-status": ticketStatus,
+      "@/lib/supabase/server": { createClient: async () => ({
+        from(table) { assert.equal(table, "events"); return query; },
+        async rpc(name, args) {
+          assert.equal(name, "create_reservation_atomic");
+          assert.equal(args.p_quantity, seats.length);
+          writes++;
+          return { data: [{ reservation_id: "reservation-test", seat_types: seats }] };
+        }
+      }) },
+      "@/lib/tickets": {
+        hashTicketToken: async (token) => token, makeTicketToken: () => "test-token",
+        ticketQrDataUrl: async () => "data:image/png;base64,test", ticketQrUrl: () => "https://bonkhouse.test/ticket"
+      }
+    }).POST;
+    const response = await post(new Request("https://bonkhouse.test/api/rsvp", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ eventSlug: "screening", name: "Test", email: "test@example.test", quantity: seats.length })
+    }));
+    const body = await response.json();
+    assert.equal(response.status, 200);
+    assert.equal(body.status, status);
+    assert.equal(writes, 1);
+    assert.deepEqual(body.tickets.map((ticket) => ticket.seatType), seats);
+    assert.deepEqual(Array.from(emailed.tickets, (ticket) => ticket.seatType), seats);
+    body.tickets.forEach((ticket) => assert.equal(!!ticket.qrDataUrl, ticket.seatType !== "waitlist"));
+  }
+});
+
+test("public availability switches to standby at 80 standard seats and waitlist at 100", async () => {
+  const source = readFileSync(path.resolve(__dirname, "../public/events.js"), "utf8");
+  const { mapRow } = await import("data:text/javascript;base64," + Buffer.from(source).toString("base64"));
+  const event = { slug: "screening", title: "Screening", status: "published", is_upcoming: true, capacity_standard: 80, capacity_overflow: 20 };
+  const available = mapRow({ ...event, tickets_claimed: 79 });
+  assert.equal(available.soldOut, false);
+  assert.equal(available.seatsLeft, 1);
+  for (const claimed of [80, 99]) {
+    const standby = mapRow({ ...event, tickets_claimed: claimed });
+    assert.equal(standby.soldOut, true);
+    assert.equal(standby.waitlistOnly, false);
+    assert.equal(standby.rsvp.label, "Sold out: standby tickets only");
+    assert.match(standby.rsvp.note, /entry is not guaranteed/);
+  }
+  assert.equal(mapRow({ ...event, tickets_claimed: 100 }).rsvp.label, "Sold out: waitlist only");
+  assert.equal(mapRow({ ...event, capacity_standard: 0, capacity_overflow: 0, tickets_claimed: 0 }).waitlistOnly, true);
+  assert.equal(mapRow({ ...event, tickets_claimed: 80, rsvp_closes_at: "2000-01-01" }).rsvp.open, false);
 });

@@ -22,7 +22,7 @@ type Attendee = {
 
 // "Standard ticket × 2 · 1 checked in" beats one chip per ticket.
 function summarizeTickets(tickets: AttendeeTicket[] | null | undefined) {
-  const labels: Record<string, string> = { standard: "Standard ticket", overflow: "Overflow ticket", waitlist: "Waitlist" };
+  const labels: Record<string, string> = { standard: "Standard ticket", overflow: "Standby ticket", waitlist: "Waitlist" };
   const groups = new Map<string, { label: string; count: number; checkedIn: number; cancelled: number }>();
   for (const ticket of tickets || []) {
     const label = labels[ticket.seat_type] || ticket.seat_type;
@@ -91,7 +91,7 @@ export default async function AdminEventPage({
         {[
           ["Total", counts.total],
           ["Standard", counts.standard],
-          ["Overflow", counts.overflow],
+          ["Standby", counts.overflow],
           ["Waitlist", counts.waitlist],
           ["Checked in", counts.checkedIn]
         ].map(([label, value]) => (

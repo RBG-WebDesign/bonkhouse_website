@@ -1,4 +1,5 @@
 import { emailSubject, renderBonkhouseEmail } from "@/lib/email-templates";
+import { reservationTicketStatus } from "@/lib/ticket-status";
 import { emailSiteUrl, formatEventDate, formatEventTime } from "@/lib/utils";
 
 type TicketEmailInput = {
@@ -57,9 +58,7 @@ export function ticketQrImageUrl(token: string) {
 }
 
 export async function sendTicketEmail(input: TicketEmailInput) {
-  const variant = input.tickets.length > 0 && input.tickets.every((ticket) => ticket.seatType === "waitlist")
-    ? "waitlisted"
-    : "confirmed";
+  const variant = reservationTicketStatus(input.tickets.map((ticket) => ticket.seatType));
   return deliver({
     to: input.to,
     subject: emailSubject(variant, input.eventTitle),

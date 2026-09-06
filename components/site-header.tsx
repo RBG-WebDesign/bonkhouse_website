@@ -6,6 +6,8 @@ import { SiteNavigation } from "@/components/site-navigation";
 // Screening data stays on the server; the navigation manages its disclosure.
 export async function SiteHeader() {
   const current = await getCurrentScreening();
+  const soldOut = current && current.tickets_claimed >= current.capacity_standard;
+  const waitlistOnly = current && current.tickets_claimed >= current.capacity_standard + current.capacity_overflow;
 
   return (
     <header className="bh-header bh-header--sticky">
@@ -19,7 +21,7 @@ export async function SiteHeader() {
         </Link>
         <SiteNavigation
           rsvpHref={current ? `/events/${current.slug}` : "/#list"}
-          rsvpLabel={current ? "RSVP" : "Join the list"}
+          rsvpLabel={waitlistOnly ? "Waitlist" : soldOut ? "Standby tickets" : current ? "RSVP" : "Join the list"}
         />
       </div>
     </header>

@@ -1,4 +1,4 @@
-export type EmailVariant = "confirmed" | "waitlisted" | "cancelled" | "reminder" | "newsletter";
+export type EmailVariant = "confirmed" | "standby" | "mixed" | "waitlisted" | "cancelled" | "reminder" | "newsletter";
 
 export type EmailTicket = {
   label: string;
@@ -24,6 +24,20 @@ const copy = {
     eyebrow: "RSVP CONFIRMED",
     headline: "YOUR SEATS ARE IN THE BAG",
     intro: "Your free Bonkhouse tickets are confirmed. Keep this email handy when you arrive.",
+    accent: "#ffd400",
+    accentInk: "#080705"
+  },
+  standby: {
+    eyebrow: "STANDBY TICKET",
+    headline: "SOLD OUT. YOU'RE ON STANDBY.",
+    intro: "All standard seats are sold out. Your standby ticket is saved, but entry is not guaranteed. Show it to the host, who can admit you only if space is available.",
+    accent: "#ffd400",
+    accentInk: "#080705"
+  },
+  mixed: {
+    eyebrow: "YOUR TICKET STATUS",
+    headline: "CHECK EACH TICKET BELOW",
+    intro: "Your reservation includes different ticket types. Only standard seats are confirmed. Standby tickets do not guarantee entry, and waitlist entries do not include admission. Check the label on each ticket.",
     accent: "#ffd400",
     accentInk: "#080705"
   },
@@ -67,20 +81,25 @@ function escapeHtml(value: string) {
 }
 
 function ticketMarkup(ticket: EmailTicket) {
+  const label = ticket.seatType === "standard" ? "Confirmed standard seat"
+    : ticket.seatType === "overflow" ? "Standby ticket: entry is not guaranteed"
+    : "Waitlist: no seat or entry confirmed";
   return `
     <table role="presentation" cellpadding="0" cellspacing="0" style="display:inline-table;margin:14px 14px 0 0;vertical-align:top;">
       <tr>
         <td style="text-align:center;vertical-align:top;">
-          <div style="display:inline-block;background:#ffffff;border:2px solid #16130d;padding:6px;line-height:0;">
+          ${ticket.seatType !== "waitlist" ? `<div style="display:inline-block;background:#ffffff;border:2px solid #16130d;padding:6px;line-height:0;">
             <img src="${escapeHtml(ticket.qrUrl)}" width="116" height="116" alt="Ticket QR code" style="display:block;border:0;width:116px;height:116px;" />
-          </div>
-          <div style="padding-top:6px;font-family:'Courier New',monospace;font-size:10px;font-weight:bold;letter-spacing:1px;color:#16130d;text-transform:uppercase;">${escapeHtml(ticket.label)} · ${escapeHtml(ticket.seatType)}</div>
+          </div>` : ""}
+          <div style="max-width:200px;padding-top:6px;font-family:'Courier New',monospace;font-size:10px;font-weight:bold;letter-spacing:1px;color:#16130d;text-transform:uppercase;">${escapeHtml(ticket.label)} · ${escapeHtml(label)}</div>
         </td>
       </tr>
     </table>`;
 }
 
 export function emailSubject(variant: EmailVariant, eventTitle: string) {
+  if (variant === "standby") return `Your Bonkhouse standby tickets for ${eventTitle} (entry not guaranteed)`;
+  if (variant === "mixed") return `Your Bonkhouse ticket status for ${eventTitle}`;
   if (variant === "waitlisted") return `You’re on the Bonkhouse waitlist for ${eventTitle}`;
   if (variant === "cancelled") return `Your Bonkhouse RSVP was cancelled`;
   if (variant === "reminder") return `Tomorrow: ${eventTitle}`;
@@ -127,13 +146,13 @@ export function renderNewsletterWelcomeEmail({ guestName, logoUrl, siteUrl }: Pi
 
 export function renderBonkhouseEmail(input: BonkhouseEmailInput) {
   const theme = copy[input.variant];
-  const showTickets = input.variant === "confirmed" || input.variant === "reminder";
+  const showTickets = ["confirmed", "standby", "mixed", "reminder"].includes(input.variant);
   const ticketList = showTickets ? input.tickets.map((ticket) => ticketMarkup(ticket)).join("") : "";
   const action = input.variant === "cancelled"
     ? `<div style="font-family:'Courier New',monospace;font-size:12px;line-height:1.6;color:#6d6656;">Changed your mind? Return to the screening page to reserve again if seats remain.</div>`
     : input.variant === "waitlisted"
-      ? `<div style="font-family:'Courier New',monospace;font-size:12px;line-height:1.6;color:#6d6656;">No ticket is needed yet. If a seat opens, we’ll send a fresh confirmation with your QR code.</div>`
-      : `<a href="${escapeHtml(input.cancelUrl)}" style="font-family:'Courier New',monospace;font-size:11px;font-weight:bold;letter-spacing:1px;color:#6d6656;text-decoration:underline;text-transform:uppercase;">Can’t make it? Release your seats</a>`;
+      ? `<div style="font-family:'Courier New',monospace;font-size:12px;line-height:1.6;color:#6d6656;">No admission is confirmed. If a spot opens, we will email you its ticket type and entry details.</div>`
+      : `<a href="${escapeHtml(input.cancelUrl)}" style="font-family:'Courier New',monospace;font-size:11px;font-weight:bold;letter-spacing:1px;color:#6d6656;text-decoration:underline;text-transform:uppercase;">Can’t make it? Cancel your reservation</a>`;
 
   // Light "paper flyer" design on purpose: Gmail's dark mode mangles dark emails
   // into washed-out inversions, and it never recolors image pixels — so the dark
@@ -188,8 +207,8 @@ export function renderBonkhouseEmail(input: BonkhouseEmailInput) {
                 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#fbf7ec" style="background:#fbf7ec;border:2px dashed #16130d;">
                   <tr>
                     <td style="padding:22px;">
-                      <div style="font-family:'Courier New',monospace;font-size:10px;font-weight:bold;letter-spacing:2px;color:#6d6656;text-transform:uppercase;">Admit ${input.tickets.length === 1 ? "one" : String(input.tickets.length)} · Sunday</div>
-                      <div style="padding-top:6px;font-family:Impact,'Arial Narrow Bold',sans-serif;font-size:24px;line-height:1;color:#16130d;text-transform:uppercase;">${input.tickets.length} ${input.tickets.length === 1 ? "seat" : "seats"} — show this at the door</div>
+                      <div style="font-family:'Courier New',monospace;font-size:10px;font-weight:bold;letter-spacing:2px;color:#6d6656;text-transform:uppercase;">${input.tickets.every((ticket) => ticket.seatType === "standard") ? "Confirmed admission" : "Entry depends on ticket type"} · Sunday</div>
+                      <div style="padding-top:6px;font-family:Impact,'Arial Narrow Bold',sans-serif;font-size:24px;line-height:1;color:#16130d;text-transform:uppercase;">${input.tickets.length} ${input.tickets.length === 1 ? "ticket" : "tickets"} · check status below</div>
                       <div style="margin-top:18px;border-top:1px dashed #9b937e;padding-top:16px;">
                         <div style="font-family:'Courier New',monospace;font-size:9px;font-weight:bold;letter-spacing:2px;color:#6d6656;text-transform:uppercase;">Confirmation</div>
                         <div style="margin-top:6px;display:inline-block;background:${theme.accent};padding:6px 10px;font-family:'Courier New',monospace;font-size:18px;font-weight:bold;letter-spacing:2px;color:${theme.accentInk};">${escapeHtml(input.confirmationCode)}</div>

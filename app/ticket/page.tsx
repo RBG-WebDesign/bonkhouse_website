@@ -85,7 +85,16 @@ export default async function TicketPage({
         <Verdict
           stamp="In line"
           headline="Waitlisted, not seated (yet)"
-          body={`${guestName} is on the waitlist. No seat is confirmed yet. If one opens up, a fresh confirmation email with a real ticket will arrive.`}
+          body={`${guestName} is on the waitlist. No seat or entry is confirmed. If a spot opens up, an email with its ticket type and entry details will arrive.`}
+          tone="bad"
+        />
+      ) : ticket.seat_type === "overflow" ? (
+        <Verdict
+          stamp="Standby ticket"
+          headline={ticket.checked_in_at ? "Standby guest checked in" : "Sold out. You're on standby."}
+          body={ticket.checked_in_at
+            ? `${guestName} holds a standby ticket and has already been checked in at the gate.`
+            : `${guestName} holds a standby ticket. Standard seats are sold out, and entry is not guaranteed. Show this ticket to the host, who can admit standby guests only if space is available.`}
           tone="bad"
         />
       ) : (

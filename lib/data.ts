@@ -5,18 +5,18 @@ import type { MerchProduct, Photo } from "@/types/bonkhouse";
 // through the public_events view). The static pages read it client-side via
 // public/events.js; the one server-side consumer is the React header's RSVP
 // button, which asks the view for the current screening.
-export async function getCurrentScreening(): Promise<{ slug: string; title: string } | null> {
+export async function getCurrentScreening(): Promise<{ slug: string; title: string; capacity_standard: number; capacity_overflow: number; tickets_claimed: number } | null> {
   const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
   if (!base || !key) return null;
 
   try {
     const response = await fetch(
-      `${base}/rest/v1/public_events?select=slug,title&is_upcoming=eq.true&order=starts_at.asc&limit=1`,
+      `${base}/rest/v1/public_events?select=slug,title,capacity_standard,capacity_overflow,tickets_claimed&is_upcoming=eq.true&order=starts_at.asc&limit=1`,
       { headers: { apikey: key, Authorization: `Bearer ${key}` }, next: { revalidate: 60 } }
     );
     if (!response.ok) return null;
-    const rows = (await response.json()) as Array<{ slug: string; title: string }>;
+    const rows = (await response.json()) as Array<{ slug: string; title: string; capacity_standard: number; capacity_overflow: number; tickets_claimed: number }>;
     return rows[0] || null;
   } catch {
     return null;
