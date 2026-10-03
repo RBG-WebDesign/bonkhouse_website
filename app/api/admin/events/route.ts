@@ -18,7 +18,7 @@ export async function POST(request: Request) {
 
   const venueId = await resolveVenueId(
     supabase,
-    body.venueName || "Glorya Kaufman Community Center",
+    body.venueName || "Wende Museum’s Community Center",
     body.venueAddress
   );
 

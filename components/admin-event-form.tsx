@@ -320,7 +320,7 @@ export function AdminEventForm({ event }: { event?: EventRecord }) {
         <div className="grid gap-3 sm:grid-cols-2">
           <input
             className={field}
-            defaultValue={event ? event.venues?.name || "" : "Glorya Kaufman Community Center"}
+            defaultValue={event ? event.venues?.name || "" : "Wende Museum’s Community Center"}
             name="venueName"
             placeholder="Venue name"
             required
