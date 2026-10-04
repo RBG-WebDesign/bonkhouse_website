@@ -5,6 +5,7 @@ import { InviteCodeForm } from "@/components/invite-code-form";
 import { RemoveReservationButton } from "@/components/remove-reservation-button";
 import { buttonVariants } from "@/components/ui/button";
 import { requireAdmin } from "@/lib/admin";
+import { createServiceClient } from "@/lib/supabase/service";
 
 type AttendeeTicket = {
   seat_type: "standard" | "overflow" | "waitlist";
@@ -43,7 +44,9 @@ export default async function AdminEventPage({
   const { id } = await params;
   const { supabase } = await requireAdmin();
 
-  const { data: event } = await supabase.from("events").select("*, venues(name,address)").eq("id", id).single();
+  // requireAdmin has already verified this user. Private event notes are not
+  // selectable with browser credentials, including non-admin signed-in users.
+  const { data: event } = await createServiceClient().from("events").select("*, venues(name,address)").eq("id", id).single();
   const { data: attendees } = await supabase
     .from("reservations")
     .select("id,guest_name,guest_email,status,quantity,created_at,tickets(id,seat_type,status,checked_in_at)")

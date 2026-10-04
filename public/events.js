@@ -68,8 +68,11 @@ export function mapRow(row, now = Date.now()) {
   const venue = row.venue_name || "";
   const standardCapacity = Number(row.capacity_standard || 0);
   const standbyCapacity = Number(row.capacity_overflow || 0);
-  const capacity = standardCapacity + standbyCapacity;
   const claimed = Number(row.tickets_claimed || 0);
+  // The new view reports both inventories separately. The fallback keeps a
+  // prepared build compatible until the additive counts migration is applied.
+  const standardClaimed = Number(row.standard_tickets_claimed ?? Math.min(claimed, standardCapacity));
+  const standbyClaimed = Number(row.standby_tickets_claimed ?? Math.max(0, claimed - standardCapacity));
   const logo = row.logo_url || "";
   const crop = Object.keys(LEGACY_LOGO_CROP).find((file) => logo.endsWith(file));
   const badge = row.badge || "";
@@ -78,8 +81,8 @@ export function mapRow(row, now = Date.now()) {
   // is_upcoming comes from the view; the fallback only matters before the
   // 202609020001 migration has been applied.
   const isUpcoming = row.is_upcoming ?? (row.status === "published" && (ms(row.starts_at) || 0) + 6 * 3600 * 1000 > now);
-  const soldOut = claimed >= standardCapacity;
-  const waitlistOnly = claimed >= capacity;
+  const soldOut = standardClaimed >= standardCapacity;
+  const waitlistOnly = soldOut && standbyClaimed >= standbyCapacity;
 
   return {
     slug: row.slug,
@@ -128,7 +131,7 @@ export function mapRow(row, now = Date.now()) {
     meta: startT + (venue ? " · " + venue : ""),
     soldOut,
     waitlistOnly,
-    seatsLeft: Math.max(0, standardCapacity - claimed),
+    seatsLeft: Math.max(0, standardCapacity - standardClaimed),
     rsvp: rsvpState({ ...row, isUpcoming, soldOut, waitlistOnly }, now)
   };
 }

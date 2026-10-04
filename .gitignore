@@ -13,3 +13,4 @@ public/logos past/
 public/uploads/pasted-*
 ._*
 output/
+supabase/.temp/

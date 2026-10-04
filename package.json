@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "node --test scripts/check-server-regressions.cjs"
+    "test": "node --test scripts/check-server-regressions.cjs scripts/check-database-regressions.cjs"
   },
   "dependencies": {
     "@supabase/ssr": "latest",
@@ -24,6 +24,7 @@
     "three": "^0.180.0"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "0.5.8",
     "@netlify/plugin-nextjs": "^5.15.11",
     "@types/node": "latest",
     "@types/qrcode": "latest",

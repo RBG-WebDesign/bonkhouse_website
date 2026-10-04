@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { isAdminRequest } from "@/lib/admin";
 import { eventPayloadToRow, resolveVenueId } from "@/lib/event-fields";
+import { createServiceClient } from "@/lib/supabase/service";
 
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const { ok, supabase } = await isAdminRequest();
@@ -43,7 +44,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
   }
 
   const { id } = await params;
-  const { data: source, error: sourceError } = await supabase.from("events").select("*").eq("id", id).single();
+  const { data: source, error: sourceError } = await createServiceClient().from("events").select("*").eq("id", id).single();
 
   if (sourceError || !source) {
     return NextResponse.json({ error: "Event not found." }, { status: 404 });

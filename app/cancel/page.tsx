@@ -13,6 +13,7 @@ export default async function CancelPage({
   const token = typeof params.token === "string" ? params.token : "";
   const done = params.done === "1";
   const failed = params.error === "1";
+  const unavailable = params.unavailable === "1";
 
   let stamp = "Release seats?";
   let headline = "Can't make it?";
@@ -22,13 +23,17 @@ export default async function CancelPage({
     stamp = "Released";
     headline = "Your seats are free again";
     body = "Thanks for letting us know. A confirmation is on its way to your inbox, and if anyone was waiting for seats, they just got the good news.";
+  } else if (unavailable) {
+    stamp = "Please try again";
+    headline = "Cancellation is temporarily unavailable";
+    body = "Your reservation has not been changed. Please reopen the link in your ticket email and try again shortly.";
   } else if (failed || !reservation || !token) {
     stamp = "Nothing to release";
     headline = "That link didn't match a reservation";
     body = "It may have been used already, or the address got mangled on the way. If you still hold seats and want to release them, use the link in your most recent ticket email.";
   }
 
-  const showForm = !done && !failed && reservation && token;
+  const showForm = !done && !failed && !unavailable && reservation && token;
 
   return (
     <div className="bh-container bh-page bh-verdict">

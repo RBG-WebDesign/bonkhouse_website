@@ -36,6 +36,8 @@ supabase db push
 
 Migrations live in `supabase/migrations/` and are applied in file order. If you apply them by hand, paste each into the SQL editor in that order.
 
+The ticketing security update has a coordinated [publication and database rollout](supabase/pending-migrations/README.md). Its SQL is staged separately so a Git push cannot break the currently published server. Configure the server-only `SUPABASE_SECRET_KEY` before manually publishing that update.
+
 ## Admins
 
 Admin access uses Supabase magic links and the `admin_profiles` table. Add approved admin emails there after running the migration.
@@ -53,7 +55,7 @@ npm test
 npm run build
 ```
 
-Lint uses the installed Next.js and TypeScript ESLint configurations. The test command runs server regression checks with Node's built-in test runner and does not require Supabase credentials.
+Lint uses the installed Next.js and TypeScript ESLint configurations. Tests run mocked server checks and real SQL against disposable local PostgreSQL via PGlite. They do not require Supabase credentials or send email.
 
 To check the screening data field mapping separately:
 

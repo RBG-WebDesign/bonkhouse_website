@@ -328,3 +328,79 @@ test("public availability switches to standby at 80 standard seats and waitlist 
   assert.equal(mapRow({ ...event, capacity_standard: 0, capacity_overflow: 0, tickets_claimed: 0 }).waitlistOnly, true);
   assert.equal(mapRow({ ...event, tickets_claimed: 80, rsvp_closes_at: "2000-01-01" }).rsvp.open, false);
 });
+
+test("a standard vacancy remains bookable while valid standby tickets exist", async () => {
+  const source = readFileSync(path.resolve(__dirname, "../public/events.js"), "utf8");
+  const { mapRow } = await import("data:text/javascript;base64," + Buffer.from(source).toString("base64"));
+  const event = { slug: "screening", title: "Screening", status: "published", is_upcoming: true, capacity_standard: 80, capacity_overflow: 20,
+    tickets_claimed: 83, standard_tickets_claimed: 79, standby_tickets_claimed: 4 };
+  const result = mapRow(event);
+  assert.equal(result.soldOut, false);
+  assert.equal(result.waitlistOnly, false);
+  assert.equal(result.seatsLeft, 1);
+  assert.equal(result.rsvp.label, "RSVP open");
+  assert.equal(mapRow({ ...event, standby_tickets_claimed: 20 }).waitlistOnly, false);
+  assert.equal(mapRow({ ...event, standard_tickets_claimed: 80, standby_tickets_claimed: 20 }).waitlistOnly, true);
+});
+
+function cancellationRoute({ createServiceClient, emailCancellationOutcome = async () => {} }) {
+  return loadTs("app/api/rsvp/cancel/route.ts", {
+    "next/server": { NextResponse },
+    "@/lib/supabase/service": { createServiceClient },
+    "@/lib/tickets": { hashTicketToken: async (token) => `hash:${token}` },
+    "@/lib/utils": { requestOrigin: () => "https://bonkhouse.test" },
+    "@/lib/waitlist": { emailCancellationOutcome }
+  });
+}
+function cancellationRequest() {
+  const form = new FormData();
+  form.set("reservation", "reservation-1");
+  form.set("token", "own-token");
+  return new Request("https://bonkhouse.test/api/rsvp/cancel", { method: "POST", body: form });
+}
+
+test("cancellation passes hashed credentials to the server and never returns promoted guest credentials", async () => {
+  const outcomes = [{ kind: "cancelled", reservation_id: "reservation-1" }, {
+    kind: "promoted", guest_email: "other@example.test", tokens: ["private-qr"], cancel_token: "private-cancel"
+  }];
+  let delivered;
+  const client = { rpc: async (name, args) => {
+    assert.equal(name, "cancel_reservation");
+    assert.equal(args.reservation_uuid, "reservation-1");
+    assert.equal(args.supplied_token_hash, "hash:own-token");
+    return { data: outcomes, error: null };
+  } };
+  const route = cancellationRoute({ createServiceClient: () => client,
+    emailCancellationOutcome: async (database, rows) => { assert.equal(database, client); delivered = rows; }
+  });
+  const response = await route.POST(cancellationRequest());
+  assert.equal(delivered, outcomes);
+  assert.equal(response.status, 303);
+  assert.equal(response.headers.get("location"), "https://bonkhouse.test/cancel?done=1");
+  assert.equal(await response.text(), "");
+});
+
+test("missing server credentials fail closed without a cancellation or email", async () => {
+  const route = cancellationRoute({ createServiceClient: () => { throw new Error("Missing secret"); },
+    emailCancellationOutcome: async () => assert.fail("Must not send email") });
+  const response = await route.POST(cancellationRequest());
+  assert.equal(response.status, 303);
+  assert.equal(response.headers.get("location"), "https://bonkhouse.test/cancel?unavailable=1");
+});
+
+test("email link previews cannot cancel a reservation", async () => {
+  const route = cancellationRoute({ createServiceClient: () => assert.fail("GET must not reach the database") });
+  const response = await route.GET(new Request("https://bonkhouse.test/api/rsvp/cancel?reservation=reservation-1&token=own-token"));
+  assert.equal(response.headers.get("location"), "https://bonkhouse.test/cancel?reservation=reservation-1&token=own-token");
+});
+
+test("event duplication requires admin authorization before reading private event fields", async () => {
+  const route = loadTs("app/api/admin/events/[id]/route.ts", {
+    "next/server": { NextResponse },
+    "@/lib/admin": { isAdminRequest: async () => ({ ok: false }) },
+    "@/lib/supabase/service": { createServiceClient: () => assert.fail("No privileged read before authorization") },
+    "@/lib/event-fields": {}
+  });
+  const response = await route.POST(new Request("https://bonkhouse.test/api/admin/events/example", { method: "POST" }), { params: Promise.resolve({ id: "example" }) });
+  assert.equal(response.status, 401);
+});

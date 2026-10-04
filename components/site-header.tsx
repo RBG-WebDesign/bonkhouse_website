@@ -6,8 +6,10 @@ import { SiteNavigation } from "@/components/site-navigation";
 // Screening data stays on the server; the navigation manages its disclosure.
 export async function SiteHeader() {
   const current = await getCurrentScreening();
-  const soldOut = current && current.tickets_claimed >= current.capacity_standard;
-  const waitlistOnly = current && current.tickets_claimed >= current.capacity_standard + current.capacity_overflow;
+  const standardClaimed = current?.standard_tickets_claimed ?? Math.min(current?.tickets_claimed || 0, current?.capacity_standard || 0);
+  const standbyClaimed = current?.standby_tickets_claimed ?? Math.max(0, (current?.tickets_claimed || 0) - (current?.capacity_standard || 0));
+  const soldOut = current && standardClaimed >= current.capacity_standard;
+  const waitlistOnly = current && soldOut && standbyClaimed >= current.capacity_overflow;
 
   return (
     <header className="bh-header bh-header--sticky">

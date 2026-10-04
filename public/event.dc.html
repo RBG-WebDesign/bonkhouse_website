@@ -32,7 +32,7 @@ body::after{position:fixed;inset:0;z-index:71;pointer-events:none;content:"";opa
 </helmet>
 
 <div class="event-page">
-<a class="bh-skip-link" href="#main-content">Skip to screening details</a>
+<a class="bh-skip-link" href="{{ detailsHref }}">Skip to screening details</a>
 
 <dc-import name="SiteHeader" active="screenings" cta-href="{{ headerHref }}" cta-label="{{ headerLabel }}" style="position:sticky;top:0;z-index:50;display:block" hint-size="100%,81px"></dc-import>
 
@@ -103,7 +103,7 @@ body::after{position:fixed;inset:0;z-index:71;pointer-events:none;content:"";opa
         <div class="event-meta-row"><dt>Screening</dt><dd>{{ timeLabel }}</dd></div>
         <div class="event-meta-row"><dt>Venue</dt><dd>{{ venueLine }}</dd></div>
         <sc-if value="{{ isUpcoming }}" hint-placeholder-val="{{ true }}">
-          <div class="event-meta-row event-meta-row--note"><dt>Late arrival</dt><dd>If the gate is closed, text the host number in your ticket email.</dd></div>
+          <div class="event-meta-row event-meta-row--note"><dt>Arrival</dt><dd>Please arrive before the gate closes.</dd></div>
         </sc-if>
       </dl>
 
@@ -126,11 +126,11 @@ body::after{position:fixed;inset:0;z-index:71;pointer-events:none;content:"";opa
             <div class="event-fields">
               <label class="bh-field" for="event-attendee">
                 <span class="bh-field-label">Name</span>
-                <input class="bh-input" id="event-attendee" name="attendee" autocomplete="name" placeholder="Your name" required="">
+                <input class="bh-input" id="event-attendee" name="attendee" autocomplete="name" placeholder="Your name" required="{{ true }}" aria-required="true">
               </label>
               <label class="bh-field" for="event-email">
                 <span class="bh-field-label">Email</span>
-                <input class="bh-input" id="event-email" name="email" autocomplete="email" placeholder="you@example.com" required="" type="email">
+                <input class="bh-input" id="event-email" name="email" autocomplete="email" placeholder="you@example.com" required="{{ true }}" aria-required="true" type="email">
               </label>
               <div class="event-field-pair">
                 <label class="bh-field" for="event-quantity">
@@ -210,7 +210,7 @@ body::after{position:fixed;inset:0;z-index:71;pointer-events:none;content:"";opa
 </main>
 
 <sc-if value="{{ showBar }}" hint-placeholder-val="{{ true }}">
-  <a class="bh-button event-rsvp-bar" href="#rsvp">{{ barLabel }}
+  <a class="bh-button event-rsvp-bar" href="{{ rsvpHref }}">{{ barLabel }}
     <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
   </a>
 </sc-if>
@@ -283,7 +283,9 @@ class Component extends DCLogic {
       notFound: this.state.loaded && this.state.ok && !ev,
       loadFailed: this.state.loaded && !this.state.ok,
       retry: () => location.reload(),
-      headerHref: ev && ev.isUpcoming ? "#rsvp" : "",
+      detailsHref: location.pathname + "#main-content",
+      rsvpHref: location.pathname + "#rsvp",
+      headerHref: ev && ev.isUpcoming ? ev.href + "#rsvp" : "",
       headerLabel: ev && ev.isUpcoming ? (rsvp.open ? (e.waitlistOnly ? "Waitlist" : e.soldOut ? "Standby tickets" : "RSVP") : rsvp.label) : "",
       title: e.title ?? "",
       hasPoster: !!e.poster,
@@ -339,7 +341,15 @@ class Component extends DCLogic {
         const f = ev2.target;
         const name = f.elements.namedItem("attendee").value.trim();
         const email = f.elements.namedItem("email").value.trim();
-        if (!name || !email) return;
+        if (!name || !email) {
+          this.setState({ error: !name ? "Enter your name to reserve tickets." : "Enter your email address to reserve tickets." });
+          f.elements.namedItem(!name ? "attendee" : "email").focus();
+          return;
+        }
+        if (!f.checkValidity()) {
+          f.reportValidity();
+          return;
+        }
         const qty = Number(f.elements.namedItem("quantity").value || 1);
         const inviteCode = f.elements.namedItem("invite").value.trim();
         this.setState({ submitting: true, error: "" });

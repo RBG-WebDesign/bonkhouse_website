@@ -5,7 +5,8 @@ import { emailSubject, EmailVariant, renderBonkhouseEmail, renderNewsletterWelco
 
 const variants: Array<{ id: EmailVariant; label: string; note: string }> = [
   { id: "confirmed", label: "Tickets confirmed", note: "Sent immediately after a successful RSVP" },
-  { id: "waitlisted", label: "Waitlist", note: "Sent when standard and overflow seats are full" },
+  { id: "standby", label: "Standby ticket", note: "Entry depends on space at the door" },
+  { id: "waitlisted", label: "Waitlist", note: "Sent when standard seats and standby spots are full" },
   { id: "cancelled", label: "Cancellation", note: "Confirms that the seats were released" },
   { id: "reminder", label: "Event reminder", note: "A day-before arrival reminder" },
   { id: "newsletter", label: "Newsletter welcome", note: "A simple opt-in message, never a ticket" }
@@ -29,13 +30,13 @@ export function EmailPreviewStudio({ initialVariant = "confirmed" }: { initialVa
       eventTitle: sampleTitle,
       eventDate: "Sunday, October 18, 2026 · 1:00 PM",
       venue: "Wende Museum’s Community Center · 10858 Culver Blvd, Culver City, CA",
-      arrivalInstructions: "Enter through the side gate. The gate closes at 1:20 PM. If it is closed, text the host number included in your confirmation.",
+      arrivalInstructions: "Enter through the side gate. Please arrive before the gate closes at 1:20 PM.",
       cancelUrl: "#cancel-preview",
       logoUrl: "/email-masthead.png",
       confirmationCode: "BONK-018-JS",
       tickets: [
-        { label: "Ticket 01", seatType: "Standard", qrUrl: "/email-qr-placeholder.svg" },
-        { label: "Ticket 02", seatType: "Standard", qrUrl: "/email-qr-placeholder.svg" }
+        { label: "Ticket 01", seatType: variant === "standby" ? "overflow" : variant === "waitlisted" ? "waitlist" : "standard", qrUrl: "/email-qr-placeholder.svg" },
+        { label: "Ticket 02", seatType: variant === "standby" ? "overflow" : variant === "waitlisted" ? "waitlist" : "standard", qrUrl: "/email-qr-placeholder.svg" }
       ]
     }),
     [guestName, variant]

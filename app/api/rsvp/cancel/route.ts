@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/service";
 import { hashTicketToken } from "@/lib/tickets";
 import { requestOrigin } from "@/lib/utils";
 import { emailCancellationOutcome, type CancellationRow } from "@/lib/waitlist";
@@ -25,7 +25,14 @@ export async function POST(request: Request) {
     return NextResponse.redirect(new URL("/cancel?error=1", origin), 303);
   }
 
-  const supabase = await createClient();
+  // Promotion results contain other guests' ticket credentials. Only this
+  // trusted server client can call the RPC; the browser receives a redirect.
+  let supabase;
+  try {
+    supabase = createServiceClient();
+  } catch {
+    return NextResponse.redirect(new URL("/cancel?unavailable=1", origin), 303);
+  }
   const { data, error } = await supabase.rpc("cancel_reservation", {
     reservation_uuid: reservationId,
     supplied_token_hash: await hashTicketToken(token)
